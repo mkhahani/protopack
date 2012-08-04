@@ -1,0 +1,3 @@
+- I should decide what to do with parentless nodes
+- Selected node
+- removeNode() should check the child nodes

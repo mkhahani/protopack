@@ -1,0 +1,28 @@
+ul.protopack-tab {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #BBB;
+}
+ul.protopack-tab:after {
+  content:".";
+  display:block;
+  height:0;
+  clear:both;
+  visibility:hidden;
+}
+.protopack-tab li {
+  float: left;
+  margin: 0 5px;
+}
+.protopack-tab a {
+  display: block;
+  padding: 5px 10px;
+  cursor: pointer;
+  height: 20px; 
+}
+.protopack-tab li.active {
+  background-color: #CCC;
+}
+.protopack-tab li.active a {
+}

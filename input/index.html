@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Input</title>
+  <link rel="stylesheet" type="text/css" href="protopack.input.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="protopack.input.js"></script>
+</head>
+<style type="text/css">
+  input {width:300px; border_:1px solid #aaaaaa;}
+</style>
+<body>
+  <div id="workspace">
+    <div><input id="whatever" type="text" value="Javascript Programming Language" /></div>
+    <div id="mkhinput"></div>
+  </div>
+  <button onclick="myFunc()">GO</button>
+</body>
+<script>
+  function myFunc() {
+    alert(1);
+  }
+  var myInput = new ProtopackInput('mkhinput');
+  myInput.entry.id = 'the_id';
+  myInput.entry.name = 'the_name';
+  myInput.entry.value = 'MKH';
+  myInput.popup.update('M.K.H');
+  
+</script>
+</html>

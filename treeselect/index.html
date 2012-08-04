@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack TreeSelect</title>
+  <link rel="stylesheet" type="text/css" href="protopack.treeselect.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../input/protopack.input.js"></script>
+  <script type="text/javascript" src="../tree/protopack.tree.js"></script>
+  <script type="text/javascript" src="protopack.treeselect.js"></script>
+</head>
+<style type="text/css">
+  input[type=text] {width:300px;}
+</style>
+<body>
+  <div id="workspace" align="center">
+  <!--select id="myselect" onchange="alert(this.value)">
+    <option>javascript 1</option>
+    <option>javascript 2</option>
+    <option>javascript 3</option>
+    <option value="[1,2,3]">javascript</option>
+    <option value="{1:1, 2:2, 3:3}">javascript</option>
+  </select>
+  <input id="whatever" type="text" value="Javascript Programming Language" /-->
+  </div>
+  <button onclick="myFunc()">GO</button>
+</body>
+<script>
+  function myFunc() {
+    //myCombo.setValue(['1','3','4']);
+    //myCombo.setId('mkh_combo');
+    //myCombo.setValue(5);
+    //myCombo.insertNode(['1','3','Added Node']);
+    //myCombo.deleteNode('3');
+    //myCombo.updateNode('3', ['3','9','Updated Node']);
+    myCombo.setValue([1,2,5]);
+    //myCombo.setValue(5);
+  }
+  function onTreeSelect() {
+    //alert(myCombo.value);
+    //alert(myCombo.tree.selected);
+  }
+  //var items = [[1, 'item1', false], [2, 'item2', 1], [3, 'item3', true], [4, 'item4', false], [5, 'item5', false]];
+  //var combo1 = new AdvCombo('mkhCombo1', 'This is an advanced combobox component', items, 3, {}, 'workspace1');
+  //var combo2 = new AdvCombo('mkhCombo2', 'This is an advanced combobox component', items, 3, {}, 'workspace2');
+
+
+  var data = [
+      [1, 0, 'Item1'],
+      [2, 0, 'Item2'],
+      [3, 2, 'Item3'],
+      [4, 3, 'Item4'],
+      [5, 3, 'Item5'],
+      [6, 5, 'Item6'],
+      [7, 2, 'Item7'],
+      [8, 7, 'Item8'],
+      [9, 7, 'Item9'],
+      [10, 0, 'Item10']
+  ];
+  var myCombo = new ProtopackTreeSelect('workspace', {multiSelect:true});
+  //var myCombo = new ProtopackTreeSelect('workspace', {multiSelect:true}, {onSelect: onTreeSelect});
+  myCombo.loadData(data);
+  //myCombo.render();
+  //$('workspace').update(combo.get());
+  //combo.render();
+  //alert(edt.value);
+  //edt.value = 'MKH';
+  //alert(edt.value);
+</script>
+</html>

@@ -1,0 +1,13 @@
+Class Hierarchy:
+---------------------
+selectBase
+advSelect
+advTreeSelect
+advTagSelect
+advImageSelect
+advColorSelect
+...
+
+
+- write some useful functions like (getInputs, getChecked, ...)
+- 

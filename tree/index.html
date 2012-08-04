@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Tree</title>
+  <link rel="stylesheet" type="text/css" href="skin/tree.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="protopack.tree.js"></script>
+</head>
+<style type="text/css">
+</style>
+<body>
+  <div>
+  <div id="workspace"></div>
+  <div id="workspace2"></div>
+  <button onclick="myFunc()">GO</button>
+  </div>
+</body>
+<script>
+  function treeClick(node, e) {
+    //alert(tree.numberOfChildren(node.id));
+    //alert(tree.hasChild(node.id));
+    //tree.setSelected(node.id);
+    //alert(tree2.selected);
+  }
+  function treeMouseOver(node, value, e) {
+  }
+  function treeMouseOut(node, value, e) {
+  }
+  
+  function myFunc() {
+    //tree.insertNode([11, 6, 'Item11', {}, {color:'green'}]);
+    //tree.deleteNode(8);
+    //tree.updateNode(8, [8, 7, 'Item8', {}, {color:'green'}]);
+    //tree.clearSelection();
+    //tree2.clearSelection();
+    
+    tree.setSelected(5);
+    //tree2.setSelected(8);
+    //alert(tree.selected);
+    //alert(tree2.selected);
+    
+    //alert(tree.getText(2));
+    //alert(tree2.getText([2,3,8]));
+  }
+
+  var data = [
+      [0, -1, 'Root'],
+      [1, 0, 'Item1', {id:'node1', classname:'item-class', seq:3}, {color:'red', fontWeight:'bold'}],
+      [2, 0, 'Item2', {id:'node2', title:'This is a hint', seq:1}],
+      [3, 2, 'Item3', {id:'node3'}],
+      [4, 3, 'Item4', {id:'node4', href:'http://127.0.0.1', target:'_blank'}],
+      [5, 3, 'Item5', {id:'node5', checked: true}],
+      [6, 5, 'Item6', {id:'node6'}],
+      [7, 2, 'Item7', {id:'node7'}],
+      [8, 7, 'Item8', {id:'node8', seq:2}],
+      [9, 7, 'Item9', {id:'node9', seq:1}],
+      [11, 20, 'ItemX', {id:'node9', seq:1}],
+      [10, 0, 'Item10', {id:'node10', seq:2}]
+  ];
+
+  var data = [ [19, 0, 19], [21, 19, 21], [22, 21, 22]];
+
+  var events = {nodeclick:treeClick, nodemouseover:treeMouseOver, nodemouseout:treeMouseOut};
+  var options = {multiSelect:true, className_:'mkh-tree'};
+  //var rootNode = [0, 0, 'Root'];
+  var tree = new ProtopackTree('workspace', {multiSelect:true}, events);
+  //var tree2 = new ProtopackTree('workspace2', options, events);
+  tree.loadData(data);
+  //tree2.loadData(data);
+  //tree.setId('mkh_tree');
+  tree.setSelected(22);
+  tree.setCaption('MKH Tree!');
+</script>
+</html>
