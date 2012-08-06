@@ -1,0 +1,24 @@
+- Support RTL
+- Loading overlay
+- To support more data structures (JSON, XML, PHP Array, ...)
+- About link (?)
+- Horizontal scroll
+
+
+- we should be able to set layout by some methods:
+  setHeader("Sales,Book Title,Author")
+  setInitWidths("50,250,*")
+  setColAlign("right,left,left")
+  setColTypes("dyn,ed,ed")
+  setColSorting("str,str,str")
+  enablePaging()
+
+
+* Some advanced features:
+-------------------------
+- MultiSelect rows
+- Row numbers
+- Skins
+- Horizontal scrollbars
+- Resizable Columns
+- Editing

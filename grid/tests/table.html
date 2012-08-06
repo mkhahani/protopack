@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+  <title>Tiny Grid for Prototype</title>
+  <link rel="stylesheet" type="text/css" href="tgrid.css" media="screen" />
+  <script type="text/javascript" src="prototype/prototype.js"></script>
+  <script type="text/javascript" src="tgrid.js"></script>
+</head>
+<body>
+  <div id="wrapper" align="center" style="width:200px; overflow:hidden;" onscroll="alert(1)">
+    <table id="ttable" border="1px" style="width:500px">
+      <tr><td width="50px">1</td><td width="200px">MKH</td></tr>
+      <tr><td>2</td><td style="width:400px;" align="center">KHM</td></tr>
+    </table>
+  </div>
+</body>
+<script type="text/javascript">
+  var el = document.getElementById('wrapper');
+  //el.scrollTo(500, 500);
+  el.scrollLeft = 100;
+  //alert(el.scrollWidth);
+  //alert(el.scrollHeight);
+</script>
+</html>

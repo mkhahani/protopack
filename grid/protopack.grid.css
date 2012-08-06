@@ -1,0 +1,44 @@
+.pp-grid {border:1px solid #888888;}
+.pp-grid table {width:100%; font:11px tahoma; border-spacing:0; border-collapse:collapse;}
+.pp-grid th {padding:0 5px;}
+
+.pp-grid-header {background-color:#666; overflow:auto;}
+.pp-grid-header table {color:white; width_:500px;}
+.pp-grid-header th {border-right:1px solid #DDD; height:20px; cursor:default;}
+.pp-grid-header th:last-child {border-right:none;}
+.pp-grid-header th.sorted-asc {background:url(images/down.png) right no-repeat}
+.pp-grid-header th.sorted-desc {background:url(images/up.png) right no-repeat}
+.pp-grid-header th img {vertical-align:middle; margin-right:3px;}
+
+.pp-grid-body {height_:100px; overflow:auto;}
+.pp-grid-body_ thead th {height:0; padding-top:0; padding-bottom:0}
+
+.pp-grid-footer {height:18px; background-color:#EEE; border-top:1px solid #DDD; font:10px tahoma;}
+.pp-grid-footer .status {float:left; margin:3px 0 0 5px;}
+.pp-grid-footer .about {float:right; padding:3px 5px; cursor:pointer;}
+.pp-grid-footer .controls {text-align:right;}
+.pp-grid-footer .controls input {height:14px; font:10px tahoma; padding:0 2px; vertical-align:middle;}
+.pp-grid-footer .controls input[type=button] {width:16px; height:16px; padding:0; font:10px tahoma; border:none;}
+.pp-grid-footer .controls input[type=button]:active {border:1px inset #DDD;}
+.pp-grid-footer .controls input.first {background:url(images/first.png) no-repeat;}
+.pp-grid-footer .controls input.prev {background:url(images/prev.png) no-repeat;}
+.pp-grid-footer .controls input.next {background:url(images/next.png) no-repeat;}
+.pp-grid-footer .controls input.last {background:url(images/last.png) no-repeat;}
+
+.pp-grid tfoot {background-color:#EEEEEE; color:#888888; border-top_:1px solid #DDD; font-size:10px;}
+.pp-grid th {}
+.pp-grid td {height:20px; padding:0 5px; cursor:default;}
+.pp-grid a {}
+.pp-grid a:hover {text-decoration:none;}
+.pp-grid th.hidden {display:none;}
+.pp-grid td.hidden {display:none;}
+.pp-grid col.hidden {display:none;}
+.pp-grid th.sortable {cursor:pointer;}
+
+.pp-grid-body tr.even {background-color:#F5F5F5;}
+.pp-grid-body tr.odd {background-color:#FFFFFF;}
+.pp-grid-body tr.hover {background-color:#FFF5DF;}
+.pp-grid-body tr.selected {background-color:#FFE9C4;}
+.pp-grid-body tr.selected td {background:url(images/sel.png) repeat-x;}
+
+#mkhtgrid {width:300px; margin-top:100px; height_:150px; overflow_:auto;}
