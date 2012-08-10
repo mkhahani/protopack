@@ -1,8 +1,25 @@
+Bugs:
+-----
+
+
+TODO:
+-----
 - Support RTL
+- Server side sorting
+- Filters
+
+
+Some advanced features:
+-------------------------
+- MultiSelect rows
+- Row numbers
 - Loading overlay
 - To support more data structures (JSON, XML, PHP Array, ...)
-- About link (?)
-- Horizontal scroll
+- Skins
+- Horizontal scrollbars
+- Resizable Columns
+- Selectable Columns
+- Editing
 
 
 - we should be able to set layout by some methods:
@@ -12,13 +29,3 @@
   setColTypes("dyn,ed,ed")
   setColSorting("str,str,str")
   enablePaging()
-
-
-* Some advanced features:
--------------------------
-- MultiSelect rows
-- Row numbers
-- Skins
-- Horizontal scrollbars
-- Resizable Columns
-- Editing
