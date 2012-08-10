@@ -235,7 +235,7 @@ var ProtopackGrid = Class.create({
             Event.observe(tr, 'click', function(e) {
                 this._select(tr);
                 if (this.events.rowSelect) {
-                    this.events.rowSelect(e, tr.rowIndex);
+                    this.events.rowSelect(tr.rowIndex, e);
                 }
             }.bind(this));
         }
@@ -243,13 +243,13 @@ var ProtopackGrid = Class.create({
             Event.observe(tr, 'mouseover', function(e) {
                 this._highlightRow(tr);
                 if (this.events.rowOver) {
-                    this.events.rowOver(e, tr.rowIndex);
+                    this.events.rowOver(tr.rowIndex, e);
                 }
             }.bind(this));
             Event.observe(tr, 'mouseout', function(e) {
                 this._unHighlightRow(tr);
                 if (this.events.rowOut) {
-                    this.events.rowOut(e, tr.rowIndex);
+                    this.events.rowOut(tr.rowIndex, e);
                 }
             }.bind(this));
         }
@@ -275,7 +275,7 @@ var ProtopackGrid = Class.create({
             }
             if (this.events.cellClick) {
                 Event.observe(cell, 'click', function(e) {
-                    this.events.cellClick(e, tr.rowIndex, index + 1);
+                    this.events.cellClick(tr.rowIndex, index + 1, e);
                 }.bind(this));
             }
             Element.insert(cell, el);
@@ -292,7 +292,7 @@ var ProtopackGrid = Class.create({
                 el = data;
                 break;
             case 'text':
-                if (Object.isString(data)) {
+                if (Object.isString(data) || Object.isNumber(data)) {
                     el = new Element('span').update(data);
                 } else {
                     el = new Element('span').update(data.text);
