@@ -7,6 +7,9 @@
   <script type="text/javascript" src="../protopack.grid.js"></script>
 </head>
 <body>
+  <style type="text/css">
+    #mkhgrid {width:300px; margin-top:100px;}
+  </style>
   <div align="center">
   <div id="thetable">Protopack Grid v1.0</div><br/>
   <input type="button" value="Refresh" onClick="myGrid.header.hide();"></input>
@@ -131,7 +134,7 @@
   }
 
   var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
-  myGrid.setID('mkhtgrid');
+  myGrid.setID('mkhgrid');
   myGrid.pageBy(3);
   myGrid.options.currencyFormat = ['$ ', 2, ',', '.', '%s%v'];
   myGrid.init('fillGrid');
