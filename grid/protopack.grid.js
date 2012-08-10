@@ -44,6 +44,7 @@ var ProtopackGrid = Class.create({
         this.className = this.options.className;
         this.pageIndex = 1;
         this._pageBy = 0;
+        this.sortOrder = 'ASC';
         this.grid = this._createGrid(target);
     },
 
@@ -119,7 +120,8 @@ var ProtopackGrid = Class.create({
                 }
                 if (column.sortType) {
                     th.observe('click', function () {
-                        this.sort(th, index, column.name, column.sortType);
+                        this.sort(index);
+                        this.update();
                     }.bind(this));
                     th.addClassName('sortable');
                 }
@@ -380,7 +382,10 @@ var ProtopackGrid = Class.create({
         if (data) {
             this.table.tBodies[0].update();
             this.data = data;
-            data.each( function (rowData) {
+            if (typeof this.sortBy !== 'undefined') {
+                this.sort(this.sortBy, this.sortOrder);
+            }
+            data.each(function(rowData) {
                 this._insertRow(rowData, -1);
             }.bind(this));
         }
@@ -445,13 +450,7 @@ var ProtopackGrid = Class.create({
             }
         }
         window[this.initFunc](this.pageIndex);
-        this.pageInput.setValue(this.pageIndex);
-        var from = (this.pageIndex - 1) * this._pageBy + 1,
-            to = this.pageIndex * this._pageBy;
-        if (to > this.total) {
-            to = this.total;
-        }
-        this.status.update(from + ' - ' + to + ' (' + this.total + ')');
+        this._updateStatusbar();
 
         // if (this.pageIndex == this.maxPageIndex) {
             // right.disable();
@@ -463,6 +462,25 @@ var ProtopackGrid = Class.create({
         // } else {
             // left.enable();
         // }
+    },
+
+    /**
+     * Does an offline update on grid with current data
+     */
+    _updateStatusbar: function() {
+        if (this.footer) {
+            if (this.total == 0) {
+                this.status.update('');
+            } else {
+                this.pageInput.setValue(this.pageIndex);
+                var from = (this.pageIndex - 1) * this._pageBy + 1,
+                    to = this.pageIndex * this._pageBy;
+                if (to > this.total) {
+                    to = this.total;
+                }
+                this.status.update(from + ' - ' + to + ' (' + this.total + ')');
+            }
+        }
     },
 
 /*=============================================================================
@@ -496,16 +514,10 @@ var ProtopackGrid = Class.create({
     loadData: function (data, total) {
         this._load(data);
         this.total = (typeof total == 'undefined')? data.length : total;
-        if (this.footer) {
-            if (this.total == 0) {
-                this.status.update('');
-            } else {
-                this.status.update('1 - ' + data.length + ' (' + this.total + ')');
-            }
-        }
         if (this._pageBy != 0) {
             this.maxPageIndex = Math.ceil(this.total / this._pageBy);
         }
+        this._updateStatusbar();
     },
 
     /**
@@ -550,14 +562,6 @@ var ProtopackGrid = Class.create({
                 }
             })
         }
-
-        // if (this.footer) {
-            // if (this.data.length == 0) {
-                // this.status.update('');
-            // } else {
-                // this.status.update('1 - ' + this.data.length + ' (' + this.data.length + ')');
-            // }
-        // }
     },
 
     /**
@@ -579,9 +583,9 @@ var ProtopackGrid = Class.create({
     /**
      * Sorts the grid
      */
-    sort: function(el, colIndex, colName, sortType, sortOrder) {
+    sort: function(sortBy, sortOrder) {
         function _sort(a, b) {
-            var key = Object.isArray(a)? colIndex : colName,
+            var key = Object.isArray(a)? sortBy : colName,
                 sign = (sortOrder.toUpperCase() === 'ASC')? 1 : -1,
                 res;
             a = a[key];
@@ -608,16 +612,18 @@ var ProtopackGrid = Class.create({
             }
             return res * sign;
         }
-        var ths = el.up('tr').select('th');
         if (sortOrder === undefined) {
             sortOrder = (this.sortOrder === 'ASC')? 'DESC' : 'ASC';
             this.sortOrder = sortOrder;
         }
-        ths.invoke('removeClassName', 'sorted-asc');
-        ths.invoke('removeClassName', 'sorted-desc');
-        el.addClassName('sorted-' + sortOrder.toLowerCase());
+        this.sortBy = sortBy;
+        var colName = this.columns[sortBy].name,
+            sortType = this.columns[sortBy].sortType,
+            thArr = this.header.select('th');
+        thArr.invoke('removeClassName', 'sorted-asc');
+        thArr.invoke('removeClassName', 'sorted-desc');
+        thArr[sortBy].addClassName('sorted-' + sortOrder.toLowerCase());
         this.data.sort(_sort);
-        this.update();
     },
 
     /**
