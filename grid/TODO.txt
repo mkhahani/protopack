@@ -7,6 +7,7 @@ TODO:
 - Support RTL
 - Server side sorting
 - Filters
+- Keyboard Navigation (rowSelect, pageSelect, ...)
 
 
 Some advanced features:

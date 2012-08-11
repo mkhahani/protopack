@@ -89,6 +89,13 @@ var ProtopackGrid = Class.create({
             grid.insert(this.footer);
         }
 
+        if (this.events.onKeyDown) {
+            body.tabIndex = '1';
+            Event.observe(body, 'keydown', function(e) {
+                this.events.onKeyDown(e);
+            }.bind(this));
+        }
+
         $(target).insert(grid);
         return grid;
     },
@@ -236,22 +243,22 @@ var ProtopackGrid = Class.create({
         if (this.options.rowSelect) {
             Event.observe(tr, 'click', function(e) {
                 this._select(tr);
-                if (this.events.rowSelect) {
-                    this.events.rowSelect(tr.rowIndex, e);
+                if (this.events.onRowSelect) {
+                    this.events.onRowSelect(tr.rowIndex, e);
                 }
             }.bind(this));
         }
         if (this.options.mouseRollOver) {
             Event.observe(tr, 'mouseover', function(e) {
                 this._highlightRow(tr);
-                if (this.events.rowOver) {
-                    this.events.rowOver(tr.rowIndex, e);
+                if (this.events.onRowOver) {
+                    this.events.onRowOver(tr.rowIndex, e);
                 }
             }.bind(this));
             Event.observe(tr, 'mouseout', function(e) {
                 this._unHighlightRow(tr);
-                if (this.events.rowOut) {
-                    this.events.rowOut(tr.rowIndex, e);
+                if (this.events.onRowOut) {
+                    this.events.onRowOut(tr.rowIndex, e);
                 }
             }.bind(this));
         }
@@ -275,9 +282,9 @@ var ProtopackGrid = Class.create({
                     cell.setAttribute('align', column.align);
                 }
             }
-            if (this.events.cellClick) {
+            if (this.events.onCellClick) {
                 Event.observe(cell, 'click', function(e) {
-                    this.events.cellClick(tr.rowIndex, index + 1, e);
+                    this.events.onCellClick(tr.rowIndex, index + 1, e);
                 }.bind(this));
             }
             Element.insert(cell, el);
