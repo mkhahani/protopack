@@ -110,27 +110,32 @@
       hasFooter : true
   };
     
-  function onRowSelect(event, rowIndex) {
+  function onRowSelect(rowIndex, event) {
     console.log('onRowSelect:' + rowIndex);
   }
 
-  function onRowOver(event, rowIndex) {
+  function onRowOver(rowIndex, event) {
     console.log('onRowOver');
   }
 
-  function onRowOut(event, rowIndex) {
+  function onRowOut(rowIndex, event) {
     console.log('onRowOut');
   }
 
-  function onCellClick(event, rowIndex, cellIndex) {
+  function onCellClick(rowIndex, cellIndex, event) {
     console.log('onCellClick: (' + rowIndex + ',' + cellIndex + ')');
   }
 
+  function onKeyDown(event) {
+    console.log('onKeyDown: (' + event.keyCode + ')');
+  }
+
   var gridEvents = {
-    rowSelect : onRowSelect,
-    rowOver   : onRowOver,
-    rowOut    : onRowOut,
-    cellClick : onCellClick
+    //onRowSelect : onRowSelect,
+    //onRowOver   : onRowOver,
+    //onRowOut    : onRowOut,
+    //onCellClick : onCellClick,
+    onKeyDown   : onKeyDown
   }
 
   var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
