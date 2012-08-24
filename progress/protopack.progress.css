@@ -1,0 +1,4 @@
+.protopack-progress {position:relative; width:100%; height:100%; border:1px solid #999999; padding:1px; x-overflow:hidden;}
+.protopack-progress .bar {float:left; width:0; height:100%; background-color:blue; background_:url(progress.png);}
+.protopack-progress .value {position:absolute; height:100%; padding:0 2px; white-space:nowrap;}
+.protopack-progress .value {text-align:center; font-size:10px; font-weight:bold;}
