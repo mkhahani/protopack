@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+  <title>Protopack Grid for Prototype</title>
+  <link rel="stylesheet" type="text/css" href="../../style/grid/grid.css" media="screen" />
+  <script type="text/javascript" src="../../lib/prototype.js"></script>
+  <script type="text/javascript" src="../../lib/accounting.min.js"></script>
+  <script type="text/javascript" src="../../protopack.js"></script>
+  <script type="text/javascript" src="../../grid.js"></script>
+</head>
+<body>
+  <style type="text/css">
+    #mkhgrid {width:300px; margin-top:100px;}
+  </style>
+  <div align="center">
+  <div id="thetable">Protopack Grid v1.0</div><br/>
+  <input type="button" value="Refresh" onClick="myGrid.header.hide();"></input>
+  <input type="button" value="Set Caption" onClick="myGrid.setCaption('MKH');"></input>
+  <input type="button" value="Del Caption" onClick="myGrid.setCaption('');"></input>
+  <input type="button" value="Insert Row" onClick="insertRow()"></input>
+  <input type="button" value="Delete Row" onClick="deleteRow()"></input>
+  <input type="button" value="Update Row" onClick="updateRow()"></input>
+  <input type="button" value="Test" onClick="test()"></input>
+  </div>
+</body>
+<script>
+
+  // Full Object Model
+  var dataObj1 = [
+      { id:1,  title:{text:'Google',    href:'http://www.google.com/'},    price:250000, image:{src:'icons/google.png',    title:'Google'} },
+      { id:2,  title:{text:'Yahoo',     href:'http://www.yahoo.com/'},     price:350000, image:{src:'icons/yahoo.png',     title:'Yahoo'} },
+      { id:13, title:{text:'Facebook',  href:'http://www.facebook.com/'},  price:156000, image:{src:'icons/facebook.png',  title:'Facebook'} },
+      { id:4,  title:{text:'Flickr',    href:'http://www.flickr.com/'},    price:412000, image:{src:'icons/flickr.png',    title:'Flickr'} },
+      { id:15, title:{text:'LinkedIn',  href:'http://www.linkedin.com/'},  price:98000,  image:{src:'icons/linkedin.png',  title:'LinkedIn'} },
+      { id:6,  title:{text:'Twitter',   href:'http://www.twitter.com/'},   price:270000, image:{src:'icons/twitter.png',   title:'twitter'} },
+      { id:7,  title:{text:'Youtube',   href:'http://www.youtube.com/'},   price:555000, image:{src:'icons/youtube.png',   title:'youtube'} },
+      { id:18, title:{text:'Microsoft', href:'http://www.microsoft.com/'}, price:1020000,image:{src:'icons/microsoft.png', title:'Microsoft'} },
+      { id:9,  title:{text:'MKH',       href:'http://mohsenkhahani.com/'}, price:380000, image:{src:'icons/microsoft.png', title:'Microsoft'} },
+      { id:10, title:{text:'Jaws',      href:'http://jaws.ir/'},           price:660000, image:{src:'icons/microsoft.png', title:'Microsoft'} },
+      { id:11, title:{text:'Rovzane',   href:'http://www.rovzane.com/', style:'color:#F00;'}, price:250000, image:{src:'icons/microsoft.png', title:'Microso ft'} },
+  ];
+
+  // Object Model
+  var dataObj2 = [
+      { id:1, title:'http://www.google.com/',    image:'icons/google.png'},
+      { id:2, title:'http://www.yahoo.com/',     image:'icons/yahoo.png'},
+      { id:3, title:'http://www.facebook.com/',  image:'icons/facebook.png'},
+      { id:4, title:'http://www.flickr.com/',    image:'icons/flickr.png'},
+      { id:5, title:'http://www.linkedin.com/',  image:'icons/linkedin.png'},
+      { id:6, title:'http://www.twitter.com/',   image:'icons/twitter.png'},
+      { id:7, title:'http://www.youtube.com/',   image:'icons/youtube.png'},
+      { id:8, title:'http://www.microsoft.com/', image:'icons/microsoft.png'}];
+
+  // Array Model
+  var dataArr = [
+      [ 1, 'http://www.google.com/',    'icons/google.png'],
+      [ 2, 'http://www.yahoo.com/',     'icons/yahoo.png'],
+      [ 3, 'http://www.facebook.com/',  'icons/facebook.png'],
+      [ 4, 'http://www.flickr.com/',    'icons/flickr.png'],
+      [ 5, 'http://www.linkedin.com/',  'icons/linkedin.png'],
+      [ 6, 'http://www.twitter.com/',   'icons/twitter.png'],
+      [ 7, 'http://www.youtube.com/',   'icons/youtube.png'],
+      [ 8, 'http://www.microsoft.com/', 'icons/microsoft.png']];
+
+  var gridLayout = [
+      { name     : 'id',
+        type     : 'id',
+        title    : 'ID',
+        align    : 'left',
+        width    : '20',
+        sortType : 'num'
+        //hidden    : true
+      },
+      { name     : 'title',
+        type     : 'link',
+        title    : 'Title',
+        image    : 'images/info.png',
+        align    : 'left',
+        //width    : '450',
+        sortType : 'str'
+      },
+      { name     : 'price',
+        type     : 'currency',
+        title    : 'Price',
+        align    : 'right',
+        width    : '100',
+        sortType : 'num'
+      },
+      { name  : 'image',
+        type  : 'image',
+        title : 'Image',
+        align : 'center',
+        width : '50',
+        onClick : 'clickTest'
+      }
+    ];
+
+  var gridOptions = {
+      border : '1',
+      cellpadding : '2',
+      cellspacing : '2',
+      frame : 'box',
+      //rules : 'rows',
+      /*width : '400px',
+      height : '100px',
+      autoRowClass : true,
+      autoCellClass : true,
+      coloredRows : true,*/
+      pagination : true,
+      mouseRollOver : true,
+      rowSelect : true,
+      hasFooter : true
+  };
+    
+  function onRowSelect(rowIndex, event) {
+    console.log('onRowSelect:' + rowIndex);
+  }
+
+  function onRowOver(rowIndex, event) {
+    console.log('onRowOver');
+  }
+
+  function onRowOut(rowIndex, event) {
+    console.log('onRowOut');
+  }
+
+  function onCellClick(rowIndex, cellIndex, event) {
+    console.log('onCellClick: (' + rowIndex + ',' + cellIndex + ')');
+  }
+
+  function onKeyDown(event) {
+    console.log('onKeyDown: (' + event.keyCode + ')');
+  }
+
+  var gridEvents = {
+    //onRowSelect : onRowSelect,
+    //onRowOver   : onRowOver,
+    //onRowOut    : onRowOut,
+    //onCellClick : onCellClick,
+    onKeyDown   : onKeyDown
+  }
+
+  var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
+  myGrid.setID('mkhgrid');
+  myGrid.pageBy(3);
+  myGrid.options.currencyFormat = ['$ ', 2, ',', '.', '%s%v'];
+  myGrid.init('fillGrid');
+  //myGrid.render();
+  
+  function fillGrid(page) {
+    var limit = 3;
+    var offset = (page - 1) * limit;
+    var data = dataObj1.slice(offset, offset + limit);
+    myGrid.loadData(data, 11);
+    //myGrid.loadData(dataObj1);
+    //myGrid.loadData(dataArr);
+  }
+
+  function clickTest(row) {
+    //var scroll = Element.cumulativeScrollOffset(myGrid.body);
+    alert(myGrid.body.getHeight());
+    //alert(myGrid.table.getHeight());
+    return;
+    alert(myGrid.data[row-1]['id']);
+    return;
+    myGrid.select(row);
+    myGrid.clearSelection();
+  }
+  
+  function doUpdateGrid() {
+    alert(1);
+  }
+  
+  function insertRow() {
+    //var rowData = {id:20, title:'http://mohsenkhahani.com/', image:'images/mkh.png'};
+    var rowData = {id:20, title:{text:'Mohsen Khahani', href:'http://mohsenkhahani.com/'}, image:{src:'images/mkh.png', title:'MKH'}};
+    myGrid.insertRow(rowData, 2);
+  }
+  function deleteRow() {
+    myGrid.deleteRow(2);
+  }
+  function updateRow() {
+    var rowData = {id:20, title:{text:'Mohsen Khahani', href:'http://mohsenkhahani.com/'}, image:{src:'images/mkh.png', title:'MKH'}};
+    myGrid.updateRow(2, rowData);
+  }
+  function test() {
+    //myGrid.header.scrollLeft = 100;
+    //myGrid.updateCell(2, 2, {text:'Yahoo2', href:'http://www.yahoo2.com/'});
+    myGrid.sort(1);
+    myGrid.update();
+  }
+</script>
+</html>

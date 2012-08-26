@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Progress</title>
+  <link rel="stylesheet" type="text/css" href="../style/progress/progress.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../progress.js"></script>
+  <style type="text/css">
+    body {font:12px arial;}
+    .protopack-progress .value {color:orange; font-size:20px;}
+  </style>
+</head>
+<body>
+  <br/><br/><br/><br/>
+  <div align="center">
+    <div id="progressbar1" style="width:435px; height:50px;"></div><br/>
+    <input type="button" value="Start" onClick="Start();"></input>
+    <input type="button" value="Pause" onClick="Pause();"></input>
+    <input type="button" value="Step Forward" onClick="progress1.stepIt();"></input>
+    <input type="button" value="Step Back" onClick="progress1.stepBy(-1);"></input>
+    <input type="button" value="Set Pos = 25" onClick="progress1.setPosition(25);"></input>
+    <input type="button" value="Stop" onClick="Stop();"></input>
+  </div>
+</body>
+<script>
+  function Start() {
+    if (timer != null) return;
+    timer = new PeriodicalExecuter(function(pe) {
+      if (progress1.position >= progress1.end) {
+        pe.stop();
+        console.log('The End');
+      }
+      progress1.stepIt();
+    }, 0.1);
+  }
+
+  function Pause() {
+    if (timer) {
+      timer.stop();
+      timer = null;
+    }
+  }
+
+  function Stop() {
+    if (timer) {
+      timer.stop();
+      timer = null;
+    }
+    progress1.reset();
+  }
+
+  var timer,
+      options1 = {position:0, start:0, end:100, valueType:'percent', valuePos:'center', valuePostfix:'%'},
+      progress1 = new ProtopackProgress('progressbar1', options1);
+</script>
+</html>

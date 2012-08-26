@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Tabs</title>
+  <link rel="stylesheet" type="text/css" href="../style/tabs.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../tabs.js"></script>
+</head>
+<style type="text/css">
+  #workspace {width:500px; margin:100px auto 0 auto;}
+</style>
+<body>
+  <div id="workspace">
+    <ul id="tab_sheet" class="protopack-tabs">
+      <li><a rel="sheet1">Tab1</a></li>
+      <li><a rel="sheet2">Tab2</a></li>
+      <li><a rel="sheet3">Tab3</a></li>
+    </ul>
+    <div style="padding:10px;">
+      <div id="sheet1">This is sheet #1</div>
+      <div id="sheet2">This is sheet #2</div>
+      <div id="sheet3">This is sheet #3</div>
+    </div>
+    <button onclick="myFunc()">GO</button>
+  </div>
+</body>
+<script>
+  function myFunc() {
+  }
+  var myTabSheet = new ProtopackTabs('tab_sheet', {defaultTabIndex:2});
+</script>
+</html>

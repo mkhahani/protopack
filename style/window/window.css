@@ -1,0 +1,43 @@
+.twindow {
+    position: absolute;
+    z-index:20;
+    background-color: white;
+    border: 1px solid #CCCCCC;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    box-shadow: 5px 5px 15px silver;
+    -moz-box-shadow: 5px 5px 15px silver;
+    min-width: 100px;
+    min-height: 50px;
+    font-size: 12px;
+}
+.twindow-overlay {
+    position:fixed;
+    top:0;
+    left:0;
+    width:10000px;
+    height:10000px;
+    z-index:10;
+    background-color:white;
+}
+.twindow-header {
+    padding:20px;
+}
+.twindow-title {
+    font-size:16px;
+    font-weight:bold;
+    text-align:left;
+}
+.twindow-content {
+    padding:20px;
+}
+.twindow-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    width: 11px;
+    height: 11px;
+    background: url(close.png) no-repeat;
+    cursor: pointer;
+}

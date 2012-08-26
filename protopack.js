@@ -48,5 +48,5 @@ function setEqualHeight(sourceEl, targetEl) {
         sourceHeight = e1.getHeight(),
         padding = layout.get('padding-top') + layout.get('padding-bottom'),
         border  = layout.get('border-top')  + layout.get('border-bottom');
-    e2.setStyle({height: sourceHeight - padding - border + 'px'});
+    e2.setStyle({height: sourceHeight + 'px'});
 }

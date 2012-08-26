@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Window Component</title>
+  <link rel="stylesheet" type="text/css" href="../style/window/window.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../lib/scriptaculous.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../draggable.js"></script>
+  <script type="text/javascript" src="../window.js"></script>
+</head>
+<body>
+  <div id="workspace" style="position:relative; width:600px; height:500px; border:1px solid black; overflow:auto;">
+    <button onclick="wnd.setSize(400, 200);">setSize()</button>
+    <button onclick="wnd.show(500, 100);">show(500, 100)</button>
+    <input />
+  </div>
+  <div id="sample_content">A content..</div>
+</body>
+<script>
+  function cls(wndId) {
+    alert(wndId);
+  }
+  var options = {
+    modal: false,
+    transparentDrag: false
+  }
+  var wnd = new tWindow(options, 'workspace');
+  wnd.setTitle('Tiny Window v1.0');
+  wnd.setContent($('sample_content'));
+  wnd.show();
+</script>
+</html>

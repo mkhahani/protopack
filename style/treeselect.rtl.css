@@ -1,0 +1,50 @@
+.protopack-treeselect {
+    display: inline-block;
+    font-size: 13px;
+    direction: rtl;
+}
+.protopack-treeselect input {
+}
+.protopack-treeselect-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #888888;
+    overflow: auto;
+    max-height: 400px;
+    box-shadow: 5px 5px 5px #AAAAAA;
+    -moz-box-shadow: 5px 5px 5px #AAAAAA;
+    z-index: 100;
+    padding: 5px;
+}
+.protopack-treeselect-tree {
+    width: 100%;
+}
+.protopack-treeselect-tree var {
+    display: none;
+}
+.protopack-treeselect-tree ul {
+    list-style: none;
+    margin: 0;
+    padding-right:0;
+}
+.protopack-treeselect-tree li {
+    text-align: right;
+}
+.protopack-treeselect-tree li ul {
+    padding-right:20px;
+}
+.protopack-treeselect-tree-node {
+    cursor: default;
+}
+.protopack-treeselect-tree-node a {
+    padding: 0 2px;
+}
+.protopack-treeselect-tree-node-hover {
+    background-color: #ddd;
+}
+.protopack-treeselect-tree-node-selected {
+    background-color: grey;
+}
+.protopack-treeselect-tree-node-selected a {
+    color: white;
+}
