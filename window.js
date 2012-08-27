@@ -1,16 +1,19 @@
 /**
- * Window Component based on Prototype
+ *  Protopack Window, a DHTML Window Component based on Prototype JS framework
+ *  © 2012 Mohsen Khahani
+ *
+ *  Licensed under the MIT license
+ *  Created on May 6, 2012
+ *
+ *  http://mohsen.khahani.com/protopack
  */
 
-if (typeof Prototype == 'undefined' || !Prototype.Version.match('1.7')) {
-    throw('tWindow component requires Prototype library >= 1.7.0');
-}
 
 /**
  * Default configuration
  */
-var tWindowOptions = {
-    className       : 'twindow',
+var ProtopackWindowOptions = {
+    className       : 'protopack-window',
     showHeader      : true,
     closeButton     : true,
     escape          : true,
@@ -20,16 +23,16 @@ var tWindowOptions = {
 }
 
 /**
- * tWindow class
+ * ProtopackWindow class
  */
-var tWindow = Class.create({
+var ProtopackWindow = Class.create({
     version: '1.0',
 
     /**
      * The window intializer
      */
     initialize: function(options, target) {
-        this.options = tWindowOptions;
+        this.options = ProtopackWindowOptions;
         Object.extend(this.options, options || {});
         this.className = this.options.className;
 
@@ -125,7 +128,7 @@ var tWindow = Class.create({
         }
     },
 
-    setID: function(id) {
+    setId: function(id) {
         this._window.id = id;
     },
 
