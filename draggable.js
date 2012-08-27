@@ -1,22 +1,25 @@
 /**
- * Drag & Drop library based on Prototype
+ *  Protopack Draggable, a drag & drop library based on Prototype JS framework
+ *  © 2012 Mohsen Khahani
+ *
+ *  Licensed under the MIT license
+ *  Created on May 6, 2012
+ *
+ *  http://mohsen.khahani.com/protopack
  */
 
-if (typeof Prototype == 'undefined' || !Prototype.Version.match('1.7')) {
-    throw('tDraggable component requires Prototype library >= 1.7.0');
-}
 
 /**
  * Default configuration
  */
-var tDraggableOptions = {
+var ProtopackDraggableOptions = {
     transparent: true
 }
 
 /**
- * tDraggable class
+ * ProtopackDraggable class
  */
-var tDraggable = Class.create({
+var ProtopackDraggable = Class.create({
     version: '1.0',
 
     /**
@@ -29,7 +32,7 @@ var tDraggable = Class.create({
         if (typeof clickableEl == 'undefined') {
             clickableEl = dragableEl;
         }
-        this.options = tDraggableOptions;
+        this.options = ProtopackDraggableOptions;
         Object.extend(this.options, options || {});
 
         this.dragObj = draggableEl;
