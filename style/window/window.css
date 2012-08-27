@@ -1,4 +1,4 @@
-.twindow {
+.protopack-window {
     position: absolute;
     z-index:20;
     background-color: white;
@@ -11,7 +11,7 @@
     min-height: 50px;
     font-size: 12px;
 }
-.twindow-overlay {
+.protopack-window-overlay {
     position:fixed;
     top:0;
     left:0;
@@ -20,18 +20,18 @@
     z-index:10;
     background-color:white;
 }
-.twindow-header {
+.protopack-window-header {
     padding:20px;
 }
-.twindow-title {
+.protopack-window-title {
     font-size:16px;
     font-weight:bold;
     text-align:left;
 }
-.twindow-content {
+.protopack-window-content {
     padding:20px;
 }
-.twindow-close {
+.protopack-window-close {
     position: absolute;
     top: 10px;
     right: 10px;

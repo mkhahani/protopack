@@ -5,7 +5,6 @@
   <title>Window Component</title>
   <link rel="stylesheet" type="text/css" href="../style/window/window.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
-  <script type="text/javascript" src="../lib/scriptaculous.js"></script>
   <script type="text/javascript" src="../protopack.js"></script>
   <script type="text/javascript" src="../draggable.js"></script>
   <script type="text/javascript" src="../window.js"></script>
@@ -26,8 +25,8 @@
     modal: false,
     transparentDrag: false
   }
-  var wnd = new tWindow(options, 'workspace');
-  wnd.setTitle('Tiny Window v1.0');
+  var wnd = new ProtopackWindow(options, 'workspace');
+  wnd.setTitle('Protopack Window v1.0');
   wnd.setContent($('sample_content'));
   wnd.show();
 </script>
