@@ -55,12 +55,12 @@ var ProtopackWindow = Class.create({
         }
 
         if (this.options.draggable) {
-            if (typeof Draggable != 'undefined') {
+            /* if (typeof Draggable != 'undefined') {
                 if (!this.options.transparentDrag) {
                     var options = {starteffect:false, endeffect:false};
                 }
                 new Draggable(this._window, options);
-            } else if (typeof ProtopackDraggable != 'undefined') {
+            } else */ if (typeof ProtopackDraggable != 'undefined') {
                 new ProtopackDraggable(this._window, 
                                this._header? this._header : this._window, 
                                {transparent:this.options.transparentDrag});
