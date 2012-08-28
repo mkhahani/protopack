@@ -74,6 +74,7 @@ var ProtopackTree = Class.create({
     reload: function () {
         var nodes = [],
             nodesById = {},
+            dataById  = {},
             rootNodes = [],
             tree;
 
@@ -89,10 +90,15 @@ var ProtopackTree = Class.create({
             return nodeItem;
         }.bind(this));
 
+        // It seems these two properties have cost and should become optional
         nodes.each( function (node, i) {
             nodesById[node.id] = node;
         });
         this.nodesById = nodesById;
+        this.data.each( function (data, i) {
+            dataById[data[0]] = data;
+        });
+        this.dataById = dataById;
 
         function getChildNodes(id) {
             var res = nodes.partition(function (node) {return node.pid == id;});
