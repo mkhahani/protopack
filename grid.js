@@ -59,19 +59,7 @@ var ProtopackGrid = Class.create({
 
         /*Event.observe(div, 'scroll', function() {
                 alert('boo');
-        });
-        if (this.options.cellpadding) {
-            table.writeAttribute('cellpadding', this.options.cellpadding);
-        }
-        if (this.options.cellspacing) {
-            table.writeAttribute('cellspacing', this.options.cellspacing);
-        }
-        if (this.options.frame) {
-            table.writeAttribute('frame', this.options.frame);
-        }
-        if (this.options.rules) {
-            table.writeAttribute('rules', this.options.rules);
-        }*/
+        });*/
         
         // Grid Header
         this.header = this._createHeader();
