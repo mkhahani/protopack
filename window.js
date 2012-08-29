@@ -55,15 +55,15 @@ var ProtopackWindow = Class.create({
         }
 
         if (this.options.draggable) {
-            /* if (typeof Draggable != 'undefined') {
+            if (typeof ProtopackDraggable != 'undefined') {
+                new ProtopackDraggable(this._window,
+                                       this._header? this._header : this._window, 
+                                       {transparent:this.options.transparentDrag});
+            } else if (typeof Draggable != 'undefined') {
                 if (!this.options.transparentDrag) {
                     var options = {starteffect:false, endeffect:false};
                 }
                 new Draggable(this._window, options);
-            } else */ if (typeof ProtopackDraggable != 'undefined') {
-                new ProtopackDraggable(this._window, 
-                               this._header? this._header : this._window, 
-                               {transparent:this.options.transparentDrag});
             }
         }
     },
@@ -122,12 +122,12 @@ var ProtopackWindow = Class.create({
                 throw 'Could not set window position.';
             }
         } else {
-            //var docDim = document.viewport.getDimensions(),
+            //var dim = document.viewport.getDimensions(),
             var dim = this._window.parentNode.getDimensions(),
                 width  = this._window.getWidth(),
                 height = this._window.getHeight();
             this._window.style.left = (width > dim.width)? 0 : Math.round(dim.width / 2 - width / 2) + 'px';
-            this._window.style.top = (height > dim.height)? 0 :  Math.round(dim.height / 2 - height / 2) + 'px';
+            this._window.style.top = (height > dim.height)? 0 : Math.round(dim.height / 2 - height / 2) + 'px';
         }
     },
 
