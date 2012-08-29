@@ -4,9 +4,7 @@ Protopack
 
 Looking for Javascript UI components based on Prototype JS framework? You just found it!
 
-Protopack is set of useful DHTML UI components and publishes under the MIT license.
-
-I'm not pro in Prototype nor in Javascript but my focus has been on writing standard, optimized & applicable codes all the time.
+Protopack is set of useful DHTML UI components for Prototype and publishes under the MIT license.
 
 
 Rquirements
