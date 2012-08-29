@@ -2,13 +2,16 @@
 .pp-grid table {width:100%; font:11px tahoma; border-spacing:0; border-collapse:collapse;}
 .pp-grid th {padding:0 5px;}
 
-.pp-grid-header {background-color:#666; overflow:auto;}
+.pp-grid-header {background-color_:#666; overflow:auto; border-bottom:1px solid #DDD;}
 .pp-grid-header table {color:white; width_:500px;}
 .pp-grid-header th {border-right:1px solid #DDD; height:20px; cursor:default;}
 .pp-grid-header th:last-child {border-right:none;}
 .pp-grid-header th.sorted-asc {background:url(down.png) right no-repeat}
 .pp-grid-header th.sorted-desc {background:url(up.png) right no-repeat}
 .pp-grid-header th img {vertical-align:middle; margin-right:3px;}
+
+.pp-grid-header .titles {background-color:#666;}
+.pp-grid-header .filters input {font:11px tahoma; padding:0 2px; margin:2px 0;}
 
 .pp-grid-body {height_:100px; overflow:auto;}
 

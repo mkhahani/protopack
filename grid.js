@@ -31,7 +31,7 @@ var ProtopackGridOptions = {
  * Grid base class
  */
 var ProtopackGrid = Class.create({
-    Version: '1.0',
+    Version: '1.1',
 
     /**
      * The grid intializer
@@ -45,13 +45,13 @@ var ProtopackGrid = Class.create({
         this.pageIndex = 1;
         this._pageBy = 0;
         this.sortOrder = 'ASC';
-        this.grid = this._createGrid(target);
+        this.grid = this._construct(target);
     },
 
     /**
      * Creates the grid structure and fills it with givven data
      */
-    _createGrid: function (target) {
+    _construct: function (target) {
         var grid  = new Element('div', {'class':this.className}),
             tbody = new Element('tbody'),
             table = new Element('table').update(tbody),
@@ -92,10 +92,13 @@ var ProtopackGrid = Class.create({
      * Adds header to grid
      */
     _createHeader: function () {
-        var header = new Element('div', {'class':this.className + '-header'}),
-            table  = new Element('table'),
-            tr     = table.insertRow(-1),
-            ignore = 0;
+        var header   = new Element('div', {'class':this.className + '-header'}),
+            table    = new Element('table'),
+            trTitle  = table.insertRow(-1),
+            trFilter = table.insertRow(-1),
+            ignore   = 0;
+
+        // Titles
         this.columns.each( function (column, index) {
             if (ignore > 0) {
                 ignore--;
@@ -121,12 +124,52 @@ var ProtopackGrid = Class.create({
                     th.addClassName('sortable');
                 }
             }
-            Element.insert(tr, th.insert(column.title));
+            trTitle.className = 'titles';
+            Element.insert(trTitle, th.insert(column.title));
             if (column.hasOwnProperty('colSpan')) {
                 th.setAttribute('colspan', column.colSpan);
                 ignore = column.colSpan - 1;
             }
         }.bind(this));
+
+        // Filter
+        if (this.events.onFilter) {
+            ignore = 0;
+            trFilter.className = 'filters';
+            this.columns.each( function (column, index) {
+                if (ignore > 0) {
+                    ignore--;
+                    return;
+                }
+                var td = new Element('td');
+                if (column.hidden) {
+                    td.addClassName('hidden');
+                    td.setAttribute('width', 0);
+                } else {
+                    if (column.filter) {
+                        switch (column.filter) {
+                            case 'text':
+                                var input = new Element('input', {name:column.name});
+                                input.style.width = column.width + 'px';
+                                input.observe('keydown', function(e) {
+                                    if (e.keyCode == 13) {
+                                        this.events.onFilter(input.name, input.value);
+                                    }
+                                }.bind(this));
+                                td.insert(input);
+                            //case 'list': /* should be implemented */
+                        }
+                    }
+                }
+                Element.insert(trFilter, td);
+                if (column.hasOwnProperty('colSpan')) {
+                    td.setAttribute('colspan', column.colSpan);
+                    ignore = column.colSpan - 1;
+                }
+            }.bind(this));
+            //this.filter = trFilter;
+        }
+
         return header.insert(table);
     },
 
@@ -280,7 +323,7 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Creates the element of a cell
+     * Creates required element and assigns it to a cell
      */
     _createElement: function (col, data) {
         var el;
@@ -445,7 +488,7 @@ var ProtopackGrid = Class.create({
             }
         }
         window[this.initFunc](this.pageIndex);
-        this._updateStatusbar();
+        this._updatePager();
 
         // if (this.pageIndex == this.maxPageIndex) {
             // right.disable();
@@ -462,7 +505,7 @@ var ProtopackGrid = Class.create({
     /**
      * Does an offline update on grid with current data
      */
-    _updateStatusbar: function() {
+    _updatePager: function() {
         if (this.footer) {
             if (this.total == 0) {
                 this.status.update('');
@@ -476,6 +519,14 @@ var ProtopackGrid = Class.create({
                 this.status.update(from + ' - ' + to + ' (' + this.total + ')');
             }
         }
+    },
+
+    /**
+     * Does an offline update on grid with current data
+     */
+    resetPager: function() {
+        this.pageIndex = 1;
+        this._updatePager();
     },
 
 /*=============================================================================
@@ -512,7 +563,7 @@ var ProtopackGrid = Class.create({
         if (this._pageBy != 0) {
             this.maxPageIndex = Math.ceil(this.total / this._pageBy);
         }
-        this._updateStatusbar();
+        this._updatePager();
     },
 
     /**

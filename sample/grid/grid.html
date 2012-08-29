@@ -12,7 +12,7 @@
     #mkhgrid {width:300px; margin-top:100px;}
   </style>
   <div align="center">
-  <div id="thetable">Protopack Grid v1.0</div><br/>
+  <div id="thetable">Protopack Grid v1.1</div><br/>
   <input type="button" value="Refresh" onClick="myGrid.header.hide();"></input>
   <input type="button" value="Set Caption" onClick="myGrid.setCaption('MKH');"></input>
   <input type="button" value="Del Caption" onClick="myGrid.setCaption('');"></input>
@@ -67,7 +67,8 @@
         title    : 'ID',
         align    : 'left',
         width    : '20',
-        sortType : 'num'
+        sortType : 'num',
+        filter   : 'text'
         //hidden    : true
       },
       { name     : 'title',
@@ -76,7 +77,8 @@
         image    : 'images/info.png',
         align    : 'left',
         //width    : '450',
-        sortType : 'str'
+        sortType : 'str',
+        filter   : 'text'
       },
       { name     : 'price',
         type     : 'currency',
@@ -131,12 +133,17 @@
     console.log('onKeyDown: (' + event.keyCode + ')');
   }
 
+  function onFilter(name, value) {
+    console.log('onFilter: (' + name + ':' + value + ')');
+  }
+
   var gridEvents = {
     //onRowSelect : onRowSelect,
     //onRowOver   : onRowOver,
     //onRowOut    : onRowOut,
     //onCellClick : onCellClick,
-    onKeyDown   : onKeyDown
+    onKeyDown   : onKeyDown,
+    onFilter   : onFilter
   }
 
   var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
