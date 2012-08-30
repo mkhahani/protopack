@@ -70,7 +70,6 @@ var ProtopackWindow = Class.create({
 
     _createWindow: function() {
         var window  = new Element('div', {'class': this.className}).hide();
-        window.setStyle({left:this.left + 'px', top:this.top + 'px'});
         if (this.options.escape) {
             document.observe('keydown', function(e) {
                 if (window.visible() && e.keyCode == Event.KEY_ESC) {
