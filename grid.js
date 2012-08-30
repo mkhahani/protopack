@@ -635,8 +635,8 @@ var ProtopackGrid = Class.create({
                 res;
             a = a[key];
             b = b[key];
-            if (typeof a == 'object') {a = a.text;}
-            if (typeof b == 'object') {b = b.text;}
+            if (typeof a == 'object') {a = a.value;}
+            if (typeof b == 'object') {b = b.value;}
             if (!Object.isString(a) && !Object.isNumber(a)) {
                 a = a[Object.keys(a)[0]];
                 b = b[Object.keys(b)[0]];
