@@ -355,7 +355,7 @@ var ProtopackGrid = Class.create({
             case 'image':
                 if (Object.isString(data)) {
                     el = new Element('img', {src:data});
-                } else if (Object.isArray(data)) {
+                /*} else if (Object.isArray(data)) {
                     el = [];
                     data.each(function (img) {
                         if (Object.isString(img)) {
@@ -367,7 +367,7 @@ var ProtopackGrid = Class.create({
                             }
                             el.push(imgEl);
                         }
-                    });
+                    });*/
                 } else {
                     el = new Element('img', {src:data.src});
                     if (data.hasOwnProperty('title')) {
