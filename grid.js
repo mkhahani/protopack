@@ -510,13 +510,15 @@ var ProtopackGrid = Class.create({
             if (this.total == 0) {
                 this.status.update('');
             } else {
-                this.pageInput.setValue(this.pageIndex);
                 var from = (this.pageIndex - 1) * this._pageBy + 1,
                     to = this.pageIndex * this._pageBy;
-                if (to > this.total) {
+                if (to == 0 || to > this.total) {
                     to = this.total;
                 }
                 this.status.update(from + ' - ' + to + ' (' + this.total + ')');
+                if (this.options.pagination) {
+                    this.pageInput.setValue(this.pageIndex);
+                }
             }
         }
     },
