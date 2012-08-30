@@ -336,9 +336,6 @@ var ProtopackGrid = Class.create({
                     el = new Element('span').update(data);
                 } else {
                     el = new Element('span').update(data.text);
-                    if (data.hasOwnProperty('style')) {
-                        el.setAttribute('style', data.style);
-                    }
                 }
                 break;
             case 'currency':
@@ -347,9 +344,6 @@ var ProtopackGrid = Class.create({
                     el = new Element('span').update(accounting.formatMoney(data, cf[0], cf[1], cf[2], cf[3], cf[4]));
                 } else {
                     el = new Element('span').update(accounting.formatMoney(data.text, cf[0], cf[1], cf[2], cf[3], cf[4]));
-                    if (data.hasOwnProperty('style')) {
-                        el.setAttribute('style', data.style);
-                    }
                 }
                 break;
             case 'image':
@@ -370,9 +364,6 @@ var ProtopackGrid = Class.create({
                     });*/
                 } else {
                     el = new Element('img', {src:data.src});
-                    if (data.hasOwnProperty('title')) {
-                        el.setAttribute('title', data.title)
-                    }
                     if (data.hasOwnProperty('alt')) {
                         el.setAttribute('alt', data.alt)
                     }
@@ -386,17 +377,19 @@ var ProtopackGrid = Class.create({
                     if (data.hasOwnProperty('text')) {
                         el.update(data.text)
                     }
-                    if (data.hasOwnProperty('title')) {
-                        el.setAttribute('title', data.title)
-                    }
                     if (data.hasOwnProperty('image')) {
                         el.insert(new Element('img'), {src:data.image})
                     }
-                    if (data.hasOwnProperty('style')) {
-                        el.setAttribute('style', data.style);
-                    }
                 }
                 break;
+        }
+        if (typeof data == 'object') {
+            if (data.hasOwnProperty('title')) {
+                el.setAttribute('title', data.title)
+            }
+            if (data.hasOwnProperty('style')) {
+                el.setAttribute('style', data.style);
+            }
         }
         if (col.onClick) {
             el.observe('click', function() {
