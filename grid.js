@@ -543,7 +543,7 @@ var ProtopackGrid = Class.create({
     /**
      * Sets ID of the grid
      */
-    setID: function(id) {
+    setId: function(id) {
         this.grid.id = id;
     },
 
