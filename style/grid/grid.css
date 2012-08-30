@@ -1,21 +1,32 @@
-
 .pp-grid {border:1px solid #888888;}
 .pp-grid table {width:100%; font:11px tahoma; border-spacing:0; border-collapse:collapse;}
 .pp-grid div, .pp-grid input {outline:none;} /* webkit */
 .pp-grid th {padding:0 5px;}
+.pp-grid th.hidden {display:none;}
+.pp-grid th.sortable {cursor:pointer;}
+.pp-grid td {padding:0 5px; cursor:default;}
+.pp-grid td.hidden {display:none;}
+.pp-grid tfoot {background-color:#EEEEEE; color:#888888; font-size:10px;}
+.pp-grid col.hidden {display:none;}
+.pp-grid a:hover {text-decoration:none;}
 
+.pp-grid-header .titles {background-color:#666;}
+.pp-grid-header .filters input {font:11px tahoma; padding:0 2px; margin:2px 0;}
 .pp-grid-header {background-color_:#666; overflow:auto; border-bottom:1px solid #DDD;}
 .pp-grid-header table {color:white; width_:500px;}
 .pp-grid-header th {border-right:1px solid #DDD; height:20px; cursor:default;}
 .pp-grid-header th:last-child {border-right:none;}
+.pp-grid-header th img {vertical-align:middle; margin-right:3px;}
 .pp-grid-header th.sorted-asc {background:url(down.png) right no-repeat}
 .pp-grid-header th.sorted-desc {background:url(up.png) right no-repeat}
-.pp-grid-header th img {vertical-align:middle; margin-right:3px;}
-
-.pp-grid-header .titles {background-color:#666;}
-.pp-grid-header .filters input {font:11px tahoma; padding:0 2px; margin:2px 0;}
 
 .pp-grid-body {overflow:auto;} /* set height for scrolled content */
+.pp-grid-body tr.even {background-color:#F5F5F5;}
+.pp-grid-body tr.odd {background-color:#FFFFFF;}
+.pp-grid-body tr.hover {background-color:#FFF5DF;}
+.pp-grid-body tr.selected {background-color:#FFE9C4;}
+.pp-grid-body tr.selected td {background:url(sel.png) repeat-x;}
+.pp-grid-body td {height:20px;}
 
 .pp-grid-footer {height:18px; background-color:#EEE; border-top:1px solid #DDD; font:10px tahoma;}
 .pp-grid-footer .status {float:left; margin:3px 0 0 5px;}
@@ -28,16 +39,3 @@
 .pp-grid-footer .controls input.prev {background:url(prev.png) 50% 50% no-repeat;}
 .pp-grid-footer .controls input.next {background:url(next.png) 50% 50% no-repeat;}
 .pp-grid-footer .controls input.last {background:url(last.png) 50% 50% no-repeat;}
-
-.pp-grid tfoot {background-color:#EEEEEE; color:#888888; font-size:10px;}
-.pp-grid td {padding:2px 5px; cursor:default;}
-.pp-grid a:hover {text-decoration:none;}
-.pp-grid th.hidden {display:none;}
-.pp-grid td.hidden {display:none;}
-.pp-grid col.hidden {display:none;}
-.pp-grid th.sortable {cursor:pointer;}
-
-.pp-grid-body tr.even {background-color:#F5F5F5;}
-.pp-grid-body tr.odd {background-color:#FFFFFF;}
-.pp-grid-body tr.hover {background-color:#FFF5DF;}
-.pp-grid-body tr.selected {background-color:#ffe1ba;}
