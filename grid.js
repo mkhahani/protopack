@@ -280,17 +280,21 @@ var ProtopackGrid = Class.create({
             }.bind(this));
         }
         if (this.options.mouseRollOver) {
-            Event.observe(tr, 'mouseover', function(e) {
+            Event.observe(tr, 'mouseover', function() {
                 this._highlightRow(tr);
-                if (this.events.onRowOver) {
-                    this.events.onRowOver(tr.rowIndex, e);
-                }
             }.bind(this));
-            Event.observe(tr, 'mouseout', function(e) {
+            Event.observe(tr, 'mouseout', function() {
                 this._unHighlightRow(tr);
-                if (this.events.onRowOut) {
-                    this.events.onRowOut(tr.rowIndex, e);
-                }
+            }.bind(this));
+        }
+        if (this.events.onRowOver) {
+            Event.observe(tr, 'mouseover', function(e) {
+                this.events.onRowOver(tr.rowIndex, e);
+            }.bind(this));
+        }
+        if (this.events.onRowOut) {
+            Event.observe(tr, 'mouseout', function(e) {
+                this.events.onRowOut(tr.rowIndex, e);
             }.bind(this));
         }
     },
