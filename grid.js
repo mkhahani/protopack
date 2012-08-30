@@ -17,7 +17,7 @@ var ProtopackGridOptions = {
     coloredRows   : true,
     rowSelect     : true,
     mouseRollOver : true,
-    colClasses    : true,
+    colClasses    : false,
     pagination    : false,
     // rowNumber     : false,
     // autoWidth     : false,
