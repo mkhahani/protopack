@@ -4,11 +4,12 @@ Bugs:
 
 TODO:
 -----
+- selectedRowIndex
 - Support RTL
 - Server side sorting
 - Filters
 - Keyboard Navigation (rowSelect, pageSelect, ...)
-
+- There are some useful attrib for styling table (rule, frame, cellpadding, cellspacing)
 
 Some advanced features:
 -------------------------
