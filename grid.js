@@ -22,6 +22,7 @@ var ProtopackGridOptions = {
     // rowNumber     : false,
     // autoWidth     : false,
     hasFooter     : true,
+    filter        : false,  // if true, onFilter event must be set too
     titleAlign    : 'left',
     currencyFormat: ['$ ', 0, ',', '.', '%s%v']  // See accounting.js documentation
 }
@@ -133,7 +134,9 @@ var ProtopackGrid = Class.create({
         }.bind(this));
 
         // Filter
-        if (this.events.onFilter) {
+        if (this.options.filter) {
+            var form = new Element('form');
+            header.insert(form.insert(table));
             ignore = 0;
             trFilter.className = 'filters';
             this.columns.each( function (column, index) {
@@ -153,11 +156,19 @@ var ProtopackGrid = Class.create({
                                 input.style.width = column.width + 'px';
                                 input.observe('keydown', function(e) {
                                     if (e.keyCode == 13) {
-                                        this.events.onFilter(input.name, input.value);
+                                        this.events.onFilter(form.serialize(true));
                                     }
                                 }.bind(this));
                                 td.insert(input);
-                            //case 'list': /* should be implemented */
+                                break;
+                            case 'list':
+                                var select = new Element('select', {name:column.name});
+                                select.style.width = column.width + 'px';
+                                select.observe('change', function() {
+                                    this.events.onFilter(form.serialize(true));
+                                }.bind(this));
+                                td.insert(select);
+                                break;
                         }
                     }
                 }
@@ -167,10 +178,11 @@ var ProtopackGrid = Class.create({
                     ignore = column.colSpan - 1;
                 }
             }.bind(this));
-            //this.filter = trFilter;
+        } else {
+            header.insert(table);
         }
 
-        return header.insert(table);
+        return header;
     },
 
     /**
@@ -551,6 +563,23 @@ var ProtopackGrid = Class.create({
      */
     pageBy: function(count) {
         this._pageBy = count;
+    },
+
+    /**
+     * Fills the specified filter listbox with givven data values
+     */
+    setFilterList: function(name, values) {
+        if (!this.options.filter) {
+            throw new Error('ProtopackGrid.setFilterList(): filter option is disabled');
+        }
+        var select = this.header.down('form')[name];
+        //console.log(select);
+        if (Object.isArray(values) && values.length > 0) {
+            values.each( function(value) {
+                var option = new Element('option', {value: value[0]}).update(value[1]);
+                select.insert(option);
+            });
+        }
     },
 
     /**

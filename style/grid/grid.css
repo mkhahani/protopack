@@ -17,9 +17,11 @@
 .pp-grid-header th img {vertical-align:middle; margin-right:3px;}
 .pp-grid-header th.sorted-asc {background:url(down.png) right no-repeat}
 .pp-grid-header th.sorted-desc {background:url(up.png) right no-repeat}
+.pp-grid-header form {margin:0;}
 .pp-grid-header .titles {background-color:#666;}
 .pp-grid-header .filters {border-bottom:1px solid #DDD; }
-.pp-grid-header .filters input {font:11px tahoma; padding:0 2px; margin:2px 0;}
+.pp-grid-header .filters input {width:100%; font:11px tahoma; padding:0 2px; margin:2px 0;}
+.pp-grid-header .filters select {width:100%; font:11px tahoma; padding:0; margin:2px 0;}
 
 .pp-grid-body {overflow:auto;} /* set height for scrolled content */
 .pp-grid-body tr.even {background-color:#F5F5F5;}
