@@ -5,6 +5,10 @@ Bugs:
 TODO:
 -----
 - selectedRowIndex
+- rowNumber
+- cellSelect
+- cellClasses
+- mouseRollOver [row, cell]
 - Support RTL
 - Server side sorting
 - Filters
