@@ -26,8 +26,8 @@
 .pp-grid-body {overflow:auto;} /* set height for scrolled content */
 .pp-grid-body tr.even {background-color:#F5F5F5;}
 .pp-grid-body tr.odd {background-color:#FFFFFF;}
-.pp-grid-body tr.hover {background-color:#FFF5DF;}
-.pp-grid-body tr.selected {background-color:#FFE9C4;}
+.pp-grid-body tr.hover {background-color:#E3EFFF;}
+.pp-grid-body tr.selected {background-color:#E3EFFF;}
 .pp-grid-body tr.selected td {background:url(sel.png) repeat-x;}
 .pp-grid-body td {height:20px;}
 
