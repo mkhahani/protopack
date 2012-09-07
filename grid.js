@@ -14,14 +14,12 @@
  */
 var ProtopackGridOptions = {
     className     : 'pp-grid',
-    coloredRows   : true,
+    oddEvenRows   : true,
     rowSelect     : true,
     mouseRollOver : true,
     colClasses    : false,
     pagination    : false,
-    // rowNumber     : false,
-    // autoWidth     : false,
-    hasFooter     : true,
+    footer        : true,
     filter        : false,  // if true, onFilter event must be set too
     titleAlign    : 'left',
     currencyFormat: ['$ ', 0, ',', '.', '%s%v']  // See accounting.js documentation
@@ -73,7 +71,7 @@ var ProtopackGrid = Class.create({
         grid.insert(this.body);
 
         // Grid Footer
-        if (this.options.hasFooter) {
+        if (this.options.footer) {
             this.footer = this._createFooter();
             grid.insert(this.footer);
         }
@@ -624,7 +622,7 @@ var ProtopackGrid = Class.create({
      * Redraws the grid (no data update)
      */
     refresh: function () {
-        if (this.options.coloredRows) {
+        if (this.options.oddEvenRows) {
             this.table.tBodies[0].select('tr').each(function (tr, i) {
                 var className = (i % 2 === 0)? 'even' : 'odd',
                     oposite = (className === 'odd')? 'even' : 'odd';

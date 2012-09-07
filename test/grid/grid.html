@@ -107,11 +107,11 @@
       height : '100px',
       autoRowClass : true,
       autoCellClass : true,
-      coloredRows : true,*/
+      oddEvenRows : true,*/
       pagination : true,
       mouseRollOver : true,
       rowSelect : true,
-      hasFooter : true,
+      footer : true,
       filter    : true
   };
     
@@ -149,15 +149,15 @@
   }
 
   var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
+  var limit = 5;
   myGrid.setId('mkhgrid');
-  myGrid.pageBy(3);
+  myGrid.pageBy(limit);
   myGrid.options.currencyFormat = ['$ ', 2, ',', '.', '%s%v'];
   myGrid.setFilterList('price', [[null, ''], [1, 'item1'], [2, 'item2'], [3, 'item3']]);
   myGrid.init('fillGrid');
   //myGrid.render();
   
   function fillGrid(page) {
-    var limit = 3;
     var offset = (page - 1) * limit;
     var data = dataObj1.slice(offset, offset + limit);
     myGrid.loadData(data, 11);
