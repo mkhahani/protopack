@@ -3,7 +3,6 @@
   <title>Protopack Grid for Prototype</title>
   <link rel="stylesheet" type="text/css" href="../../style/grid/grid.css" media="screen" />
   <script type="text/javascript" src="../../lib/prototype.js"></script>
-  <script type="text/javascript" src="../../lib/accounting.min.js"></script>
   <script type="text/javascript" src="../../protopack.js"></script>
   <script type="text/javascript" src="../../grid.js"></script>
 </head>
@@ -152,7 +151,6 @@
   var limit = 5;
   myGrid.setId('mkhgrid');
   myGrid.pageBy(limit);
-  myGrid.options.currencyFormat = ['$ ', 2, ',', '.', '%s%v'];
   myGrid.setFilterList('price', [[null, ''], [1, 'item1'], [2, 'item2'], [3, 'item3']]);
   myGrid.init('fillGrid');
   //myGrid.render();

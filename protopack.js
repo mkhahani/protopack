@@ -50,3 +50,25 @@ function setEqualHeight(sourceEl, targetEl) {
         border  = layout.get('border-top')  + layout.get('border-bottom');
     e2.setStyle({height: sourceHeight + 'px'});
 }
+
+/**
+ * Adds commas to a number string
+ * From "http://www.mredkj.com/javascript/numberFormat.html" + some improvements
+ */
+function addCommas(nStr, symbol)
+{
+	var rgx = /(\d+)(\d{3})/,
+        x, x1, x2, res;
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	res = x1 + x2;
+    if (typeof symbol !== 'undefined') {
+        res = symbol + res;
+    }
+    return res;
+}

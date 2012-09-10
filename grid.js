@@ -22,7 +22,7 @@ var ProtopackGridOptions = {
     footer        : true,
     filter        : false,  // if true, onFilter event must be set too
     titleAlign    : 'left',
-    currencyFormat: ['$ ', 0, ',', '.', '%s%v']  // See accounting.js documentation
+    currencySymbol: '$ '
 }
 
 
@@ -353,12 +353,9 @@ var ProtopackGrid = Class.create({
                 }
                 break;
             case 'currency':
-                var cf = this.options.currencyFormat;
-                if (accounting && (Object.isString(data) || !isNaN(data))) {
-                    el = new Element('span').update(accounting.formatMoney(data, cf[0], cf[1], cf[2], cf[3], cf[4]));
-                } else {
-                    el = new Element('span').update(accounting.formatMoney(data.text, cf[0], cf[1], cf[2], cf[3], cf[4]));
-                }
+                var value = (Object.isString(data) || !isNaN(data))? data : data.text;
+                value = addCommas(value, this.options.currencySymbol);
+                el = new Element('span').update(value);
                 break;
             case 'image':
                 if (Object.isString(data)) {
