@@ -90,7 +90,7 @@ var ProtopackTree = Class.create({
             nodeItem.node.addClassName(this.className + '-node');
             if (this.multiSelect) {
                 nodeItem.node.down('label').observe('click', this._onLabelClick.bind(this));
-                if (nodeItem.attrib.checked) {
+                if (nodeItem.data.checked) {
                     this.selected.push(nodeItem.id);
                 }
             }
@@ -269,7 +269,7 @@ var ProtopackTree = Class.create({
     clearSelection: function () {
         if (this.multiSelect) {
             this.selected.each(function (id) {
-                this.nodesById[id].attrib.checked = false;
+                this.nodesById[id].data.checked = false;
                 this.nodesById[id].node.down('input').checked = false;
             }.bind(this));
             this.selected.clear();
@@ -285,15 +285,16 @@ var ProtopackTree = Class.create({
      * Occurs on node click and updates the 'selected' attribute of the tree
      */
     _selectNode: function (id) {
+        if (typeof this.nodesById[id] == 'undefined') return;
         if (this.multiSelect) {
-            var checked = this.nodesById[id].attrib.checked,
+            var checked = this.nodesById[id].data.checked,
                 i = this.selected.indexOf(id);
             if (checked) {
                 this.selected.splice(i, 1);
             } else if (i === -1) {
                 this.selected.push(id);
             }
-            this.nodesById[id].attrib.checked = !checked;
+            this.nodesById[id].data.checked = !checked;
             this.nodesById[id].node.down('input').checked = !checked;
         } else {
             this.clearSelection();
@@ -308,7 +309,7 @@ var ProtopackTree = Class.create({
     setSelected: function (sel) {
         if (this.multiSelect) {
             function doSelect(id) {
-                this.nodesById[id].attrib.checked = true;
+                this.nodesById[id].data.checked = true;
                 this.nodesById[id].node.down('input').checked = true;
             };
             this.clearSelection();
@@ -418,25 +419,24 @@ var ProtopackTreeNode = Class.create({
     /**
      * Initiates the tree node
      *
-     * @node    Array[id, pid, text, attrib, style]
-     *              id    : String
-     *              pid   : String(parent)
-     *              text  : String(label)
-     *              attrib: Array[id, title, seq, href, checked, target, className, dir]
-     *              style : String(CSS Style)
-     * @options Boolean True/False
+     * @node    Array [id, pid, label, data]
+     *              id    : String (ID of the node element)
+     *              pid   : String (ID of the parent node element)
+     *              label : String (label of the node)
+     *              data  : Object {id, seq, checked, title, href, target, className, style, dir, UserDefined..}
+     * @options Object {interactive, multiSelect}
      *
      * @return  Object  A class instance of TreeNode
      */
     initialize: function (node, options) {
-        this.id          = node[0];
-        this.pid         = node[1];
-        this.text        = node[2];
-        this.attrib      = node[3] || {};
-        this.style       = node[4] || {};
-        this.seq         = this.attrib.seq || 0;
+        this.id    = node[0];
+        this.pid   = node[1];
+        this.label = node[2];
+        this.data  = node[3] || {};
+        // this.style       = node[4] || {};
+        // this.seq         = this.attrib.seq || 0;
         this.xhtml       = this._construct(options);
-        this.eventParams = {id:this.id, pid:this.pid, text:this.text, element:this.node};
+        this.eventParams = {id:this.id, pid:this.pid, text:this.label, element:this.node};
     },
 
     _construct: function (options) {
@@ -444,30 +444,28 @@ var ProtopackTreeNode = Class.create({
             nodeItem  = new Element('div');
         if (options.multiSelect) {
             var checkbox = new Element('input', {type: 'checkbox', value: this.id}),
-                textEl = new Element('label').update(this.text);
-            if (this.attrib.checked) {
-                checkbox.writeAttribute({checked: this.attrib.checked}); // Does not work on IE6
+                textEl = new Element('label').update(this.label);
+            if (typeof this.data.checked != 'undefined') {
+                checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
             } else {
-                this.attrib.checked = false;
+                this.data.checked = false;
             }
             nodeItem.insert(checkbox);
         } else {
-            var textEl = new Element('a').update(this.text);
-            if (this.attrib.href) {
-                textEl.writeAttribute({href: this.attrib.href});
-                if (this.attrib.target) {
-                    textEl.writeAttribute({target: this.attrib.target});
+            var textEl = new Element('a').update(this.label);
+            if (typeof this.data.href != 'undefined') {
+                textEl.writeAttribute({href: this.data.href});
+                if (typeof this.data.target != 'undefined') {
+                    textEl.writeAttribute({target: this.data.target});
                 }
             }
         }
         nodeItem.insert(textEl);
-        if (this.attrib.id) nodeItem.writeAttribute({id: this.attrib.id});
-        if (this.attrib.title) nodeItem.writeAttribute({title: this.attrib.title});
-        if (this.attrib.dir) nodeItem.writeAttribute({dir: this.attrib.dir});
-        if (this.attrib.className) nodeItem.addClassName(this.attrib.className);
-        if (Object.keys(this.style).length > 0) { // There must be a better way to check the object length
-            nodeItem.setStyle(this.style);
-        }
+        if (typeof this.data.id != 'undefined') nodeItem.writeAttribute({id: this.data.id});
+        if (typeof this.data.title != 'undefined') nodeItem.writeAttribute({title: this.data.title});
+        if (typeof this.data.dir != 'undefined') nodeItem.writeAttribute({dir: this.data.dir});
+        if (typeof this.data.className != 'undefined') nodeItem.addClassName(this.data.className);
+        if (typeof this.data.style != 'undefined') nodeItem.setStyle(this.data.style);
         nodeItem.observe('click', this._onClick.bind(this));
         nodeItem.observe('mouseover', this._onMouseOver.bind(this));
         nodeItem.observe('mouseout', this._onMouseOut.bind(this));
@@ -477,8 +475,8 @@ var ProtopackTreeNode = Class.create({
             expander.observe('click', this._onToggleNode.bind(this)),
             container.insert(expander);
         }
-        container.insert(nodeItem);
         this.node = nodeItem;
+        container.insert(nodeItem);
 
         return container;
     },
