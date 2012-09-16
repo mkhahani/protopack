@@ -13,9 +13,11 @@
  * Default configuration
  */
 var ProtopackTreeSelectOptions = {
-    className   : 'protopack-treeselect',
+    className   : 'pp-treeselect',
     editable    : true,
-    multiSelect : false
+    multiSelect : false,
+    interactive : false,
+    defaultState: 'expand'
 }
 
 /**
@@ -37,26 +39,34 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
         this.readonly    = true;
         this.buttonStyle = 'disabled';
         this.popupStyle  = 'auto';
-        this.xhtml       = this.construct();
+        this.value       = [];
+        this.xhtml       = this._construct();
         if (target) {
             $(target).insert(this.xhtml);
             //this.render();
         }
     },
 
-    construct: function ($super) {
+    _construct: function ($super) {
         var xhtml = $super(),   // Calling constructor of the Parent Class
-            tree  = new ProtopackTree(null, 
-                                      {multiSelect: this.multiSelect, className: this.className + '-tree'}, 
-                                      {nodeclick: this._onSelect.bind(this)});
+            entry = new Element('input', {type:'hidden'}),
+            options = {multiSelect: this.multiSelect, 
+                       className: this.className + '-tree',
+                       interactive:this.options.interactive,
+                       defaultState:this.options.defaultState},
+            tree = new ProtopackTree(null, 
+                                     options, 
+                                     {nodeclick: this._onSelect.bind(this)});
 
+        this.valueEntry = entry;
         this.tree = tree;
+        xhtml.insert(entry);
         return xhtml.insert(this.popup.update(tree.xhtml));
     },
 
     _updateTree: function () {
         var target = this.xhtml.up();
-        this.xhtml = this.construct();
+        this.xhtml = this._construct();
         if (target) {
             $(target).update(this.xhtml);
             //this.render();
@@ -68,10 +78,10 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
 
     _onSelect: function (node, e) {
         if (this.multiSelect) {
-            this.value = this.tree.selected;
+            this.value = this.valueEntry.value = this.tree.selected;
             this.text = this.entry.value = this.tree.getText(this.tree.selected).join(', ');
         } else {
-            this.value = node.id;
+            this.value = this.valueEntry.value = node.id;
             this.text = this.entry.value = node.text;
             this.popup.hide();
         }
@@ -90,18 +100,19 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
     },
 
     setId: function (id) {
-        this.entry.id = id;
+        this.valueEntry.id = id;
+        this.valueEntry.name = id;
     },
 
     clear: function () {
         this.tree.clearSelection();
-        this.value = (this.tree.selected);
+        this.value = this.valueEntry.value = this.tree.selected;
         this.entry.value = this.text = '';
     },
 
     setValue: function (value) {
         this.tree.setSelected(value);
-        this.value = value = this.tree.selected;
+        this.value = this.valueEntry.value = value = this.tree.selected;
         this.text = (Object.isArray(value))? this.tree.getText(value).join(', ') :
                                              this.tree.getText(value);
         this.entry.value = this.text;

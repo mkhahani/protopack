@@ -58,8 +58,9 @@
       [9, 7, 'Item9'],
       [10, 0, 'Item10']
   ];
-  var myCombo = new ProtopackTreeSelect('workspace');
-  //var myCombo = new ProtopackTreeSelect('workspace', {multiSelect:true}, {onSelect: onTreeSelect});
+  //var myCombo = new ProtopackTreeSelect('workspace');
+  var myCombo = new ProtopackTreeSelect('workspace', {multiSelect:true, interactive:true, defaultState:'collapse'}, {onSelect: onTreeSelect});
+  myCombo.setId('the_treeselect');
   myCombo.loadData(data);
   //myCombo.render();
   //$('workspace').update(combo.get());

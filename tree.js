@@ -14,7 +14,9 @@
  */
 var ProtopackTreeOptions = {
     className: 'pp-tree',
-    multiSelect: false
+    multiSelect: false,
+    interactive: true,
+    defaultState: 'expand'
 }
 
 /**
@@ -39,7 +41,7 @@ var ProtopackTree = Class.create({
         this.multiSelect = this.options.multiSelect;
         this.className = this.options.className;
         this.selected = (this.multiSelect)? [] : null;
-        this.xhtml = this.construct();
+        this.xhtml = this._construct();
         this._createEvents();
         if (target) {
             $(target).update(this.xhtml);
@@ -55,7 +57,7 @@ var ProtopackTree = Class.create({
      *
      * @return  String      XHTML tree
      */
-    construct: function () {
+    _construct: function () {
         var xhtml = new Element('div', {'class': this.className});
         this.tree = new Element('div');
         return xhtml.insert(this.tree);
@@ -76,10 +78,15 @@ var ProtopackTree = Class.create({
             nodesById = {},
             dataById  = {},
             rootNodes = [],
+            display = '',
             tree;
 
+        if (this.options.interactive && this.options.defaultState === 'collapse') {
+            display = 'none';
+        }
         nodes = this.data.map( function (node) {
-            var nodeItem = new ProtopackTreeNode(this.multiSelect, node);
+            var options = {multiSelect:this.multiSelect, interactive:this.options.interactive},
+                nodeItem = new ProtopackTreeNode(node, options);
             nodeItem.node.addClassName(this.className + '-node');
             if (this.multiSelect) {
                 nodeItem.node.down('label').observe('click', this._onLabelClick.bind(this));
@@ -107,7 +114,7 @@ var ProtopackTree = Class.create({
         }
 
         function buildNodes(nodesArr) {
-            var ul = new Element('ul'),
+            var ul = new Element('ul').setStyle({display:display}),
                 len = nodesArr.length;
             nodesArr.each( function (node, i) {
                 var chNodes = getChildNodes(node.id);
@@ -138,7 +145,7 @@ var ProtopackTree = Class.create({
                     // tree.insert(node.xhtml.addClassName('orphan'));
                 // });
             // }
-            this.tree.update(tree);
+            this.tree.update(tree.show());
             this.render();
         }
     },
@@ -154,6 +161,9 @@ var ProtopackTree = Class.create({
     },
 
     render: function () {
+        if (!this.options.interactive) {
+            return;
+        }
         var nodes = this.tree.select('div');
         nodes.each(function (node) {
             if (node.next()) {
@@ -219,7 +229,7 @@ var ProtopackTree = Class.create({
      * Occurs on moving mouse over a node and trigers user defined function if exists
      */
     _onNodeMouseOver: function (e) {
-        e.memo.element.addClassName(this.className + '-node-hover');
+        e.memo.element.addClassName('hover');
         if (this.events.nodemouseover) {
             this.events.nodemouseover(e.memo, e);
         }
@@ -229,7 +239,7 @@ var ProtopackTree = Class.create({
      * Occurs on moving mouse out of a node and trigers user defined function if exists
      */
     _onNodeMouseOut: function (e) {
-        e.memo.element.removeClassName(this.className + '-node-hover');
+        e.memo.element.removeClassName('hover');
         if (this.events.nodemouseout) {
             this.events.nodemouseout(e.memo, e);
         }
@@ -265,7 +275,7 @@ var ProtopackTree = Class.create({
             this.selected.clear();
         } else {
             if (this.selected !== null && this.nodesById[this.selected]) {
-                this.nodesById[this.selected].node.removeClassName(this.className + '-node-selected');
+                this.nodesById[this.selected].node.removeClassName('selected');
             }
             this.selected = null;
         }
@@ -287,7 +297,7 @@ var ProtopackTree = Class.create({
             this.nodesById[id].node.down('input').checked = !checked;
         } else {
             this.clearSelection();
-            this.nodesById[id].node.addClassName(this.className + '-node-selected');
+            this.nodesById[id].node.addClassName('selected');
             this.selected = id;
         }
     },
@@ -408,29 +418,31 @@ var ProtopackTreeNode = Class.create({
     /**
      * Initiates the tree node
      *
-     * @multiSelect     Boolean True/False
-     * @node            Array   [id, pid, text, attrib, style]
-     *                          attrib: Array[id, title, seq, href, checked, target, className, dir]
-     *                          style : String(CSS Style)
+     * @node    Array[id, pid, text, attrib, style]
+     *              id    : String
+     *              pid   : String(parent)
+     *              text  : String(label)
+     *              attrib: Array[id, title, seq, href, checked, target, className, dir]
+     *              style : String(CSS Style)
+     * @options Boolean True/False
      *
-     * @return  Object          A class instance of Tree 
+     * @return  Object  A class instance of TreeNode
      */
-    initialize: function (multiSelect, node) {
+    initialize: function (node, options) {
         this.id          = node[0];
         this.pid         = node[1];
         this.text        = node[2];
         this.attrib      = node[3] || {};
         this.style       = node[4] || {};
         this.seq         = this.attrib.seq || 0;
-        this.xhtml       = this.construct(multiSelect);
+        this.xhtml       = this._construct(options);
         this.eventParams = {id:this.id, pid:this.pid, text:this.text, element:this.node};
     },
 
-    construct: function (multiSelect) {
-        var expander  = new Element('span', {'class':'spacer'}).observe('click', this._onToggleNode.bind(this)),
-            container = new Element('li').insert(expander),
+    _construct: function (options) {
+        var container = new Element('li'),
             nodeItem  = new Element('div');
-        if (multiSelect) {
+        if (options.multiSelect) {
             var checkbox = new Element('input', {type: 'checkbox', value: this.id}),
                 textEl = new Element('label').update(this.text);
             if (this.attrib.checked) {
@@ -460,6 +472,11 @@ var ProtopackTreeNode = Class.create({
         nodeItem.observe('mouseover', this._onMouseOver.bind(this));
         nodeItem.observe('mouseout', this._onMouseOut.bind(this));
 
+        if (options.interactive) {
+            var expander = new Element('span', {'class':'spacer'});
+            expander.observe('click', this._onToggleNode.bind(this)),
+            container.insert(expander);
+        }
         container.insert(nodeItem);
         this.node = nodeItem;
 
