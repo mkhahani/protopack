@@ -13,7 +13,7 @@
  * Default configuration
  */
 var ProtopackTreeOptions = {
-    className: 'pp-tree',
+    className: 'pp-tree2',
     multiSelect: false,
     interactive: true,
     defaultState: 'expand'
