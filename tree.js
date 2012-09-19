@@ -327,15 +327,15 @@ var ProtopackTree = Class.create({
     },
 
     /**
-     * Returns text or array of text of the givven node IDs
+     * Returns label or array of label of the givven node IDs
      */
     getText: function (ids) {
         if (Object.isArray(ids)) {
             return ids.map(function (id) {
-                return this.nodesById[id].text;
+                return this.nodesById[id].label;
             }.bind(this));
         } else {
-            return this.nodesById[ids].text;
+            return this.nodesById[ids].label;
         }
     },
 

@@ -43,7 +43,7 @@ var ProtopackInput = Class.create({
         }
     },
 
-    construct: function () {
+    _construct: function () {
         var xhtml  = new Element('div', {'class': this.className});
         this.entry = this._buildEntry();
         xhtml.insert(this.entry);
