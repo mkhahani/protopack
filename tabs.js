@@ -1,11 +1,11 @@
 /**
- *  Protopack Tabs, a DHTML Tabs Component based on Prototype JS framework
- *  © 2012 Mohsen Khahani
+ * Protopack Tabs is a DHTML Tabs Component based on Prototype JS framework
+ * © 2012 Mohsen Khahani
  *
- *  Licensed under the MIT license
- *  Created on August 4, 2012
+ * Licensed under the MIT license
+ * Created on August 4, 2012
  *
- *  http://mohsen.khahani.com/protopack
+ * http://mohsen.khahani.com/protopack
  */
 
 
@@ -13,53 +13,70 @@
  * Default configuration
  */
 var ProtopackTabsOptions = {
-    defaultTabIndex : 1
+    defaultTab: 1,
+    hover     : false
 }
-
-function TabsError(message) {
-   this.name = 'ProtopackTabs Error';
-   this.message = message;
-}
-TabsError.prototype = new Error();
-//ProtopackTabssError.prototype.constructor = ProtopackTabssError;
 
 /**
  * ProtopackInput base class
  */
 var ProtopackTabs = Class.create({
-    Version: '1.0',
+    Version: '1.1',
 
+    /**
+     * The tabs intializer
+     * @param   string  target  ID of the target element
+     * @param   object  options
+     */
     initialize: function (target, options) {
         if (!$(target)) {
-            throw new TabsError('Could not find the target element "' + target + '".');
+            throw new Error('ProtopackTabs.initialize(): Could not find the target element "' + target + '".');
         }
         this.options = Object.clone(ProtopackTabsOptions);
         Object.extend(this.options, options || {});
-        this.tabs = $(target).select('li');
-        this.links = $(target).select('li a');
-        this.sheets = this.links.map(function (link) {
-            return $(link.rel);
-        });
-        this.links.each(function(link) {
-            link.observe('click', this._onSelectTab.bind(this));
-        }.bind(this));
-
-        this._reset();
-        this.setActive(this.options.defaultTabIndex);
+        this._construct(target);
     },
 
-    _onSelectTab: function (e) {
+    /**
+     * Builds tabs
+     * @param   string  target  ID of the target element
+     */
+    _construct: function (target) {
+        var links = $(target).select('li a');
+        this.tabs = $(target).select('li');
+        this.sheets = links.map(function (link) {return $(link.rel);});
+        links.invoke('observe', 'click', this._switchTab.bind(this));
+        if (this.options.hover) {
+            links.invoke('observe', 'mouseover', this._switchTab.bind(this));
+        }
+
+        this._reset();
+        this.setActive(this.options.defaultTab);
+    },
+
+    /**
+     * Switches to the clicked/hovered tab
+     * @param   object  e   mouse event (click or mouseover)
+     */
+    _switchTab: function (e) {
         var link = Event.findElement(e);
         this._reset();
         $(link.rel).show();
         link.up('li').className = 'active';
     },
 
+    /**
+     * Deselects tabs and hides all sheets
+     */
     _reset: function () {
         this.sheets.invoke('hide');
         this.tabs.invoke('removeClassName', 'active');
     },
 
+    /**
+     * Selects a tab and displays related sheet
+     * @param   integer index   tab index, begins from 1
+     */
     setActive: function (index) {
         this._reset();
         this.tabs[index - 1].className = 'active';
