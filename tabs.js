@@ -13,6 +13,7 @@
  * Default configuration
  */
 var ProtopackTabsOptions = {
+    className : 'ptabs',
     defaultTab: 1,
     hover     : false
 }
@@ -52,6 +53,7 @@ var ProtopackTabs = Class.create({
 
         this._reset();
         this.setActive(this.options.defaultTab);
+        $(target).addClassName(this.options.className);
     },
 
     /**

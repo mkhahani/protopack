@@ -1,27 +1,27 @@
-ul.protopack-tabs {
+ul.ptabs {
   list-style: none;
   margin: 0;
   padding: 0;
   border-bottom: 1px solid #BBB;
 }
-ul.protopack-tabs:after {
+ul.ptabs:after {
   content:".";
   display:block;
   height:0;
   clear:both;
   visibility:hidden;
 }
-.protopack-tabs li {
+.ptabs li {
   float: left;
 }
-.protopack-tabs li.active {
+.ptabs li.active {
   background-color: #666;
 }
-.protopack-tabs li.active a {
+.ptabs li.active a {
   color: white;
   font-weight: bold;
 }
-.protopack-tabs a {
+.ptabs a {
   display: block;
   padding: 5px 10px;
   margin:0 2px;

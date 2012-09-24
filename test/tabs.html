@@ -12,15 +12,15 @@
 </style>
 <body>
   <div id="workspace">
-    <ul id="tab_sheet" class="protopack-tabs">
+    <ul id="tab_sheet">
       <li><a rel="sheet1">Tab1</a></li>
       <li><a rel="sheet2">Tab2</a></li>
       <li><a rel="sheet3">Tab3</a></li>
     </ul>
     <div style="padding:10px;">
-      <div id="sheet1">This is sheet #1</div>
-      <div id="sheet2">This is sheet #2</div>
-      <div id="sheet3">This is sheet #3</div>
+      <div id="sheet1">This is tab sheet #1</div>
+      <div id="sheet2">This is tab sheet #2</div>
+      <div id="sheet3">This is tab sheet #3</div>
     </div>
     <button onclick="myFunc()">GO</button>
   </div>
@@ -28,6 +28,6 @@
 <script>
   function myFunc() {
   }
-  var myTabSheet = new ProtopackTabs('tab_sheet', {defaultTabIndex:2});
+  var myTabs = new ProtopackTabs('tab_sheet', {defaultTab:3});
 </script>
 </html>
