@@ -1,8 +1,17 @@
 /**
+ * Protopack is set of DHTML UI Components based on Prototype JS framework
+ * © 2011-2012 Mohsen Khahani
+ *
+ * Licensed under the MIT license
+ * http://mohsen.khahani.com/protopack
+ */
+
+
+/**
  * Checks for existance of the Prototype JS
  */
 if (typeof Prototype === 'undefined' || !Prototype.Version.match('1.7')) {
-    throw('Protopack requires the Prototype JavaScript framework 1.7.0+');
+    throw('Protopack requires Prototype JavaScript framework 1.7.0+');
 }
 
 /**
