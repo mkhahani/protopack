@@ -11,7 +11,7 @@ ul.ptabs:after {
   clear:both;
   visibility:hidden;
 }
-.ptabs li {
+.ptabs li.ptabs-tab {
   float: left;
 }
 .ptabs li.active {

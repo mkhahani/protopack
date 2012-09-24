@@ -44,7 +44,7 @@ var ProtopackTabs = Class.create({
      */
     _construct: function (target) {
         var links = $(target).select('li a');
-        this.tabs = $(target).select('li');
+        this.tabs = $(target).select('li').invoke('addClassName', this.options.className + '-tab');
         this.sheets = links.map(function (link) {return $(link.rel);});
         links.invoke('observe', 'click', this._switchTab.bind(this));
         if (this.options.hover) {
@@ -64,7 +64,7 @@ var ProtopackTabs = Class.create({
         var link = Event.findElement(e);
         this._reset();
         $(link.rel).show();
-        link.up('li').className = 'active';
+        link.up('li').addClassName('active');
     },
 
     /**
@@ -81,7 +81,7 @@ var ProtopackTabs = Class.create({
      */
     setActive: function (index) {
         this._reset();
-        this.tabs[index - 1].className = 'active';
+        this.tabs[index - 1].addClassName('active');
         this.sheets[index - 1].show();
     }
 });
