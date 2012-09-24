@@ -12,7 +12,8 @@
 </style>
 <body>
   <div id="workspace">
-    <ul id="tab_sheet">
+    <h4>Pre-build Tabs</h4>
+    <ul id="static_tabs">
       <li><a rel="sheet1">Tab1</a></li>
       <li><a rel="sheet2">Tab2</a></li>
       <li><a rel="sheet3">Tab3</a></li>
@@ -23,12 +24,23 @@
       <div id="sheet3">This is tab sheet #3</div>
     </div>
     <button onclick="myFunc()">setActive(2)</button>
+    <br/><br/><br/>
+    <h4>Auto Created Tabs</h4>
+    <div id="auto_tabs"></div>
+    <div style="padding:10px;">
+      <div id="sheet4">This is tab sheet #1</div>
+      <div id="sheet5">This is tab sheet #2</div>
+      <div id="sheet6">This is tab sheet #3</div>
+    </div>
   </div>
 </body>
 <script>
   function myFunc() {
-      myTabs.setActive(2);
+      staticTabs.setActive(2);
   }
-  var myTabs = new ProtopackTabs('tab_sheet', {defaultTab:3});
+  var staticTabs = new ProtopackTabs('static_tabs', {defaultTab:3});
+
+  var autoTabs = new ProtopackTabs('auto_tabs', {findTabs:false});
+  autoTabs.setTabs([['sheet4', 'Tab1'], ['sheet5', 'Tab2'], ['sheet6', 'Tab3']]);
 </script>
 </html>
