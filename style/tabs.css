@@ -21,7 +21,7 @@ ul.ptabs:after {
   color: white;
   font-weight: bold;
 }
-.ptabs a {
+.ptabs li.ptabs-tab a {
   display: block;
   padding: 5px 10px;
   margin:0 2px;
