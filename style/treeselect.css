@@ -28,22 +28,30 @@
 }
 .pp-treeselect-tree li {
     text-align: left;
+    white-space: nowrap;
 }
 .pp-treeselect-tree li ul {
     padding-left:20px;
 }
 .pp-treeselect-tree-node {
     cursor: default;
+    vertical-align: middle;
 }
 .pp-treeselect-tree-node a {
     padding: 0 2px;
 }
-.pp-treeselect-tree-node-hover {
+.pp-treeselect-tree-node.hover {
     background-color: #ddd;
 }
-.pp-treeselect-tree-node-selected {
+.pp-treeselect-tree-node.selected {
     background-color: grey;
 }
-.pp-treeselect-tree-node-selected a {
+.pp-treeselect-tree-node.selected a {
     color: white;
 }
+
+.pp-treeselect-tree li div {display:inline-block;}
+.pp-treeselect-tree span {display:inline-block; width:16px; height:20px; vertical-align:middle;}
+.pp-treeselect-tree span.plus {background:url(plus.png) 0 50% no-repeat;}
+.pp-treeselect-tree span.minus {background:url(minus.png) 0 50% no-repeat;}
+

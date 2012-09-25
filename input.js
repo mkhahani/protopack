@@ -13,7 +13,7 @@
  * Default configuration
  */
 var ProtopackInputOptions = {
-    className   : 'protopack-input',
+    className   : 'pp-input',
     readonly    : true,
     buttonStyle : 'smart',  // [disabled, visible, smart]
     popupStyle  : 'auto'    // [disabled, manually, auto]
@@ -32,7 +32,7 @@ var ProtopackInput = Class.create({
         this.readonly    = this.options.readonly;
         this.buttonStyle = this.options.buttonStyle;
         this.popupStyle  = this.options.popupStyle;
-        this.xhtml       = this.construct();
+        this.xhtml       = this._construct();
         if (target) {
             try {
                 $(target).insert(this.xhtml);
@@ -93,7 +93,7 @@ var ProtopackInput = Class.create({
     },
 
     _onInputClick: function (e) {
-        if (this.popupStyle === 'auto') {
+        if (this.popupStyle === 'auto' && Event.isLeftClick(e)) {
             this.popup.toggle();
             // Event.stop(e); // To not be editable
         }
@@ -113,6 +113,10 @@ var ProtopackInput = Class.create({
         }
     },
 
+
+//=============================================================================
+// Public Functions
+//=============================================================================
     get: function () {
         return this.xhtml;
     },
