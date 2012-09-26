@@ -13,14 +13,18 @@
  * Default configuration
  */
 var ProtopackGridOptions = {
-    className     : 'pp-grid',
-    oddEvenRows   : true,
-    rowSelect     : true,
-    mouseRollOver : true,
-    colClasses    : false,
-    pagination    : false,
+    className     : 'pgrid',
+    header        : true,
     footer        : true,
-    filter        : false,  // if true, onFilter event must be set too
+    sorting       : true,   // depends on header
+    filtering     : false,  // depends on header
+    pagination    : false,  // depends on footer
+    rowClasses    : false,
+    rowSelect     : true,
+    cellClasses   : false,
+    cellSelect    : true,
+    oddEvenRows   : true,
+    mouseRollOver : true,
     titleAlign    : 'left',
     currencySymbol: '$ '
 }
@@ -30,10 +34,15 @@ var ProtopackGridOptions = {
  * Grid base class
  */
 var ProtopackGrid = Class.create({
-    Version: '1.1',
+    Version: '1.2',
 
     /**
      * The grid intializer
+     *
+     * @param   string  target  ID of the target element
+     * @param   array   layout  grid layout (optional)
+     * @param   object  options grid options (optional)
+     * @param   object  events  grid events (optional)
      */
     initialize: function (target, layout, options, events) {
         this.options = ProtopackGridOptions;
@@ -48,7 +57,10 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Creates the grid structure and fills it with givven data
+     * Builds the grid structure
+     *
+     * @param   string  target  ID of the target element
+     * @return  string  XHTML grid
      */
     _construct: function (target) {
         var grid  = new Element('div', {'class':this.className}),
@@ -61,8 +73,10 @@ var ProtopackGrid = Class.create({
         });*/
         
         // Grid Header
-        this.header = this._createHeader();
-        grid.insert(this.header);
+        if (this.options.header) {
+            this.header = this._createHeader();
+            grid.insert(this.header);
+        }
 
         // Grid Body
         this.body = body;
@@ -118,7 +132,7 @@ var ProtopackGrid = Class.create({
                 if (column.sortType) {
                     th.observe('click', function () {
                         this.sort(index);
-                        this.update();
+                        this.reload();
                     }.bind(this));
                     th.addClassName('sortable');
                 }
@@ -151,7 +165,9 @@ var ProtopackGrid = Class.create({
                         switch (column.filter) {
                             case 'text':
                                 var input = new Element('input', {name:column.name});
-                                input.style.width = column.width + 'px';
+                                if (column.width) {
+                                    input.style.width = column.width + 'px';
+                                }
                                 input.observe('keydown', function(e) {
                                     if (e.keyCode == 13) {
                                         this.events.onFilter(form.serialize(true));
@@ -283,7 +299,7 @@ var ProtopackGrid = Class.create({
         this._createCells(tr, data);
         if (this.options.rowSelect) {
             Event.observe(tr, 'click', function(e) {
-                this._select(tr);
+                this._selectRow(tr);
                 if (this.events.onRowSelect) {
                     this.events.onRowSelect(tr.rowIndex, e);
                 }
@@ -327,9 +343,12 @@ var ProtopackGrid = Class.create({
                     cell.setAttribute('align', column.align);
                 }
             }
-            if (this.events.onCellClick) {
+            if (this.options.cellSelect) {
                 Event.observe(cell, 'click', function(e) {
-                    this.events.onCellClick(tr.rowIndex, index + 1, e);
+                    this._selectCell(cell);
+                    if (this.events.onCellSelect) {
+                        this.events.onCellSelect(tr.rowIndex, key, e);
+                    }
                 }.bind(this));
             }
             Element.insert(cell, el);
@@ -354,7 +373,7 @@ var ProtopackGrid = Class.create({
                 break;
             case 'currency':
                 var value = (Object.isString(data) || !isNaN(data))? data : data.text;
-                value = addCommas(value, this.options.currencySymbol);
+                //value = addCommas(value, this.options.currencySymbol);
                 el = new Element('span').update(value);
                 break;
             case 'image':
@@ -414,7 +433,7 @@ var ProtopackGrid = Class.create({
      * Trigers on cell click
      */
     _onCellClick: function (el, func) {
-        window[func](el.up('tr').rowIndex);
+        func(el.up('tr').rowIndex);
     },
 
     /**
@@ -422,7 +441,7 @@ var ProtopackGrid = Class.create({
      */
     _load: function(data) {
         if (data) {
-            this.table.tBodies[0].update();
+            $(this.table.tBodies[0]).update();
             this.data = data;
             if (typeof this.sortBy !== 'undefined') {
                 this.sort(this.sortBy, this.sortOrder);
@@ -452,9 +471,9 @@ var ProtopackGrid = Class.create({
     /**
      * Selects a row
      */
-    _select: function(rowEl) {
+    _selectRow: function(rowEl) {
         if (typeof this.selectedRow != 'undefined') {
-            this._unselect(this.selectedRow);
+            this._unselectRow(this.selectedRow);
         }
         rowEl.addClassName('selected');
         this.selectedRow = rowEl;
@@ -463,8 +482,26 @@ var ProtopackGrid = Class.create({
     /**
      * Deselects the row
      */
-    _unselect: function(rowEl) {
+    _unselectRow: function(rowEl) {
         rowEl.removeClassName('selected');
+    },
+
+    /**
+     * Selects a column
+     */
+    _selectCell: function(cellEl) {
+        if (typeof this.selectedCell != 'undefined') {
+            this._unselectRow(this.selectedCell);
+        }
+        cellEl.addClassName('selected');
+        this.selectedCell = cellEl;
+    },
+
+    /**
+     * Deselects the column
+     */
+    _unselectCell: function(cellEl) {
+        cellEl.removeClassName('selected');
     },
 
     /**
@@ -491,7 +528,7 @@ var ProtopackGrid = Class.create({
                     return;
             }
         }
-        window[this.initFunc](this.pageIndex);
+        this.initFunc(this.pageIndex);
         this._updatePager();
 
         // if (this.pageIndex == this.maxPageIndex) {
@@ -539,11 +576,11 @@ var ProtopackGrid = Class.create({
 /* Public Functions
 /*=============================================================================
     /**
-     *  Calls the givven function for initilization
+     * Calls user defined function to initilize grid
      */
     init: function(func) {
         this.initFunc = func;
-        window[func](this.pageIndex);
+        func(this.pageIndex);
     },
 
     /**
@@ -568,7 +605,6 @@ var ProtopackGrid = Class.create({
             throw new Error('ProtopackGrid.setFilterList(): filter option is disabled');
         }
         var select = this.header.down('form')[name];
-        //console.log(select);
         if (Object.isArray(values) && values.length > 0) {
             values.each( function(value) {
                 var option = new Element('option', {value: value[0]}).update(value[1]);
@@ -609,18 +645,24 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Does an offline update on grid with current data
+     * Reloads grid with current data
      */
-    update: function () {
+    reload: function () {
         this._load(this.data);
     },
 
     /**
-     * Redraws the grid (no data update)
+     * Assigns classnames (no data update)
      */
     refresh: function () {
+        var rows = this.table.tBodies[0].select('tr');
+        if (this.options.rowClasses) {
+            rows.each(function (tr, i) {
+                tr.addClassName('row' + i);
+            })
+        }
         if (this.options.oddEvenRows) {
-            this.table.tBodies[0].select('tr').each(function (tr, i) {
+            rows.each(function (tr, i) {
                 var className = (i % 2 === 0)? 'even' : 'odd',
                     oposite = (className === 'odd')? 'even' : 'odd';
                 if (tr.hasClassName(oposite)) {
@@ -637,7 +679,14 @@ var ProtopackGrid = Class.create({
      * Selects a row
      */
     selectRow: function(rowIndex) {
-        this._select(this.table.tBodies[0].rows[rowIndex - 1]);
+        this._selectRow(this.table.tBodies[0].rows[rowIndex - 1]);
+    },
+
+    /**
+     * Selects a cell
+     */
+    selectCell: function(rowIndex, cellIndex) {
+        this._selectCell(this.table.tBodies[0].rows[rowIndex - 1].cells[cellIndex - 1]);
     },
 
     /**
