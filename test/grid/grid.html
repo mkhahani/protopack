@@ -22,9 +22,30 @@
   </div>
 </body>
 <script>
+  // Array Model
+  var dataArr = [
+      [ 1, 'http://www.google.com/',    'icons/google.png'],
+      [ 2, 'http://www.yahoo.com/',     'icons/yahoo.png'],
+      [ 3, 'http://www.facebook.com/',  'icons/facebook.png'],
+      [ 4, 'http://www.flickr.com/',    'icons/flickr.png'],
+      [ 5, 'http://www.linkedin.com/',  'icons/linkedin.png'],
+      [ 6, 'http://www.twitter.com/',   'icons/twitter.png'],
+      [ 7, 'http://www.youtube.com/',   'icons/youtube.png'],
+      [ 8, 'http://www.microsoft.com/', 'icons/microsoft.png']];
 
-  // Full Object Model
+  // Object Model 1
   var dataObj1 = [
+      { id:1, title:'http://www.google.com/',    image:'icons/google.png'},
+      { id:2, title:'http://www.yahoo.com/',     image:'icons/yahoo.png'},
+      { id:3, title:'http://www.facebook.com/',  image:'icons/facebook.png'},
+      { id:4, title:'http://www.flickr.com/',    image:'icons/flickr.png'},
+      { id:5, title:'http://www.linkedin.com/',  image:'icons/linkedin.png'},
+      { id:6, title:'http://www.twitter.com/',   image:'icons/twitter.png'},
+      { id:7, title:'http://www.youtube.com/',   image:'icons/youtube.png'},
+      { id:8, title:'http://www.microsoft.com/', image:'icons/microsoft.png'}];
+
+  // Object Model 2
+  var dataObj2 = [
       { id:1,  title:{text:'Google',    href:'http://www.google.com/'},    price:250000, image:{src:'icons/google.png',    title:'Google'} },
       { id:2,  title:{text:'Yahoo',     href:'http://www.yahoo.com/'},     price:350000, image:{src:'icons/yahoo.png',     title:'Yahoo'} },
       { id:13, title:{text:'Facebook',  href:'http://www.facebook.com/'},  price:156000, image:{src:'icons/facebook.png',  title:'Facebook'} },
@@ -38,29 +59,35 @@
       { id:11, title:{text:'Rovzane',   href:'http://www.rovzane.com/', style:'color:#F00;'}, price:250000, image:{src:'icons/microsoft.png', title:'Microso ft'} },
   ];
 
-  // Object Model
-  var dataObj2 = [
-      { id:1, title:'http://www.google.com/',    image:'icons/google.png'},
-      { id:2, title:'http://www.yahoo.com/',     image:'icons/yahoo.png'},
-      { id:3, title:'http://www.facebook.com/',  image:'icons/facebook.png'},
-      { id:4, title:'http://www.flickr.com/',    image:'icons/flickr.png'},
-      { id:5, title:'http://www.linkedin.com/',  image:'icons/linkedin.png'},
-      { id:6, title:'http://www.twitter.com/',   image:'icons/twitter.png'},
-      { id:7, title:'http://www.youtube.com/',   image:'icons/youtube.png'},
-      { id:8, title:'http://www.microsoft.com/', image:'icons/microsoft.png'}];
+  var gridLayout1 = [
+      { name     : 'id',
+        type     : 'id',
+        title    : 'ID',
+        align    : 'left',
+        width    : '40',
+        sortType : 'num',
+        filter   : 'text'
+        //hidden    : true
+      },
+      { name     : 'title',
+        type     : 'link',
+        title    : 'Title',
+        image    : 'images/info.png',
+        align    : 'left',
+        //width    : '450',
+        sortType : 'str',
+        filter   : 'text'
+      },
+      { name  : 'image',
+        type  : 'image',
+        title : 'Image',
+        align : 'center',
+        width : '50',
+        onClick : 'clickTest'
+      }
+    ];
 
-  // Array Model
-  var dataArr = [
-      [ 1, 'http://www.google.com/',    'icons/google.png'],
-      [ 2, 'http://www.yahoo.com/',     'icons/yahoo.png'],
-      [ 3, 'http://www.facebook.com/',  'icons/facebook.png'],
-      [ 4, 'http://www.flickr.com/',    'icons/flickr.png'],
-      [ 5, 'http://www.linkedin.com/',  'icons/linkedin.png'],
-      [ 6, 'http://www.twitter.com/',   'icons/twitter.png'],
-      [ 7, 'http://www.youtube.com/',   'icons/youtube.png'],
-      [ 8, 'http://www.microsoft.com/', 'icons/microsoft.png']];
-
-  var gridLayout = [
+  var gridLayout2 = [
       { name     : 'id',
         type     : 'id',
         title    : 'ID',
@@ -108,12 +135,44 @@
       autoCellClass : true,
       oddEvenRows : true,*/
       pagination : true,
+      rowClasses : true,
       mouseRollOver : true,
-      rowSelect : true,
+      rowSelect : false,
+      cellClasses : true,
       footer : true,
-      filter    : true
+      filtering : 'client',
+      sorting : 'client'
   };
-    
+
+  var gridEvents = {
+    //onRowSelect : onRowSelect,
+    onCellSelect : onCellSelect,
+    //onRowOver   : onRowOver,
+    //onRowOut    : onRowOut,
+    onKeyDown   : onKeyDown,
+    onFilter   : onFilter,
+    onSort   : onSort
+  }
+
+  var myGrid = new ProtopackGrid('thetable', gridLayout1, gridOptions, gridEvents);
+  var limit = 5;
+  myGrid.setId('mkhgrid');
+  myGrid.pageBy(limit);
+  myGrid.setSort('id', 'ASC');
+  //myGrid.setFilterList('price', [[null, ''], [1, 'item1'], [2, 'item2'], [3, 'item3']]);
+  myGrid.init(fillGrid);
+  myGrid.sort('title', 'ASC');
+  //myGrid.render();
+
+  function fillGrid(page) {
+    var offset = (page - 1) * limit;
+    //var data = dataArr.slice(offset, offset + limit);
+    var data = dataObj1.slice(offset, offset + limit);
+    myGrid.loadData(data, 8);
+    //myGrid.loadData(dataObj1);
+    //myGrid.loadData(dataArr);
+  }
+
   function onRowSelect(rowIndex, event) {
     console.log('onRowSelect:' + rowIndex);
   }
@@ -126,8 +185,8 @@
     console.log('onRowOut');
   }
 
-  function onCellClick(rowIndex, cellIndex, event) {
-    console.log('onCellClick: (' + rowIndex + ',' + cellIndex + ')');
+  function onCellSelect(rowIndex, cellIndex, event) {
+    console.log('onCellSelect: (' + rowIndex + ',' + cellIndex + ')');
   }
 
   function onKeyDown(event) {
@@ -138,29 +197,8 @@
     console.log('onFilter: ' + data);
   }
 
-  var gridEvents = {
-    //onRowSelect : onRowSelect,
-    //onRowOver   : onRowOver,
-    //onRowOut    : onRowOut,
-    //onCellClick : onCellClick,
-    onKeyDown   : onKeyDown,
-    onFilter   : onFilter
-  }
-
-  var myGrid = new ProtopackGrid('thetable', gridLayout, gridOptions, gridEvents);
-  var limit = 5;
-  myGrid.setId('mkhgrid');
-  myGrid.pageBy(limit);
-  myGrid.setFilterList('price', [[null, ''], [1, 'item1'], [2, 'item2'], [3, 'item3']]);
-  myGrid.init('fillGrid');
-  //myGrid.render();
-  
-  function fillGrid(page) {
-    var offset = (page - 1) * limit;
-    var data = dataObj1.slice(offset, offset + limit);
-    myGrid.loadData(data, 11);
-    //myGrid.loadData(dataObj1);
-    //myGrid.loadData(dataArr);
+  function onSort(sortBy, sortOrder) {
+    console.log('onSort: ' + sortBy + ', ' + sortOrder);
   }
 
   function clickTest(row) {
@@ -169,9 +207,6 @@
     //alert(myGrid.table.getHeight());
     return;
     alert(myGrid.data[row-1]['id']);
-    return;
-    myGrid.select(row);
-    myGrid.clearSelection();
   }
   
   function doUpdateGrid() {
@@ -191,10 +226,14 @@
     myGrid.updateRow(2, rowData);
   }
   function test() {
+    myGrid.selectCell(2, 3);
+    alert(1);
+    myGrid.clearSelection();
+    return;
     //myGrid.header.scrollLeft = 100;
     //myGrid.updateCell(2, 2, {text:'Yahoo2', href:'http://www.yahoo2.com/'});
     myGrid.sort(1);
-    myGrid.update();
+    myGrid.reload();
   }
 </script>
 </html>

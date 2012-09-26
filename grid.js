@@ -16,9 +16,9 @@ var ProtopackGridOptions = {
     className     : 'pgrid',
     header        : true,
     footer        : true,
-    sorting       : true,   // depends on header
-    filtering     : false,  // depends on header
-    pagination    : false,  // depends on footer
+    sorting       : 'client',   // ['client', 'server', false]
+    filtering     : false,      // ['client', 'server', false]
+    pagination    : false,      // depends on footer
     rowClasses    : false,
     rowSelect     : true,
     cellClasses   : false,
@@ -45,14 +45,19 @@ var ProtopackGrid = Class.create({
      * @param   object  events  grid events (optional)
      */
     initialize: function (target, layout, options, events) {
+        var columnsByName = {};
         this.options = ProtopackGridOptions;
         Object.extend(this.options, options || {});
         this.events = events || {};
-        this.columns = layout || [];
-        this.className = this.options.className;
-        this.pageIndex = 1;
+        this._columns = layout || [];
+        this._columns.each(function (col) {
+            columnsByName[col['name']] = col;
+        });
+        this._columnsByName = columnsByName;
+        this._className = this.options.className;
+        this._pageIndex = 1;
         this._pageBy = 0;
-        this.sortOrder = 'ASC';
+        this._backupData = null;
         this.grid = this._construct(target);
     },
 
@@ -63,10 +68,10 @@ var ProtopackGrid = Class.create({
      * @return  string  XHTML grid
      */
     _construct: function (target) {
-        var grid  = new Element('div', {'class':this.className}),
+        var grid  = new Element('div', {'class':this._className}),
             tbody = new Element('tbody'),
             table = new Element('table').update(tbody),
-            body  = new Element('div', {'class':this.className + '-body'}).update(table);
+            body  = new Element('div', {'class':this._className + '-body'}).update(table);
 
         /*Event.observe(div, 'scroll', function() {
                 alert('boo');
@@ -105,14 +110,15 @@ var ProtopackGrid = Class.create({
      * Adds header to grid
      */
     _createHeader: function () {
-        var header   = new Element('div', {'class':this.className + '-header'}),
+        var header   = new Element('div', {'class':this._className + '-header'}),
             table    = new Element('table'),
             trTitle  = table.insertRow(-1),
             trFilter = table.insertRow(-1),
-            ignore   = 0;
+            ignore   = 0,
+            sortType = this.options.sorting;
 
         // Titles
-        this.columns.each( function (column, index) {
+        this._columns.each( function (column, index) {
             if (ignore > 0) {
                 ignore--;
                 return;
@@ -129,10 +135,18 @@ var ProtopackGrid = Class.create({
                 if (column.width) {
                     th.setAttribute('width', column.width);
                 }
-                if (column.sortType) {
+                if (sortType && column.sortType) {
+                    //var sortFunc = (sortType === 'client')? this.sort : this.events.onSort;
                     th.observe('click', function () {
-                        this.sort(index);
-                        this.reload();
+                        this._sortBy = column.name;
+                        this._sortOrder = (this._sortOrder === 'ASC')? 'DESC' : 'ASC';
+                        //sortFunc.bind(this, this._sortBy, this._sortOrder)();
+                        if (sortType === 'client') {
+                            this.sort(this._sortBy, this._sortOrder);
+                        } else {
+                            this.events.onSort(this._sortBy, this._sortOrder);
+                            this.setSort(this._sortBy, this._sortOrder);
+                        }
                     }.bind(this));
                     th.addClassName('sortable');
                 }
@@ -146,12 +160,14 @@ var ProtopackGrid = Class.create({
         }.bind(this));
 
         // Filter
-        if (this.options.filter) {
-            var form = new Element('form');
+        if (this.options.filtering) {
+            var form = new Element('form'),
+                filterFunc = (this.options.filtering === 'client')? this.filter:
+                                                                    this.events.onFilter;
             header.insert(form.insert(table));
             ignore = 0;
             trFilter.className = 'filters';
-            this.columns.each( function (column, index) {
+            this._columns.each( function (column, index) {
                 if (ignore > 0) {
                     ignore--;
                     return;
@@ -170,7 +186,7 @@ var ProtopackGrid = Class.create({
                                 }
                                 input.observe('keydown', function(e) {
                                     if (e.keyCode == 13) {
-                                        this.events.onFilter(form.serialize(true));
+                                        filterFunc.bind(this)(form.serialize(true));
                                     }
                                 }.bind(this));
                                 td.insert(input);
@@ -179,7 +195,7 @@ var ProtopackGrid = Class.create({
                                 var select = new Element('select', {name:column.name});
                                 select.style.width = column.width + 'px';
                                 select.observe('change', function() {
-                                    this.events.onFilter(form.serialize(true));
+                                    filterFunc.bind(this)(form.serialize(true));
                                 }.bind(this));
                                 td.insert(select);
                                 break;
@@ -205,7 +221,7 @@ var ProtopackGrid = Class.create({
     _createFooter: function () {
         var status = new Element('span', {'class':'status'}),
             about  = new Element('span', {'class':'about'}).update('?'),
-            footer = new Element('div', {'class':this.className + '-footer'}).insert(status);
+            footer = new Element('div', {'class':this._className + '-footer'}).insert(status);
         footer.insert(about.observe('click', function() {alert('Protopack JS Grid v1.0 \nby Mohsen Khahani \nhttp://mohsen.khahani.com');}));
             
         if (this.options.pagination) {
@@ -265,7 +281,7 @@ var ProtopackGrid = Class.create({
             tr = head.insertRow(-1),
             count = 0,
             ignore = 0;
-        this.columns.each( function (column, index) {
+        this._columns.each( function (column, index) {
             if (ignore > 0) {
                 ignore--;
                 return;
@@ -329,7 +345,7 @@ var ProtopackGrid = Class.create({
      * Creates table cells and adds them to the tr
      */
     _createCells: function (tr, rowData) {
-        this.columns.each( function(column, index) {
+        this._columns.each( function(column, index) {
             var cell = tr.insertCell(-1),
                 key = Object.isArray(rowData)? index : column.name,
                 el = this._createElement(column, rowData[key]);
@@ -443,9 +459,9 @@ var ProtopackGrid = Class.create({
         if (data) {
             $(this.table.tBodies[0]).update();
             this.data = data;
-            if (typeof this.sortBy !== 'undefined') {
-                this.sort(this.sortBy, this.sortOrder);
-            }
+            // if (typeof this._sortBy !== 'undefined') {
+                // this.sort(this._sortBy, this._sortOrder);
+            // }
             data.each(function(rowData) {
                 this._insertRow(rowData, -1);
             }.bind(this));
@@ -469,7 +485,7 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Selects a row
+     * Selects a grid row
      */
     _selectRow: function(rowEl) {
         if (typeof this.selectedRow != 'undefined') {
@@ -480,14 +496,14 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Deselects the row
+     * Deselects the grid row
      */
     _unselectRow: function(rowEl) {
         rowEl.removeClassName('selected');
     },
 
     /**
-     * Selects a column
+     * Selects a grid cell
      */
     _selectCell: function(cellEl) {
         if (typeof this.selectedCell != 'undefined') {
@@ -498,45 +514,49 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Deselects the column
+     * Deselects the grid cell
      */
     _unselectCell: function(cellEl) {
         cellEl.removeClassName('selected');
     },
 
     /**
-     * Does an offline update on grid with current data
+     * 
      */
     _goToPage: function(page) {
         if (!isNaN(page)) {
             if (page >= 1 || page <= this.maxPageIndex) {
-                this.pageIndex = page;
+                this._pageIndex = page;
             } else {
                 return;
             }
         } else {
             switch (page) {
                 case 'next':
-                    if (this.pageIndex < this.maxPageIndex) this.pageIndex++; else return; break;
+                    if (this._pageIndex < this.maxPageIndex) this._pageIndex++; else return; break;
                 case 'prev':
-                    if (this.pageIndex > 1) this.pageIndex--; else return; break;
+                    if (this._pageIndex > 1) this._pageIndex--; else return; break;
                 case 'last':
-                    if (this.pageIndex < this.maxPageIndex) this.pageIndex = this.maxPageIndex; else return; break;
+                    if (this._pageIndex < this.maxPageIndex) this._pageIndex = this.maxPageIndex; else return; break;
                 case 'first':
-                    if (this.pageIndex > 1) this.pageIndex = 1; else return; break;
+                    if (this._pageIndex > 1) this._pageIndex = 1; else return; break;
                 default:
                     return;
             }
         }
-        this.initFunc(this.pageIndex);
+        this.initFunc(this._pageIndex);
         this._updatePager();
+        if (this._backupData !== null) {
+            this._backupData = null;
+            this.filter(this._filterParams);
+        }
 
-        // if (this.pageIndex == this.maxPageIndex) {
+        // if (this._pageIndex == this.maxPageIndex) {
             // right.disable();
         // } else {
             // right.enable();
         // }
-        // if (this.pageIndex == 1) {
+        // if (this._pageIndex == 1) {
             // left.disable();
         // } else {
             // left.enable();
@@ -544,31 +564,31 @@ var ProtopackGrid = Class.create({
     },
 
     /**
-     * Does an offline update on grid with current data
+     * 
      */
     _updatePager: function() {
         if (this.footer) {
             if (this.total == 0) {
                 this.status.update('');
             } else {
-                var from = (this.pageIndex - 1) * this._pageBy + 1,
-                    to = this.pageIndex * this._pageBy;
+                var from = (this._pageIndex - 1) * this._pageBy + 1,
+                    to = this._pageIndex * this._pageBy;
                 if (to == 0 || to > this.total) {
                     to = this.total;
                 }
                 this.status.update(from + ' - ' + to + ' (' + this.total + ')');
                 if (this.options.pagination) {
-                    this.pageInput.setValue(this.pageIndex);
+                    this.pageInput.setValue(this._pageIndex);
                 }
             }
         }
     },
 
     /**
-     * Does an offline update on grid with current data
+     * 
      */
     resetPager: function() {
-        this.pageIndex = 1;
+        this._pageIndex = 1;
         this._updatePager();
     },
 
@@ -580,7 +600,7 @@ var ProtopackGrid = Class.create({
      */
     init: function(func) {
         this.initFunc = func;
-        func(this.pageIndex);
+        func(this._pageIndex);
     },
 
     /**
@@ -601,7 +621,7 @@ var ProtopackGrid = Class.create({
      * Fills the specified filter listbox with givven data values
      */
     setFilterList: function(name, values) {
-        if (!this.options.filter) {
+        if (!this.options.filtering) {
             throw new Error('ProtopackGrid.setFilterList(): filter option is disabled');
         }
         var select = this.header.down('form')[name];
@@ -693,17 +713,18 @@ var ProtopackGrid = Class.create({
      * Clears all selected rows
      */
     clearSelection: function() {
-        this.table.tBodies[0].select('tr').each(function (row) {
-            row.removeClassName('selected');
-        })
+        this.table.tBodies[0].select('.selected').invoke('removeClassName', 'selected');
     },
 
     /**
-     * Sorts the grid
+     * Client-side sort function
+     *
+     * @param   string  sortBy      column name
+     * @param   string  sortOrder   ['ASC' or 'DESC']
      */
     sort: function(sortBy, sortOrder) {
         function _sort(a, b) {
-            var key = Object.isArray(a)? sortBy : colName,
+            var key = Object.isArray(a)? colIndex : sortBy,
                 sign = (sortOrder.toUpperCase() === 'ASC')? 1 : -1,
                 res;
             a = a[key];
@@ -732,18 +753,58 @@ var ProtopackGrid = Class.create({
             }
             return res * sign;
         }
-        if (sortOrder === undefined) {
-            sortOrder = (this.sortOrder === 'ASC')? 'DESC' : 'ASC';
-            this.sortOrder = sortOrder;
+        var colIndex = Object.keys(this._columnsByName).indexOf(sortBy),
+            sortType = this._columnsByName[sortBy].sortType;
+        if (typeof sortOrder === 'undefined') {
+            sortOrder = this._sortOrder;
         }
-        this.sortBy = sortBy;
-        var colName = this.columns[sortBy].name,
-            sortType = this.columns[sortBy].sortType,
-            thArr = this.header.select('th');
+        this.data.sort(_sort);
+        this.setSort(sortBy, sortOrder);
+        this.reload();
+    },
+
+    /**
+     * Does not sort, just sets sortBy and sortOrder on grid
+     *
+     * @param   string  sortBy      column name
+     * @param   string  sortOrder   ['ASC' or 'DESC']
+     */
+    setSort: function(sortBy, sortOrder) {
+        var thArr = this.header.select('th');
+            index = Object.keys(this._columnsByName).indexOf(sortBy);
         thArr.invoke('removeClassName', 'sorted-asc');
         thArr.invoke('removeClassName', 'sorted-desc');
-        thArr[sortBy].addClassName('sorted-' + sortOrder.toLowerCase());
-        this.data.sort(_sort);
+        thArr[index].addClassName('sorted-' + sortOrder.toLowerCase());
+        this._sortBy = sortBy;
+        this._sortOrder = sortOrder;
+    },
+
+    /**
+     * Client side filter function
+     *
+     * @param   object  params {key1:value1, key2:value2, ...}
+     */
+    filter: function(params) {
+        var resArr = [];
+        if (this._backupData === null) {
+            this._backupData = this.data.clone();
+        }
+        this._filterParams = params;
+        this.data = [];
+        this._backupData.each(function(row, ri) {
+            var res = true;
+            Object.keys(params).each(function(param, pi) {
+                var key = Object.isArray(row)? pi : param,
+                    value = (typeof row[key] === 'object')? row[key].text : String(row[key]); // how about row[key].value ?
+                if (value.indexOf(params[param]) === -1) {
+                    res = false;
+                    throw $break;
+                }
+            });
+            if (res) resArr.push(row);
+        });
+        this.data = resArr;
+        this.reload();
     },
 
     /**
@@ -830,7 +891,7 @@ var ProtopackGrid = Class.create({
             throw new Error('ProtopackGrid.updateCell(): Invalid cell element');
             return;
         }
-        var el = this._createElement(this.columns[colIndex-1], cellData);
+        var el = this._createElement(this._columns[colIndex-1], cellData);
         cell.update(el);
         this.data[rowIndex][colIndex] = cellData;
     }
