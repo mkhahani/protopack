@@ -27,8 +27,7 @@ var ProtopackGridOptions = {
     mouseRollOver : true,
     titleAlign    : 'left',
     currencySymbol: '$ '
-}
-
+};
 
 /**
  * Grid base class
@@ -51,7 +50,7 @@ var ProtopackGrid = Class.create({
         this.events = events || {};
         this._columns = layout || [];
         this._columns.each(function (col) {
-            columnsByName[col['name']] = col;
+            columnsByName[col.name] = col;
         });
         this._columnsByName = columnsByName;
         this._className = this.options.className;
@@ -76,7 +75,7 @@ var ProtopackGrid = Class.create({
         /*Event.observe(div, 'scroll', function() {
                 alert('boo');
         });*/
-        
+
         // Grid Header
         if (this.options.header) {
             this.header = this._createHeader();
@@ -118,7 +117,7 @@ var ProtopackGrid = Class.create({
             sortType = this.options.sorting;
 
         // Titles
-        this._columns.each( function (column, index) {
+        this._columns.each( function (column) {
             if (ignore > 0) {
                 ignore--;
                 return;
@@ -161,13 +160,11 @@ var ProtopackGrid = Class.create({
 
         // Filter
         if (this.options.filtering) {
-            var form = new Element('form'),
-                filterFunc = (this.options.filtering === 'client')? this.filter:
-                                                                    this.events.onFilter;
+            var form = new Element('form');
             header.insert(form.insert(table));
             ignore = 0;
             trFilter.className = 'filters';
-            this._columns.each( function (column, index) {
+            this._columns.each( function (column) {
                 if (ignore > 0) {
                     ignore--;
                     return;
@@ -178,6 +175,8 @@ var ProtopackGrid = Class.create({
                     td.setAttribute('width', 0);
                 } else {
                     if (column.filter) {
+                        var filterFunc = (this.options.filtering === 'client')? this.filter:
+                                                                                this.events.onFilter;
                         switch (column.filter) {
                             case 'text':
                                 var input = new Element('input', {name:column.name});
@@ -411,7 +410,7 @@ var ProtopackGrid = Class.create({
                 } else {
                     el = new Element('img', {src:data.src});
                     if (data.hasOwnProperty('alt')) {
-                        el.setAttribute('alt', data.alt)
+                        el.setAttribute('alt', data.alt);
                     }
                 }
                 break;
@@ -421,17 +420,17 @@ var ProtopackGrid = Class.create({
                 } else {
                     el = new Element('a', {href:data.href});
                     if (data.hasOwnProperty('text')) {
-                        el.update(data.text)
+                        el.update(data.text);
                     }
                     if (data.hasOwnProperty('image')) {
-                        el.insert(new Element('img'), {src:data.image})
+                        el.insert(new Element('img'), {src:data.image});
                     }
                 }
                 break;
         }
         if (typeof data == 'object') {
             if (data.hasOwnProperty('title')) {
-                el.setAttribute('title', data.title)
+                el.setAttribute('title', data.title);
             }
             if (data.hasOwnProperty('style')) {
                 el.setAttribute('style', data.style);
@@ -568,12 +567,12 @@ var ProtopackGrid = Class.create({
      */
     _updatePager: function() {
         if (this.footer) {
-            if (this.total == 0) {
+            if (this.total === 0) {
                 this.status.update('');
             } else {
                 var from = (this._pageIndex - 1) * this._pageBy + 1,
                     to = this._pageIndex * this._pageBy;
-                if (to == 0 || to > this.total) {
+                if (to === 0 || to > this.total) {
                     to = this.total;
                 }
                 this.status.update(from + ' - ' + to + ' (' + this.total + ')');
@@ -592,9 +591,9 @@ var ProtopackGrid = Class.create({
         this._updatePager();
     },
 
-/*=============================================================================
-/* Public Functions
-/*=============================================================================
+//=============================================================================
+// Public Functions
+//=============================================================================
     /**
      * Calls user defined function to initilize grid
      */
@@ -639,7 +638,7 @@ var ProtopackGrid = Class.create({
     loadData: function (data, total) {
         this._load(data);
         this.total = (typeof total == 'undefined')? data.length : total;
-        if (this._pageBy != 0) {
+        if (this._pageBy !== 0) {
             this.maxPageIndex = Math.ceil(this.total / this._pageBy);
         }
         this._updatePager();
@@ -679,7 +678,7 @@ var ProtopackGrid = Class.create({
         if (this.options.rowClasses) {
             rows.each(function (tr, i) {
                 tr.addClassName('row' + i);
-            })
+            });
         }
         if (this.options.oddEvenRows) {
             rows.each(function (tr, i) {
@@ -691,7 +690,7 @@ var ProtopackGrid = Class.create({
                 if (!tr.hasClassName(className)) {
                     tr.addClassName(className);
                 }
-            })
+            });
         }
     },
 
@@ -738,18 +737,15 @@ var ProtopackGrid = Class.create({
             if (a === b) {
                 return 0;
             }
-            switch (sortType) {
-                case 'num':
-                    res = a - b;
-                    break;
-                default:
-                    if (a == b)
-                        res = 0;
-                    else if (a > b)
-                        res = 1;
-                    else
-                        res = -1;
-                    break;
+            if (sortType === 'num') {
+                res = a - b;
+            } else {
+                if (a == b)
+                    res = 0;
+                else if (a > b)
+                    res = 1;
+                else
+                    res = -1;
             }
             return res * sign;
         }
@@ -811,15 +807,14 @@ var ProtopackGrid = Class.create({
      * Returns element of the specified row
      */
     getRowElement: function(index) {
+        var tr;
         if (index > this.data.length + 1) {
             throw new Error('ProtopackGrid.getRowElement(): Invalid row index');
-            return;
         }
         try {
-            var tr = this.table.tBodies[0].rows[--index];
+            tr = this.table.tBodies[0].rows[--index];
         } catch(err) {
             throw new Error('ProtopackGrid.getRowElement(): Invalid tr element');
-            return;
         }
         return tr;
     },
@@ -842,15 +837,14 @@ var ProtopackGrid = Class.create({
      * Removes specified row from grid
      */
     deleteRow: function(index) {
+        var tr;
         if (index > this.data.length) {
             throw new Error('ProtopackGrid.deleteRow(): Invalid row index');
-            return;
         }
         try {
-            var tr = this.table.tBodies[0].rows[--index];
+            tr = this.table.tBodies[0].rows[--index];
         } catch(err) {
             throw new Error('ProtopackGrid.deleteRow(): Invalid tr element');
-            return;
         }
         tr.remove();
         this.data.splice(index, 1);
@@ -861,15 +855,14 @@ var ProtopackGrid = Class.create({
      * Updates specified row by givven data
      */
     updateRow: function(index, rowData) {
+        var tr;
         if (index > this.data.length) {
             throw new Error('ProtopackGrid.updateRow(): Invalid row index');
-            return;
         }
         try {
-            var tr = this.table.tBodies[0].rows[--index];
+            tr = this.table.tBodies[0].rows[--index];
         } catch(err) {
             throw new Error('ProtopackGrid.updateRow(): Invalid tr element');
-            return;
         }
         tr.remove();
         this._insertRow(rowData, index);
@@ -881,15 +874,14 @@ var ProtopackGrid = Class.create({
      * Returns element of the specified row
      */
     updateCell: function(rowIndex, colIndex, cellData) {
+        var cell;
         if (rowIndex > this.data.length) {
             throw new Error('ProtopackGrid.updateCell(): Invalid row index');
-            return;
         }
         try {
-            var cell = this.table.tBodies[0].rows[--rowIndex].cells[colIndex-1];
+            cell = this.table.tBodies[0].rows[--rowIndex].cells[colIndex-1];
         } catch(err) {
             throw new Error('ProtopackGrid.updateCell(): Invalid cell element');
-            return;
         }
         var el = this._createElement(this._columns[colIndex-1], cellData);
         cell.update(el);
