@@ -2,32 +2,84 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-  <title>Window Component</title>
+  <title>Protopack Window</title>
   <link rel="stylesheet" type="text/css" href="../style/window/window.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../protopack.js"></script>
   <script type="text/javascript" src="../draggable.js"></script>
   <script type="text/javascript" src="../window.js"></script>
+  <style>
+    body, button {font:12px arial;}
+    body {background-color:silver;}
+    h1 {font-size:35px; margin-top:180px; text-align:center;}
+    input[type=text], textarea {font-family:monospace;}
+    input, textarea {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box;}
+    button {height:24px;}
+  </style>
 </head>
 <body>
-  <div id="workspace" style="position:relative; width:600px; height:500px; border:1px solid black; overflow:auto;">
-    <button onclick="wnd.setSize(400, 200);">setSize()</button>
-    <button onclick="wnd.show(500, 100);">show(500, 100)</button>
-    <input />
+  <div>
+    <div id="workspace" style="position:relative; width:500px; height:400px; margin:0 auto; border:1px solid black; overflow:auto;">
+      <h1>Window over here</h1>
+    </div>
+    <div style="width:500px; margin:0 auto;">
+      <div id="types">
+        <input type="radio" name="type" value="1" checked><b>div</b> as parent
+        <input type="radio" name="type" value="2"><b>document body</b> as parent
+      </div>
+      <table id="options" width="100%"><tr>
+        <td>
+          <input type="checkbox" id="chk_header" value="header" checked>Header<br/>
+          <input type="checkbox" id="chk_close" value="close" checked>Close Button<br/>
+          <input type="checkbox" id="chk_modal" value="modal" checked>Modal<br/>
+          <input type="checkbox" id="chk_escape" value="escape" checked>Escape<br/>
+          <input type="checkbox" id="chk_draggable" value="draggable" checked>Draggable<br/>
+          <input type="checkbox" id="chk_transparent" value="tranparent" checked>Transparent Drag<br/>
+        </td>
+        <td>
+          <input type="text" id="edt_title" value="Window Title" style="width:100%"><br/>
+          <textarea id="txt_content" style="width:100%">Window content in &lt;b&gt;HTML&lt;/b&gt;</textarea>
+          <button onclick="openWindow()" style="height:40px; margin:0;">Open/Update Window</button>
+        </td>
+      </tr></table>
+      <hr/>
+      <button onclick="setSize();">setSize(x, y)</button>
+      <input type="text" id="edt_size_x" value="300" style="width:50px"> x
+      <input type="text" id="edt_size_y" value="150" style="width:50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+      <button onclick="setPos();">show(x, y)</button>
+      <input type="text" id="edt_pos_x" value="100" style="width:50px"> x
+      <input type="text" id="edt_pos_y" value="100" style="width:50px">
+    </div>
   </div>
-  <div id="sample_content">A content..</div>
 </body>
 <script>
-  function cls(wndId) {
-    alert(wndId);
-  }
-  var options = {
-    modal: false,
-    transparentDrag: false
-  }
-  var wnd = new ProtopackWindow(options, 'workspace');
-  wnd.setTitle('Protopack Window v1.0');
-  wnd.setContent($('sample_content'));
-  wnd.show();
+    var wnd = new ProtopackWindow({}, 'workspace');
+    wnd.close();
+
+    function openWindow() {
+        var type = $('types').down('input[checked]').value,
+            parent = (type == 1)? 'workspace' : document.body,
+            options = {
+                showHeader: $('chk_header').checked,
+                closeButton: $('chk_close').checked,
+                modal: $('chk_modal').checked,
+                escape: $('chk_escape').checked,
+                draggable: $('chk_draggable').checked,
+                transparentDrag: $('chk_transparent').checked
+            }
+        wnd.initialize(options, $(parent));
+        wnd.setTitle($('edt_title').value);
+        wnd.setContent($('txt_content').value);
+        wnd.show();
+    }
+
+    function setSize() {
+        wnd.setSize($('edt_size_x').value, $('edt_size_y').value);
+    }
+
+    function setPos() {
+        wnd.show($('edt_pos_x').value, $('edt_pos_y').value);
+    }
 </script>
 </html>
