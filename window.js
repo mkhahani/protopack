@@ -104,7 +104,6 @@ var ProtopackWindow = Class.create({
 
     _createOverlay: function() {
         var overlay = new Element('div', {'class': this.className + '-overlay'});
-        overlay.setOpacity(0.7);
         overlay.observe('mousedown', function(e) {Event.stop(e);});
         document.body.insert(overlay.hide());
         return overlay;
