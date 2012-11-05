@@ -186,6 +186,10 @@ var ProtopackWindow = Class.create({
 
     destroy: function() {
         this.window.remove();
+        if (this._overlay) {
+            this._overlay.remove();
+            this._overlay = null;
+        }
     }
 
 });
