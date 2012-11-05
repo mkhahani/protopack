@@ -14,13 +14,13 @@
  */
 var ProtopackDraggableOptions = {
     transparent: true
-}
+};
 
 /**
  * ProtopackDraggable class
  */
 var ProtopackDraggable = Class.create({
-    version: '1.0',
+    Version: '1.0',
 
     /**
      * The intializer
@@ -46,8 +46,8 @@ var ProtopackDraggable = Class.create({
         if (Event.isLeftClick(event)) {
             this.cursorOffsetX = Event.pointerX(event) - this.dragObj.offsetLeft;
             this.cursorOffsetY = Event.pointerY(event) - this.dragObj.offsetTop;
-            Event.observe(window, 'mousemove', this.goDragFunc);
-            Event.observe(window, 'mouseup', this.stopDragFunc);
+            Event.observe(document, 'mousemove', this.goDragFunc);
+            Event.observe(this.clickObj, 'mouseup', this.stopDragFunc);
             Event.stop(event);
             if (this.options.transparent) {
                 this.dragObj.setOpacity(0.9);
@@ -56,8 +56,8 @@ var ProtopackDraggable = Class.create({
     },
 
     stopDrag: function(event) {
-        Event.stopObserving(window, 'mousemove', this.goDragFunc);
-        Event.stopObserving(window, 'mouseup', this.stopDragFunc);
+        Event.stopObserving(document, 'mousemove', this.goDragFunc);
+        Event.stopObserving(this.clickObj, 'mouseup', this.stopDragFunc);
         //Event.stop(event);
         if (this.options.transparent) {
             this.dragObj.setOpacity(1);
@@ -69,7 +69,7 @@ var ProtopackDraggable = Class.create({
             y = Event.pointerY(event);
         this.dragObj.style.left = x - this.cursorOffsetX + 'px';
         this.dragObj.style.top  = y - this.cursorOffsetY + 'px';
-        //Event.stop(event);
+        Event.stop(event);
     }
 
 });
