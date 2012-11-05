@@ -35,6 +35,7 @@ var ProtopackWindow = Class.create({
         this.options = ProtopackWindowOptions;
         Object.extend(this.options, options || {});
         this.className = this.options.className;
+        target = (target !== undefined)? $(target) : document.body;
 
         if (this.window) {
             this.destroy();
@@ -52,7 +53,7 @@ var ProtopackWindow = Class.create({
         var window = this._createWindow();
 
         if (this.options.modal) {
-            this._overlay = this._createOverlay();
+            this._overlay = this._createOverlay(target);
         }
 
         if (this.options.showHeader) {
@@ -67,11 +68,7 @@ var ProtopackWindow = Class.create({
             window.insert(this._createClose());
         }
 
-        if (typeof target !== 'undefined') {
-            $(target).insert(window);
-        } else {
-            document.body.insert(window);
-        }
+        target.insert(window);
 
         if (this.options.draggable) {
             if (typeof ProtopackDraggable !== 'undefined') {
@@ -102,10 +99,10 @@ var ProtopackWindow = Class.create({
         return window;
     },
 
-    _createOverlay: function() {
+    _createOverlay: function(target) {
         var overlay = new Element('div', {'class': this.className + '-overlay'});
         overlay.observe('mousedown', function(e) {Event.stop(e);});
-        document.body.insert(overlay.hide());
+        target.insert(overlay.hide());
         return overlay;
     },
 
