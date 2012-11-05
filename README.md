@@ -23,7 +23,18 @@ Features
 * RTL support for right-to-left languages
 * Free to use (MIT license)
 
+Components
+----------
+* Grid
+* Tree
+* Window
+* Tabs
+* Progress
+* Select
+* TreeSelect
+* Draggable
+
 Website
 -------
-* <a href="http://mohsen.khahani.com/protopack" target="_blank">http://mohsen.khahani.com/protopack</a>
+* [http://mohsen.khahani.com/protopack](http://mohsen.khahani.com/protopack)
 
