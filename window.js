@@ -26,7 +26,7 @@ var ProtopackWindowOptions = {
  * ProtopackWindow class
  */
 var ProtopackWindow = Class.create({
-    version: '1.0',
+    Version: '1.0',
 
     /**
      * The window intializer
