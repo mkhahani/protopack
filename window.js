@@ -14,12 +14,12 @@
  */
 var ProtopackWindowOptions = {
     className       : 'pwindow',
-    showHeader      : true,
-    closeButton     : true,
     modal           : true,
-    escape          : true,
     draggable       : true,
-    transparentDrag : true
+    transparentDrag : true,
+    escape          : true,
+    showHeader      : true,
+    closeButton     : true
 };
 
 /**
