@@ -43,7 +43,7 @@
         </td>
       </tr></table>
       <hr/>
-      <button onclick="setSize();">setSize(x, y)</button>
+      <button onclick="resize();">resize(x, y)</button>
       <input type="text" id="edt_size_x" value="300" style="width:50px"> x
       <input type="text" id="edt_size_y" value="150" style="width:50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -74,8 +74,8 @@
         wnd.show();
     }
 
-    function setSize() {
-        wnd.setSize($('edt_size_x').value, $('edt_size_y').value);
+    function resize() {
+        wnd.resize($('edt_size_x').value, $('edt_size_y').value);
     }
 
     function setPos() {

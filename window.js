@@ -161,7 +161,7 @@ var ProtopackWindow = Class.create({
         this._content.update(content);
     },
 
-    setSize: function(width, height) {
+    resize: function(width, height) {
         this.window.style.width = width + 'px';
         this.window.style.height = height + 'px';
     },
