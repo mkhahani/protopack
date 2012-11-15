@@ -35,7 +35,7 @@ var ProtopackWindow = Class.create({
         this.options = ProtopackWindowOptions;
         Object.extend(this.options, options || {});
         this.className = this.options.className;
-        target = (target !== undefined)? $(target) : document.body;
+        target = (target === undefined)? document.body : $(target);
 
         if (this.window) {
             this.destroy();
@@ -130,7 +130,7 @@ var ProtopackWindow = Class.create({
     },
 
     _setPosition: function(x, y) {
-        if (typeof x !== 'undefined' && typeof y !== 'undefined') {
+        if (x !== undefined && y !== undefined) {
             try {
                 this.window.style.left = x + 'px';
                 this.window.style.top  = y + 'px';
