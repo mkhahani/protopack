@@ -15,71 +15,69 @@
     input[type=text], textarea {font-family:monospace;}
     input, textarea {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box;}
     button {height:24px;}
+    #workspace {
+      position:relative; width:500px; height:400px; margin:20px auto; 
+      border:1px solid black; background-color:#FFE0B2; overflow:auto;
+    }
   </style>
 </head>
 <body>
   <div>
-    <div id="workspace" style="position:relative; width:500px; height:400px; margin:0 auto; border:1px solid black; overflow:auto;">
-      <h1>Window over here</h1>
+    <div id="workspace">
+      <h1>Workspace</h1>
     </div>
     <div style="width:500px; margin:0 auto;">
-      <div id="types">
-        <input type="radio" name="type" value="1" checked><b>div</b> as parent
-        <input type="radio" name="type" value="2"><b>document body</b> as parent
-      </div>
-      <table id="options" width="100%"><tr>
-        <td>
-          <input type="checkbox" id="chk_header" value="header" checked>Header<br/>
-          <input type="checkbox" id="chk_close" value="close" checked>Close Button<br/>
-          <input type="checkbox" id="chk_modal" value="modal" checked>Modal<br/>
-          <input type="checkbox" id="chk_escape" value="escape" checked>Escape<br/>
-          <input type="checkbox" id="chk_draggable" value="draggable" checked>Draggable<br/>
-          <input type="checkbox" id="chk_transparent" value="tranparent" checked>Transparent Drag<br/>
-        </td>
-        <td>
-          <input type="text" id="edt_title" value="Window Title" style="width:100%"><br/>
-          <textarea id="txt_content" style="width:100%">Window content in &lt;b&gt;HTML&lt;/b&gt;</textarea>
-          <button onclick="openWindow()" style="height:40px; margin:0;">Open/Update Window</button>
-        </td>
-      </tr></table>
       <hr/>
-      <button onclick="resize();">resize(x, y)</button>
-      <input type="text" id="edt_size_x" value="300" style="width:50px"> x
-      <input type="text" id="edt_size_y" value="150" style="width:50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-      <button onclick="setPos();">show(x, y)</button>
-      <input type="text" id="edt_pos_x" value="100" style="width:50px"> x
-      <input type="text" id="edt_pos_y" value="100" style="width:50px">
+      <div id="types">
+        <input type="radio" name="type" value="1" checked /><b>div</b> as parent
+        <input type="radio" name="type" value="2" /><b>document body</b> as parent
+      </div>
+      <form id="frm_options">
+        <table id="options" width="100%"><tr>
+          <td style="width:150px;">
+            <input type="checkbox" name="chk_header" value="header" checked />Header<br/>
+            <input type="checkbox" name="chk_close" value="close" checked />Close Button<br/>
+            <input type="checkbox" name="chk_modal" value="modal" checked />Modal<br/>
+            <input type="checkbox" name="chk_escape" value="escape" checked />Escape<br/>
+            <input type="checkbox" name="chk_draggable" value="draggable" checked />Draggable<br/>
+            <input type="checkbox" name="chk_transparent" value="tranparent" checked />Transparent Drag<br/>
+          </td>
+          <td>
+            <input type="text" name="edt_title" value="Window Title" style="width:100%"><br/>
+            <textarea name="txt_content" style="width:100%">Window content in &lt;b&gt;HTML&lt;/b&gt;</textarea>
+            Size: <input type="text" name="edt_size_x" value="200" style="width:50px" /> x
+            <input type="text" name="edt_size_y" value="100" style="width:50px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Position: <input type="text" name="edt_pos_x" value="150" style="width:50px" /> x
+            <input type="text" name="edt_pos_y" value="150" style="width:50px" /><br/>
+          </td>
+        </tr></table>
+      </form>
+      <hr/>
+      <button onclick="openWindow()" style="height:40px; margin:0;">Open/Update Window</button>
     </div>
   </div>
 </body>
 <script>
-    var wnd = new ProtopackWindow({}, 'workspace');
+    var wnd = new ProtopackWindow({}, 'workspace'),
+        frm = $('frm_options');
     wnd.close();
 
     function openWindow() {
         var type = $('types').down('input[checked]').value,
             parent = (type == 1)? 'workspace' : document.body,
             options = {
-                showHeader: $('chk_header').checked,
-                closeButton: $('chk_close').checked,
-                modal: $('chk_modal').checked,
-                escape: $('chk_escape').checked,
-                draggable: $('chk_draggable').checked,
-                transparentDrag: $('chk_transparent').checked
+                showHeader: frm.chk_header.checked,
+                closeButton: frm.chk_close.checked,
+                modal: frm.chk_modal.checked,
+                escape: frm.chk_escape.checked,
+                draggable: frm.chk_draggable.checked,
+                transparentDrag: frm.chk_transparent.checked
             }
         wnd.initialize(options, $(parent));
-        wnd.setTitle($('edt_title').value);
-        wnd.setContent($('txt_content').value);
-        wnd.show();
-    }
-
-    function resize() {
-        wnd.resize($('edt_size_x').value, $('edt_size_y').value);
-    }
-
-    function setPos() {
-        wnd.show($('edt_pos_x').value, $('edt_pos_y').value);
+        wnd.setTitle(frm.edt_title.value);
+        wnd.setContent(frm.txt_content.value);
+        wnd.resize(frm.edt_size_x.value, frm.edt_size_y.value);
+        wnd.show(frm.edt_pos_x.value, frm.edt_pos_y.value);
     }
 </script>
 </html>
