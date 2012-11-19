@@ -17,7 +17,7 @@ var ProtopackTabsOptions = {
     findTabs   : true,
     hover      : false,
     defaultTab : 1
-}
+};
 
 /**
  * ProtopackInput base class
