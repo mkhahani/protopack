@@ -138,10 +138,12 @@ var ProtopackWindow = Class.create({
                 throw 'Could not set window position.';
             }
         } else {
-            //var dim = document.viewport.getDimensions(),
-            var dim = this.window.parentNode.getDimensions(),
+            var dim = (this.window.parentNode === document.body)?
+                    document.viewport.getDimensions() :
+                    this.window.parentNode.getDimensions(),
                 width  = this.window.getWidth(),
                 height = this.window.getHeight();
+            console.log(dim);
             this.window.style.left = (width > dim.width)? 0 : Math.round(dim.width / 2 - width / 2) + 'px';
             this.window.style.top = (height > dim.height)? 0 : Math.round(dim.height / 2 - height / 2) + 'px';
         }
