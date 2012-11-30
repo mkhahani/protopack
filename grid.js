@@ -771,6 +771,13 @@ var ProtopackGrid = Class.create({
     },
 
     /**
+     * Sets focus on the grid
+     */
+    focus: function() {
+        this.body.focus();
+    },
+
+    /**
      * Client-side sort function
      *
      * @param   string  sortBy      column name
