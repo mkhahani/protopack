@@ -19,12 +19,13 @@ var ProtopackGridOptions = {
     sorting       : 'client',   // ['client', 'server', false]
     filtering     : false,      // ['client', 'server', false]
     pagination    : false,      // depends on footer
-    rowClasses    : false,
+    keyNavigation : true,       // depends on rowSelect/cellSelect
     rowSelect     : true,
-    cellClasses   : false,
-    cellSelect    : true,
-    oddEvenRows   : true,
+    cellSelect    : false,
     mouseRollOver : true,
+    rowClasses    : false,
+    cellClasses   : false,
+    oddEvenRows   : true,
     titleAlign    : 'left',
     currencySymbol: '$'
 };
@@ -94,12 +95,8 @@ var ProtopackGrid = Class.create({
             grid.insert(this.footer);
         }
 
-        if (this.events.onKeyDown) {
-            body.tabIndex = '1';
-            Event.observe(body, 'keydown', function(e) {
-                this.events.onKeyDown(e);
-            }.bind(this));
-        }
+        body.tabIndex = '1';
+        Event.observe(body, 'keydown', this._onKeyDown.bind(this));
 
         $(target).insert(grid);
         return grid;
@@ -452,6 +449,78 @@ var ProtopackGrid = Class.create({
     },
 
     /**
+     * Trigers on key down
+     */
+    _onKeyDown: function (e) {
+        if (this.options.keyNavigation) {
+            this._keyNavigation(e);
+        }
+
+        // calling user defined event
+        if (this.events.onKeyDown) {
+            this.events.onKeyDown(e);
+        }
+    },
+
+    /**
+     * Implements keyboard navgiation
+     */
+    _keyNavigation: function(e) {
+        var key = e.keyCode;
+
+        // up/down navigation on rows/cells
+        if (key === 38 || key === 40) {
+            if (this.selectedRow) {
+                var row = this.selectedRow.rowIndex + key - 40,
+                    rowEl = this.table.tBodies[0].rows[row];
+                if (rowEl) {
+                    this._selectRow(rowEl);
+                    if (this.events.onRowSelect) {
+                        this.events.onRowSelect(row + 1, e);
+                    }
+                }
+            } else if (this.selectedCell) {
+                var row = this.selectedCell.up('tr').rowIndex + key - 40,
+                    rowEl = this.table.tBodies[0].rows[row];
+                if (rowEl) {
+                    var cell = this.selectedCell.cellIndex;
+                    this._selectCell(rowEl.cells[cell]);
+                    if (this.events.onCellSelect) {
+                        this.events.onCellSelect(row + 1, this._columns[cell].name, e);
+                    }
+                }
+            }
+        }
+
+        // left/right navigation on cells
+        if (key === 37 || key === 39) {
+            if (this.selectedCell) {
+                var rowEl = this.selectedCell.up('tr'),
+                    cell = this.selectedCell.cellIndex + key - 38,
+                    cellEl = rowEl.cells[cell];
+                if (cellEl) {
+                    this._selectCell(cellEl);
+                    if (this.events.onCellSelect) {
+                        this.events.onCellSelect(rowEl.rowIndex, this._columns[cell].name, e);
+                    }
+                }
+            }
+        }
+
+        // deselecting row/cell on Esc
+        if (key === 27) {
+            if (this.selectedRow) {
+                this.selectedRow.removeClassName('selected');
+                this.selectedRow = null;
+            }
+            if (this.selectedCell) {
+                this.selectedCell.removeClassName('selected');
+                this.selectedCell = null;
+            }
+        }
+    },
+
+    /**
      * Inserts data into table
      */
     _load: function(data) {
@@ -487,36 +556,22 @@ var ProtopackGrid = Class.create({
      * Selects a grid row
      */
     _selectRow: function(rowEl) {
-        if (typeof this.selectedRow != 'undefined') {
-            this._unselectRow(this.selectedRow);
+        if (this.selectedRow) {
+            this.selectedRow.removeClassName('selected');
         }
         rowEl.addClassName('selected');
         this.selectedRow = rowEl;
     },
 
     /**
-     * Deselects the grid row
-     */
-    _unselectRow: function(rowEl) {
-        rowEl.removeClassName('selected');
-    },
-
-    /**
      * Selects a grid cell
      */
     _selectCell: function(cellEl) {
-        if (typeof this.selectedCell != 'undefined') {
-            this._unselectRow(this.selectedCell);
+        if (this.selectedCell) {
+            this.selectedCell.removeClassName('selected');
         }
         cellEl.addClassName('selected');
         this.selectedCell = cellEl;
-    },
-
-    /**
-     * Deselects the grid cell
-     */
-    _unselectCell: function(cellEl) {
-        cellEl.removeClassName('selected');
     },
 
     /**

@@ -138,6 +138,7 @@
       rowClasses : true,
       mouseRollOver : true,
       rowSelect : false,
+      cellSelect : true,
       cellClasses : true,
       footer : true,
       filtering : 'client',
@@ -149,12 +150,12 @@
     onCellSelect : onCellSelect,
     //onRowOver   : onRowOver,
     //onRowOut    : onRowOut,
-    onKeyDown   : onKeyDown,
+    //onKeyDown   : onKeyDown,
     onFilter   : onFilter,
     onSort   : onSort
   }
 
-  var myGrid = new ProtopackGrid('thetable', gridLayout1, gridOptions, gridEvents);
+  var myGrid = new ProtopackGrid('thetable', gridLayout2, gridOptions, gridEvents);
   var limit = 5;
   myGrid.setId('mkhgrid');
   myGrid.pageBy(limit);
@@ -168,8 +169,8 @@
     var offset = (page - 1) * limit;
     //var data = dataArr.slice(offset, offset + limit);
     var data = dataObj1.slice(offset, offset + limit);
-    myGrid.loadData(data, 8);
-    //myGrid.loadData(dataObj1);
+    //myGrid.loadData(data, 8);
+    myGrid.loadData(dataObj2);
     //myGrid.loadData(dataArr);
   }
 
