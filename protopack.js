@@ -76,7 +76,7 @@ function addCommas(nStr, symbol)
 		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	}
 	res = x1 + x2;
-    if (typeof symbol !== 'undefined') {
+    if (!res.blank() && symbol !== undefined) {
         res = symbol + res;
     }
     return res;

@@ -26,7 +26,7 @@ var ProtopackGridOptions = {
     oddEvenRows   : true,
     mouseRollOver : true,
     titleAlign    : 'left',
-    currencySymbol: '$ '
+    currencySymbol: '$'
 };
 
 /**
@@ -388,7 +388,7 @@ var ProtopackGrid = Class.create({
                 break;
             case 'currency':
                 var value = (Object.isString(data) || !isNaN(data))? data : data.text;
-                //value = addCommas(value, this.options.currencySymbol);
+                value = addCommas(value, this.options.currencySymbol);
                 el = new Element('span').update(value);
                 break;
             case 'image':
