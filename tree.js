@@ -1,11 +1,11 @@
 /**
- *  Protopack Tree, a DHTML Tree Component based on Prototype JS framework
- *  © 2011-2012 Mohsen Khahani
+ * Protopack Tree, a DHTML Tree Component based on Prototype JS framework
+ * © 2011-2012 Mohsen Khahani
  *
- *  Licensed under the MIT license
- *  Created on October 4, 2011
+ * Licensed under the MIT license
+ * Created on October 4, 2011
  *
- *  http://mohsen.khahani.com/protopack
+ * http://mohsen.khahani.com/protopack
  */
 
 
@@ -13,7 +13,7 @@
  * Default configuration
  */
 var ProtopackTreeOptions = {
-    className: 'pp-tree',
+    className: 'ptree',
     multiSelect: false,
     interactive: true
 };
