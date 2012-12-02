@@ -46,12 +46,12 @@
   }
 
   var data = [
-      [0, -1, 'Root'],
+      //[0, -1, 'Root'],
       [1, 0, 'Item1', {id:'node1', className:'item-class', seq:3, style:{color:'red', fontWeight:'bold'}}],
       [2, 0, 'Item2', {id:'node2', title:'This is a hint', seq:1}],
-      [3, 2, 'Item3', {id:'node3'}],
       [4, 3, 'Item4', {id:'node4', href:'http://127.0.0.1', target:'_blank'}],
       [5, 3, 'Item5', {id:'node5', checked: true}],
+      [3, 2, 'Item3', {id:'node3'}],
       [6, 5, 'Item6', {id:'node6'}],
       [7, 2, 'Item7', {id:'node7'}],
       [8, 7, 'Item8', {id:'node8', seq:2}],
@@ -67,10 +67,12 @@
   //var rootNode = [0, 0, 'Root'];
   var tree = new ProtopackTree('workspace', options, events);
   //var tree2 = new ProtopackTree('workspace2', options, events);
-  tree.loadData(data);
+  var res = tree.loadData(data);
+  //var node = tree.treeObj.getNode(3)
+  //console.log(node.getNodes(true));
   //tree2.loadData(data);
   //tree.setId('mkh_tree');
   //tree.setSelected(22);
-  tree.setCaption('MKH Tree!');
+  //tree.setCaption('MKH Tree!');
 </script>
 </html>
