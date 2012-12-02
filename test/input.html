@@ -17,19 +17,18 @@
   </style>
 </head>
 <body>
-  <h1>Protopack Tree v1.1</h1>
+  <h1>Protopack Input v1.0</h1>
   <div id="wrapper">
     <div><input id="whatever" type="text" value="Javascript Programming Language" /></div>
     <div id="workspace"></div>
     <hr/>
     <div id="options">
-      <button onclick="myFunc()">GO</button>
+      <button onclick="update()">Update</button>
     </div>
   </div>
 </body>
 <script>
-  function myFunc() {
-    alert(1);
+  function update() {
   }
   var myInput = new ProtopackInput('workspace');
   myInput.entry.id = 'the_id';
