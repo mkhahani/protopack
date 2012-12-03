@@ -30,7 +30,7 @@ var ProtopackDraggable = Class.create({
             return;
         }
         if (typeof clickableEl == 'undefined') {
-            clickableEl = dragableEl;
+            clickableEl = draggableEl;
         }
         this.options = ProtopackDraggableOptions;
         Object.extend(this.options, options || {});
