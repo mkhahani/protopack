@@ -26,10 +26,10 @@ var ProtopackDraggable = Class.create({
      * The intializer
      */
     initialize: function(draggableEl, clickableEl, options) {
-        if (typeof draggableEl == 'undefined') {
+        if (draggableEl === undefined) {
             return;
         }
-        if (typeof clickableEl == 'undefined') {
+        if (clickableEl === undefined) {
             clickableEl = draggableEl;
         }
         this.options = ProtopackDraggableOptions;
