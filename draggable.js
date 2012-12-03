@@ -49,6 +49,7 @@ var ProtopackDraggable = Class.create({
             Event.observe(document, 'mousemove', this.goDragFunc);
             Event.observe(this.clickObj, 'mouseup', this.stopDragFunc);
             Event.stop(event);
+            this.dragObj.absolutize();
             if (this.options.transparent) {
                 this.dragObj.setOpacity(0.9);
             }
@@ -59,6 +60,7 @@ var ProtopackDraggable = Class.create({
         Event.stopObserving(document, 'mousemove', this.goDragFunc);
         Event.stopObserving(this.clickObj, 'mouseup', this.stopDragFunc);
         //Event.stop(event);
+        this.dragObj.relativize();
         if (this.options.transparent) {
             this.dragObj.setOpacity(1);
         }
