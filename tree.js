@@ -16,7 +16,7 @@ var ProtopackTreeOptions = {
     className: 'ptree',
     multiSelect: false,
     interactive: true,
-    collapsed: false
+    expanded: false
 };
 
 /**
@@ -41,7 +41,8 @@ var ProtopackTree = Class.create({
         this.multiSelect = this.options.multiSelect;
         this.className = this.options.className;
         this.selected = (this.multiSelect)? [] : null;
-        this.nodesById = {};
+        this.dataById = {};
+        this.nodeById = {};
         this.tree = this._construct();
         this._createEvents();
         if (target) {
@@ -96,6 +97,8 @@ var ProtopackTree = Class.create({
         this.dataObj = dataObj;
         tree = this.getTreeNodes(this.dataObj.nodes);
         this.tree.update(tree);
+        // console.log(this.dataById);
+        // console.log(this.nodeById);
     },
 
     getTreeNodes: function (nodes) {
@@ -103,22 +106,51 @@ var ProtopackTree = Class.create({
         //nodes.sort( function (n1, n2) {return n1.data.seq - n2.data.seq;} );
         nodes.each( function (node, i) {
             var options = {multiSelect:this.multiSelect, interactive:this.options.interactive},
-                nodeItem = new ProtopackTreeNode(node, options);
-            nodeItem.div.addClassName(this.className + '-node');
+                nodeObj = new ProtopackTreeNode(node, options);
+            nodeObj.div.addClassName(this.className + '-node');
             if (this.multiSelect) {
-                nodeItem.div.down('label').observe('click', this._onLabelClick.bind(this));
-                if (nodeItem.data.checked) {
-                    this.selected.push(nodeItem.id);
+                nodeObj.div.down('label').observe('click', this._onLabelClick.bind(this));
+                if (nodeObj.data.checked) {
+                    this.selected.push(nodeObj.id);
                 }
             }
             if (node.nodes.length !== 0) {
-                nodeItem.li.down('span').addClassName('plus');
+                nodeObj.li.down('span').addClassName('plus');
             }
-            ul.insert(nodeItem.li);
-            this.nodesById[node.id] = nodeItem;
+            ul.insert(nodeObj.li);
+            this.nodeById[node.id] = nodeObj;
         }.bind(this));
 
         return ul;
+    },
+
+    expand: function (nodeId, deep) {
+        var node = this.nodeById[nodeId],
+            ul = node.div.next('ul'),
+            nodeObj;
+        if (ul === undefined) {
+            nodeObj = this.dataObj.getNode(nodeId);
+            ul = this.getTreeNodes(nodeObj.nodes);
+            node.div.up('li').insert(ul);
+            node.div.previous('span').className = 'minus';
+        } else {
+            if (ul.visible()) {
+                ul.hide();
+                node.div.previous('span').className = 'plus';
+            } else {
+                ul.show();
+                node.div.previous('span').className = 'minus';
+            }
+        }
+
+        if (deep) {
+            if (!nodeObj) {
+                nodeObj = this.dataObj.getNode(nodeId);
+            }
+            nodeObj.nodes.each(function(nObj) {
+                this.expand(nObj.id, true);
+            }.bind(this));
+        }
     },
 
     render: function () {
@@ -210,6 +242,8 @@ var ProtopackTree = Class.create({
      * Expands/Collapse node
      */
     _onToggleNode: function (e) {
+        this.expand(e.memo.id);
+        return;
         var div = e.memo.element,
             ul = div.next('ul');
         if (ul === undefined) {
@@ -234,13 +268,13 @@ var ProtopackTree = Class.create({
     clearSelection: function () {
         if (this.multiSelect) {
             this.selected.each(function (id) {
-                this.nodesById[id].data.checked = false;
-                this.nodesById[id].div.down('input').checked = false;
+                this.dataById[id].data.checked = false;
+                this.dataById[id].div.down('input').checked = false;
             }.bind(this));
             this.selected.clear();
         } else {
-            if (this.selected !== null && this.nodesById[this.selected]) {
-                this.nodesById[this.selected].div.removeClassName('selected');
+            if (this.selected !== null && this.dataById[this.selected]) {
+                this.dataById[this.selected].div.removeClassName('selected');
             }
             this.selected = null;
         }
@@ -250,20 +284,20 @@ var ProtopackTree = Class.create({
      * Occurs on node click and updates the 'selected' attribute of the tree
      */
     _selectNode: function (id) {
-        if (typeof this.nodesById[id] == 'undefined') return;
+        if (typeof this.dataById[id] == 'undefined') return;
         if (this.multiSelect) {
-            var checked = this.nodesById[id].data.checked,
+            var checked = this.dataById[id].data.checked,
                 i = this.selected.indexOf(id);
             if (checked) {
                 this.selected.splice(i, 1);
             } else if (i === -1) {
                 this.selected.push(id);
             }
-            this.nodesById[id].data.checked = !checked;
-            this.nodesById[id].div.down('input').checked = !checked;
+            this.dataById[id].data.checked = !checked;
+            this.dataById[id].div.down('input').checked = !checked;
         } else {
             this.clearSelection();
-            this.nodesById[id].div.addClassName('selected');
+            this.dataById[id].div.addClassName('selected');
             this.selected = id;
         }
     },
@@ -274,8 +308,8 @@ var ProtopackTree = Class.create({
     setSelected: function (sel) {
         if (this.multiSelect) {
             function doSelect(id) {
-                this.nodesById[id].data.checked = true;
-                this.nodesById[id].node.down('input').checked = true;
+                this.dataById[id].data.checked = true;
+                this.dataById[id].node.down('input').checked = true;
             };
             this.clearSelection();
             if (Object.isArray(sel)) {
@@ -297,10 +331,10 @@ var ProtopackTree = Class.create({
     getText: function (ids) {
         if (Object.isArray(ids)) {
             return ids.map(function (id) {
-                return this.nodesById[id].label;
+                return this.dataById[id].label;
             }.bind(this));
         } else {
-            return this.nodesById[ids].label;
+            return this.dataById[ids].label;
         }
     },
 

@@ -34,6 +34,7 @@
       </form>
       <hr/>
       <button onclick="updateTree()">Update</button>
+      <button onclick="test()">Expand</button>
     </div>
   </div>
 </body>
@@ -64,8 +65,8 @@
           nodeclick: treeClick,
           nodemouseover:treeMouseOver,
           nodemouseout:treeMouseOut
-        },
-        tree = new ProtopackTree('workspace', options, events);
+        };
+    tree = new ProtopackTree('workspace', options, events);
     tree.setId('mkh_tree');
     tree.loadData(data);
   }
@@ -81,9 +82,10 @@
   function treeMouseOut(node, value, e) {
   }
   
-  function tests() {
+  function test() {
+    tree.expand(2, true);
     //var rootNode = [0, 0, 'Root'];
-    //var node = tree.treeObj.getNode(3)
+    //var node = tree.dataObj.getNode(3)
     //console.log(node.getNodes(true));
     //tree2.loadData(data);
     //tree.setSelected(22);
@@ -104,6 +106,7 @@
     //alert(tree2.getText([2,3,8]));
   }
 
+  var tree;
   updateTree();
 </script>
 </html>
