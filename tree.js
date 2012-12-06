@@ -83,7 +83,7 @@ var ProtopackTree = Class.create({
                 }
             });
         }
-        var treeObj = new TreeObj(0, -1, 'root', null),
+        var dataObj = new TreeDataObj(0, -1, 'root', null),
             dataById = {},
             tree;
 
@@ -92,9 +92,9 @@ var ProtopackTree = Class.create({
         });
         this.dataById = dataById
 
-        parseData(0, treeObj);
-        this.treeObj = treeObj;
-        tree = this.getTreeNodes(this.treeObj.nodes);
+        parseData(0, dataObj);
+        this.dataObj = dataObj;
+        tree = this.getTreeNodes(this.dataObj.nodes);
         this.tree.update(tree);
     },
 
@@ -213,7 +213,7 @@ var ProtopackTree = Class.create({
         var div = e.memo.element,
             ul = div.next('ul');
         if (ul === undefined) {
-            var nodeObj = this.treeObj.getNode(e.memo.id);
+            var nodeObj = this.dataObj.getNode(e.memo.id);
             var ul = this.getTreeNodes(nodeObj.nodes);
             div.up('li').insert(ul);
             div.previous('span').className = 'minus';
@@ -377,9 +377,9 @@ var ProtopackTree = Class.create({
 //=================================================================================================
 
 /**
- * TreeNode base class
+ * TreeDataObj base class
  */
-var TreeObj = Class.create({
+var TreeDataObj = Class.create({
 
     initialize: function (id, pid, name, data) {
         this.id = id;
@@ -391,7 +391,7 @@ var TreeObj = Class.create({
 
     addNode: function(id, pid, name, data) {
         var parent = this.getNode(pid),
-            node = new TreeObj(id, pid, name, data);
+            node = new TreeDataObj(id, pid, name, data);
         parent.nodes.push(node);
         return node;
     },
