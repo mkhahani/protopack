@@ -138,11 +138,18 @@ var ProtopackWindow = Class.create({
                 throw 'Could not set window position.';
             }
         } else {
-            var dim = (this.window.parentNode === document.body)?
-                    document.viewport.getDimensions() :
-                    this.window.parentNode.getDimensions(),
-                width  = this.window.getWidth(),
-                height = this.window.getHeight();
+            var width  = this.window.getWidth(),
+                height = this.window.getHeight(),
+                offset,
+                dim;
+            if (this.window.parentNode === document.body) {
+                dim = document.viewport.getDimensions();
+                offset = document.viewport.getScrollOffsets();
+                dim.width += 2 * offset.left;
+                dim.height += 2 * offset.top;
+            } else {
+                dim = this.window.parentNode.getDimensions();
+            }
             this.window.style.left = (width > dim.width)? 0 : Math.round(dim.width / 2 - width / 2) + 'px';
             this.window.style.top = (height > dim.height)? 0 : Math.round(dim.height / 2 - height / 2) + 'px';
         }
