@@ -26,11 +26,11 @@ var ProtopackDraggable = Class.create({
      * The intializer
      */
     initialize: function(draggableEl, clickableEl, options) {
-        if (typeof draggableEl == 'undefined') {
+        if (draggableEl === undefined) {
             return;
         }
-        if (typeof clickableEl == 'undefined') {
-            clickableEl = dragableEl;
+        if (clickableEl === undefined) {
+            clickableEl = draggableEl;
         }
         this.options = ProtopackDraggableOptions;
         Object.extend(this.options, options || {});
@@ -42,34 +42,38 @@ var ProtopackDraggable = Class.create({
         Event.observe(clickableEl, 'mousedown', this.startDrag.bindAsEventListener(this));
     },
 
-    startDrag: function(event) {
-        if (Event.isLeftClick(event)) {
-            this.cursorOffsetX = Event.pointerX(event) - this.dragObj.offsetLeft;
-            this.cursorOffsetY = Event.pointerY(event) - this.dragObj.offsetTop;
+    startDrag: function(e) {
+        if (Event.isLeftClick(e)) {
+            this.cursorOffset = [
+                Event.pointerX(e) - this.dragObj.offsetLeft,
+                Event.pointerY(e) - this.dragObj.offsetTop
+            ]
             Event.observe(document, 'mousemove', this.goDragFunc);
             Event.observe(this.clickObj, 'mouseup', this.stopDragFunc);
-            Event.stop(event);
+            Event.stop(e);
+            this.dragObj.absolutize();
             if (this.options.transparent) {
                 this.dragObj.setOpacity(0.9);
             }
         }
     },
 
-    stopDrag: function(event) {
+    stopDrag: function(e) {
         Event.stopObserving(document, 'mousemove', this.goDragFunc);
         Event.stopObserving(this.clickObj, 'mouseup', this.stopDragFunc);
-        //Event.stop(event);
+        //Event.stop(e);
+        this.dragObj.relativize();
         if (this.options.transparent) {
             this.dragObj.setOpacity(1);
         }
     },
 
-    goDrag: function(event) {
-        var x = Event.pointerX(event),
-            y = Event.pointerY(event);
-        this.dragObj.style.left = x - this.cursorOffsetX + 'px';
-        this.dragObj.style.top  = y - this.cursorOffsetY + 'px';
-        Event.stop(event);
+    goDrag: function(e) {
+        var x = Event.pointerX(e),
+            y = Event.pointerY(e);
+        this.dragObj.style.left = x - this.cursorOffset[0] + 'px';
+        this.dragObj.style.top  = y - this.cursorOffset[1] + 'px';
+        Event.stop(e);
     }
 
 });

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -7,22 +6,31 @@
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../protopack.js"></script>
   <script type="text/javascript" src="../input.js"></script>
+  <style type="text/css">
+    body, button {font:12px arial;}
+    body {background-color:silver;}
+    h1 {font:bold 16px times; text-align:center; margin-top:100px;}
+    button {height:24px;}
+    input[type=text] {width:300px;}
+    #wrapper {width:300px; margin:0 auto;}
+    #workspace {height:60px;}
+  </style>
 </head>
-<style type="text/css">
-  input {width:300px; border_:1px solid #aaaaaa;}
-</style>
 <body>
-  <div id="workspace">
+  <h1>Protopack Input v1.0</h1>
+  <div id="wrapper">
     <div><input id="whatever" type="text" value="Javascript Programming Language" /></div>
-    <div id="mkhinput"></div>
+    <div id="workspace"></div>
+    <hr/>
+    <div id="options">
+      <button onclick="update()">Update</button>
+    </div>
   </div>
-  <button onclick="myFunc()">GO</button>
 </body>
 <script>
-  function myFunc() {
-    alert(1);
+  function update() {
   }
-  var myInput = new ProtopackInput('mkhinput');
+  var myInput = new ProtopackInput('workspace');
   myInput.entry.id = 'the_id';
   myInput.entry.name = 'the_name';
   myInput.entry.value = 'MKH';

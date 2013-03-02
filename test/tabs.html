@@ -6,31 +6,42 @@
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../protopack.js"></script>
   <script type="text/javascript" src="../tabs.js"></script>
+  <style type="text/css">
+    body, button {font:12px arial;}
+    body {background-color:silver;}
+    h1 {font:bold 16px times; text-align:center; margin-top:100px;}
+    button {height:24px;}
+    #wrapper {width:400px; margin:0 auto;}
+    #workspace {height:300px; border:1px solid grey; background-color:white; overflow:auto; padding:20px;}
+  </style>
 </head>
-<style type="text/css">
-  #workspace {width:500px; margin:100px auto 0 auto;}
-</style>
 <body>
-  <div id="workspace">
-    <h4>Pre-build Tabs</h4>
-    <ul id="static_tabs">
-      <li><a rel="sheet1">Tab1</a></li>
-      <li><a rel="sheet2">Tab2</a></li>
-      <li><a rel="sheet3">Tab3</a></li>
-    </ul>
-    <div style="padding:10px;">
-      <div id="sheet1">This is tab sheet #1</div>
-      <div id="sheet2">This is tab sheet #2</div>
-      <div id="sheet3">This is tab sheet #3</div>
+  <h1>Protopack Tabs v1.0</h1>
+  <div id="wrapper">
+    <div id="workspace">
+      <h4>Pre-build Tabs</h4>
+      <ul id="static_tabs">
+        <li><a rel="sheet1">Tab1</a></li>
+        <li><a rel="sheet2">Tab2</a></li>
+        <li><a rel="sheet3">Tab3</a></li>
+      </ul>
+      <div style="padding:10px;">
+        <div id="sheet1">This is tab sheet #1</div>
+        <div id="sheet2">This is tab sheet #2</div>
+        <div id="sheet3">This is tab sheet #3</div>
+      </div>
+      <button onclick="myFunc()">setActive(2)</button>
+      <br/><br/><br/>
+      <h4>Auto Created Tabs</h4>
+      <div id="auto_tabs"></div>
+      <div style="padding:10px;">
+        <div id="sheet4">This is tab sheet #1</div>
+        <div id="sheet5">This is tab sheet #2</div>
+        <div id="sheet6">This is tab sheet #3</div>
+      </div>
     </div>
-    <button onclick="myFunc()">setActive(2)</button>
-    <br/><br/><br/>
-    <h4>Auto Created Tabs</h4>
-    <div id="auto_tabs"></div>
-    <div style="padding:10px;">
-      <div id="sheet4">This is tab sheet #1</div>
-      <div id="sheet5">This is tab sheet #2</div>
-      <div id="sheet6">This is tab sheet #3</div>
+    <hr/>
+    <div id="options">
     </div>
   </div>
 </body>
