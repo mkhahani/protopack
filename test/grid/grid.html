@@ -156,6 +156,7 @@
   };
 
   var gridEvents = {
+    onDblClick : onDblClick,
     onRowSelect : onRowSelect,
     //onCellSelect : onCellSelect,
     //onRowOver   : onRowOver,
@@ -182,6 +183,10 @@
     //myGrid.loadData(data, 8);
     myGrid.loadData(dataObj2);
     //myGrid.loadData(dataArr);
+  }
+
+  function onDblClick(rowIndex, event) {
+    console.log('onDblClick:' + rowIndex);
   }
 
   function onRowSelect(rowIndex, event) {

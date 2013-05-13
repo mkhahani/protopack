@@ -1,11 +1,11 @@
 /**
  * Protopack Grid, a DHTML Grid Component based on Prototype JS framework
- * © 2011-2012 Mohsen Khahani
+ * © 2011-2013 Mohsen Khahani
  *
  * Licensed under the MIT license
  * Created on July 10, 2011
  *
- * http://mohsen.khahani.com/protopack
+ * http://mohsenkhahani.ir/protopack
  */
 
 
@@ -333,6 +333,11 @@ var ProtopackGrid = Class.create({
         if (this.events.onRowOut) {
             Event.observe(tr, 'mouseout', function(e) {
                 this.events.onRowOut(tr.rowIndex, e);
+            }.bind(this));
+        }
+        if (this.events.onDblClick) {
+            Event.observe(tr, 'dblclick', function(e) {
+                this.events.onDblClick(tr.rowIndex, e);
             }.bind(this));
         }
     },
