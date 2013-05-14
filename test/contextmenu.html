@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Context Menu</title>
+  <link rel="stylesheet" type="text/css" href="../style/window/window.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../window.js"></script>
+  <script type="text/javascript" src="../contextmenu.js"></script>
+  <style type="text/css">
+    body, button {font:12px arial;}
+    body {background-color:silver;}
+    h1 {font:bold 16px times; text-align:center; margin-top:50px;}
+    h2 {font-size:35px; margin-top:180px; text-align:center;}
+    input[type=text], textarea {font-family:monospace;}
+    input, textarea {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box;}
+    button {height:24px;}
+    #wrapper {width:500px; margin:0 auto;}
+    #workspace {
+      position:relative; height:400px;
+      border:1px solid grey; background-color:#FFE0B2; overflow:auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Protopack Context Menu v1.0</h1>
+  <div id="wrapper">
+    <div id="workspace"><h2>Workspace</h2></div>
+    <hr/>
+    <div id="options">
+      <div id="types">
+        <input type="radio" name="type" value="1" checked /><b>div</b> as parent
+        <input type="radio" name="type" value="2" /><b>document body</b> as parent
+      </div>
+      <form id="frm_options">
+        <table width="100%"><tr>
+          <td style="width:150px;">
+            <input type="checkbox" name="chk_header" value="header" checked />Header<br/>
+            <input type="checkbox" name="chk_close" value="close" checked />Close Button<br/>
+            <input type="checkbox" name="chk_modal" value="modal" checked />Modal<br/>
+            <input type="checkbox" name="chk_escape" value="escape" checked />Escape<br/>
+            <input type="checkbox" name="chk_draggable" value="draggable" checked />Draggable<br/>
+            <input type="checkbox" name="chk_transparent" value="tranparent" checked />Transparent Drag<br/>
+          </td>
+          <td>
+            <input type="text" name="edt_title" value="Window Title" style="width:100%"><br/>
+            <textarea name="txt_content" style="width:100%">Window content in &lt;b&gt;HTML&lt;/b&gt;</textarea>
+            Size: <input type="text" name="edt_size_x" value="200" style="width:50px" /> x
+            <input type="text" name="edt_size_y" value="100" style="width:50px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Position: <input type="text" name="edt_pos_x" value="150" style="width:50px" /> x
+            <input type="text" name="edt_pos_y" value="150" style="width:50px" /><br/>
+          </td>
+        </tr></table>
+      </form>
+      <hr/>
+      <button onclick="openWindow()" style="height:40px; margin:0;">Open/Update Window</button>
+      <button id="the_button">Right click for context menu!</button>
+      <ul id="links"><li><a href="">Link 1</a></li><li><a href="">Link 2</a></li><li><a href="">Link 3</a></li><li><a href="">Link 4</a></li></ul>
+    </div>
+  </div>
+</body>
+<script>
+    var wnd = new ProtopackContextMenu({}, 'workspace'),
+        frm = $('frm_options');
+    wnd.close();
+
+    function openWindow() {
+        var type = $('types').down('input[checked]').value,
+            parent = (type == 1)? 'workspace' : document.body,
+            options = {
+                showHeader: frm.chk_header.checked,
+                closeButton: frm.chk_close.checked,
+                modal: frm.chk_modal.checked,
+                escape: frm.chk_escape.checked,
+                draggable: frm.chk_draggable.checked,
+                transparentDrag: frm.chk_transparent.checked
+            },
+            menuItems = [
+              '<a href="">menu item 1</a>',
+              '<a href="">menu item 2</a>',
+              '<a href="">menu item 3</a>',
+              '<a href="">menu item 4</a>'
+            ];
+        wnd.initialize(options, $(parent));
+        wnd.setItems(menuItems);
+        //wnd.bindTo($('frm_options'));
+        wnd.bindTo(links.select('a'));
+        //wnd.show();
+    }
+</script>
+</html>
