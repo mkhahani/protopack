@@ -340,6 +340,8 @@ var ProtopackGrid = Class.create({
                 this.events.onDblClick(tr.rowIndex, e);
             }.bind(this));
         }
+
+        return tr;
     },
 
     /**
@@ -898,6 +900,8 @@ var ProtopackGrid = Class.create({
         this._insertRow(rowData, index);
         this.data.splice(index, 0, rowData);
         this.refresh();
+
+        return index + 1;
     },
 
     /**
