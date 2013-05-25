@@ -1,11 +1,28 @@
 /**
- * Protopack Window, a DHTML Window Component based on Prototype JS framework
- * © 2012 Mohsen Khahani
- *
+ * Protopack Window is a DHTML Window Component based on Prototype JS framework
+ * Copyright 2012-2013 Mohsen Khahani
  * Licensed under the MIT license
  * Created on May 6, 2012
  *
- * http://mohsen.khahani.com/protopack
+ * Requirements:
+ *   - Prototype JS v1.7+
+ *   - draggable.js (optional)
+ *
+ * Features:
+ *   - rich JavaScript popup window
+ *   - draggable
+ *   - modal support
+ *   - full CSS customizable
+ *   - mouse and keyboard events
+ *   - many useful options
+ *
+ * v1.1 (May 25, 2013):
+ *   - added `autoClose` option
+ *   - fixed `overlay` positioning
+ *   - many enhancements
+ *   - code comments
+ *
+ * http://mohsenkhahani.ir/protopack
  */
 
 
@@ -18,6 +35,7 @@ var ProtopackWindowOptions = {
     draggable       : true,
     transparentDrag : true,
     escape          : true,
+    autoClose       : false,
     showHeader      : true,
     closeButton     : true
 };
@@ -26,15 +44,22 @@ var ProtopackWindowOptions = {
  * ProtopackWindow class
  */
 var ProtopackWindow = Class.create({
-    Version: '1.0',
+    Version: '1.1',
 
     /**
-     * The window intializer
+     * Window intializer
+     *
+     * @access  private
+     * @param   object  options Combination of ProtopackWindowOptions
+     * @param   string  target  ID of the target element
+     * @return  void
      */
-    initialize: function(options, target) {
+    initialize: function (options, target) {
         this.options = ProtopackWindowOptions;
         Object.extend(this.options, options || {});
         this.className = this.options.className;
+        this.focusHandler = this._onLostFocus.bind(this);
+        this.escapeHandler = this._onEscape.bind(this);
         target = (target === undefined)? document.body : $(target);
 
         if (this.window) {
@@ -44,10 +69,11 @@ var ProtopackWindow = Class.create({
     },
 
     /**
-     * The window constructor
+     * Window constructor
      *
+     * @access  private
      * @param   string  target  ID of the target element
-     * @return  string  XHTML grid
+     * @return  string  XHTML window
      */
     _construct: function (target) {
         var window = this._createWindow();
@@ -87,26 +113,43 @@ var ProtopackWindow = Class.create({
         return window;
     },
 
-    _createWindow: function() {
-        var window  = new Element('div', {'class': this.className}).hide();
-        if (this.options.escape) {
-            document.observe('keydown', function(e) {
-                if (window.visible() && e.keyCode == Event.KEY_ESC) {
-                    this.close();
-                }
-            }.bind(this));
-        }
-        return window;
+    /**
+     * Builds the main window
+     *
+     * @access  private
+     * @return  object  Window element
+     */
+    _createWindow: function () {
+        return new Element('div', {'class': this.className}).hide();
     },
 
-    _createOverlay: function(target) {
+    /**
+     * Builds the screen overlay
+     *
+     * @access  private
+     * @return  object  Overlay element
+     */
+    _createOverlay: function (target) {
         var overlay = new Element('div', {'class': this.className + '-overlay'});
-        overlay.observe('mousedown', function(e) {Event.stop(e);});
+        overlay.style.position = (target === document.body)? 'fixed' : 'absolute';
+        overlay.observe('mousedown', function (e) {
+            if (this.options.autoClose) {
+                this.close();
+            } else {
+                Event.stop(e);
+            }
+        }.bind(this));
         target.insert(overlay.hide());
         return overlay;
     },
 
-    _createHeader: function() {
+    /**
+     * Builds the header of the window
+     *
+     * @access  private
+     * @return  object  Window header element
+     */
+    _createHeader: function () {
         var header = new Element('div', {'class': this.className + '-header'}),
             title = new Element('div', {'class': this.className + '-title'});
         this._title = title;
@@ -114,7 +157,13 @@ var ProtopackWindow = Class.create({
         return header.insert(title);
     },
 
-    _createBody: function() {
+    /**
+     * Builds the body of the window
+     *
+     * @access  private
+     * @return  object  Window body element
+     */
+    _createBody: function () {
         var body = new Element('div', {'class': this.className + '-body'}),
             content = new Element('div', {'class': this.className + '-content'});
         this._content = content;
@@ -122,14 +171,82 @@ var ProtopackWindow = Class.create({
         return body.insert(content);
     },
 
-    _createClose: function() {
+    /**
+     * Builds the close button
+     *
+     * @access  private
+     * @return  object  Close button element
+     */
+    _createClose: function () {
         var btnClose = new Element('span', {'class': this.className + '-close'});
         btnClose.observe('click', this.close.bind(this));
-
         return btnClose;
     },
 
-    _setPosition: function(x, y) {
+    /**
+     * Creates some events on document
+     *
+     * @access  private
+     * @return  void
+     */
+    _startDocEvents: function () {
+        if (this.options.autoClose) {
+            document.observe('mousedown', this.focusHandler);
+        }
+        if (this.options.escape) {
+            document.observe('keydown', this.escapeHandler);
+        }
+    },
+
+    /**
+     * Removes document events
+     *
+     * @access  private
+     * @return  void
+     */
+    _stopDocEvents: function () {
+        document.stopObserving('mousedown', this.focusHandler);
+        document.stopObserving('keydown', this.escapeHandler);
+    },
+
+    /**
+     * Closes the window on ecape key press
+     *
+     * @access  private
+     * @param   object  e   Keybord event
+     * @return  void
+     */
+    _onEscape: function (e) {
+        if (this.window.visible() && e.keyCode === Event.KEY_ESC) {
+            this.close();
+        }
+    },
+
+    /**
+     * Closes the window when focus is lost on mouse click
+     *
+     * @access  private
+     * @param   object  e   Mouse event
+     * @return  void
+     */
+    _onLostFocus: function (e) {
+        var el = e.findElement();
+        if (this.window.visible() && this.window !== el &&
+            this.window.descendants().indexOf(el) === -1) // => click outside of Window
+        {
+            this.close();
+        }
+    },
+
+    /**
+     * Positions the window
+     *
+     * @access  private
+     * @param   int     x   Window left position(px) - optional
+     * @param   int     y   Window top position(px) - optional
+     * @return  void
+     */
+    _setPosition: function (x, y) {
         if (x !== undefined && y !== undefined) {
             try {
                 this.window.style.left = x + 'px';
@@ -155,34 +272,79 @@ var ProtopackWindow = Class.create({
         }
     },
 
-    setId: function(id) {
+    /**
+     * Sets ID of the window element
+     *
+     * @access  public
+     * @param   string  id  Window ID
+     * @return  void
+     */
+    setId: function (id) {
         this.window.id = id;
     },
 
-    setTitle: function(title) {
+    /**
+     * Sets title of the window
+     *
+     * @access  public
+     * @param   string  title   Window title
+     * @return  void
+     */
+    setTitle: function (title) {
         if (this._title) {
             this._title.update(title);
         }
     },
 
-    setContent: function(content) {
+    /**
+     * Sets content of the window
+     *
+     * @access  public
+     * @param   string  content XHTML window content
+     * @return  void
+     */
+    setContent: function (content) {
         this._content.update(content);
     },
 
-    resize: function(width, height) {
+    /**
+     * Sets width & height of the window
+     *
+     * @access  public
+     * @param   int     width   Window width(px)
+     * @param   int     Height  Window height(px)
+     * @return  void
+     */
+    resize: function (width, height) {
         this.window.style.width = width + 'px';
         this.window.style.height = height + 'px';
     },
 
-    show: function(x, y) {
+    /**
+     * Shows(unhides) the window
+     *
+     * @access  public
+     * @param   int     x   Window left position(px) - optional
+     * @param   int     y   Window top position(px) - optional
+     * @return  void
+     */
+    show: function (x, y) {
         this._setPosition(x, y);
         this.window.show();
         if (this.options.modal) {
             this._overlay.show();
         }
+        this._startDocEvents();
     },
 
-    close: function() {
+    /**
+     * Closes(hides) the window
+     *
+     * @access  public
+     * @return  void
+     */
+    close: function () {
+        this._stopDocEvents();
         this.window.hide();
         if (this._overlay) {
             this._overlay.hide();
@@ -192,13 +354,17 @@ var ProtopackWindow = Class.create({
         }
     },
 
-    destroy: function() {
+    /**
+     * Destroys the window
+     *
+     * @access  public
+     * @return  void
+     */
+    destroy: function () {
         this.window.remove();
         if (this._overlay) {
             this._overlay.remove();
             this._overlay = null;
         }
     }
-
 });
-

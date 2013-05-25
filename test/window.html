@@ -11,19 +11,19 @@
     body, button {font:12px arial;}
     body {background-color:silver;}
     h1 {font:bold 16px times; text-align:center; margin-top:50px;}
-    h2 {font-size:35px; margin-top:180px; text-align:center;}
+    h2 {font-size:35px; margin-top:120px; text-align:center;}
     input[type=text], textarea {font-family:monospace;}
     input, textarea {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box;}
     button {height:24px;}
     #wrapper {width:500px; margin:0 auto;}
     #workspace {
-      position:relative; height:400px;
+      position:relative; height:300px;
       border:1px solid grey; background-color:#FFE0B2; overflow:auto;
     }
   </style>
 </head>
 <body>
-  <h1>Protopack Window v1.0</h1>
+  <h1>Protopack Window v1.1</h1>
   <div id="wrapper">
     <div id="workspace"><h2>Workspace</h2></div>
     <hr/>
@@ -41,14 +41,15 @@
             <input type="checkbox" name="chk_escape" value="escape" checked />Escape<br/>
             <input type="checkbox" name="chk_draggable" value="draggable" checked />Draggable<br/>
             <input type="checkbox" name="chk_transparent" value="tranparent" checked />Transparent Drag<br/>
+            <input type="checkbox" name="chk_autoclose" value="autoclose" checked />Auto Close<br/>
           </td>
           <td>
             <input type="text" name="edt_title" value="Window Title" style="width:100%"><br/>
             <textarea name="txt_content" style="width:100%">Window content in &lt;b&gt;HTML&lt;/b&gt;</textarea>
             Size: <input type="text" name="edt_size_x" value="200" style="width:50px" /> x
             <input type="text" name="edt_size_y" value="100" style="width:50px" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Position: <input type="text" name="edt_pos_x" value="150" style="width:50px" /> x
-            <input type="text" name="edt_pos_y" value="150" style="width:50px" /><br/>
+            Position: <input type="text" name="edt_pos_x" value="50" style="width:50px" /> x
+            <input type="text" name="edt_pos_y" value="50" style="width:50px" /><br/>
           </td>
         </tr></table>
       </form>
@@ -71,7 +72,8 @@
                 modal: frm.chk_modal.checked,
                 escape: frm.chk_escape.checked,
                 draggable: frm.chk_draggable.checked,
-                transparentDrag: frm.chk_transparent.checked
+                transparentDrag: frm.chk_transparent.checked,
+                autoClose: frm.chk_autoclose.checked
             }
         wnd.initialize(options, $(parent));
         wnd.setTitle(frm.edt_title.value);
