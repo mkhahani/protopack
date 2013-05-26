@@ -315,7 +315,7 @@ var ProtopackWindow = Class.create({
      * @param   int     Height  Window height(px)
      * @return  void
      */
-    resize: function (width, height) {
+    setSize: function (width, height) {
         this.window.style.width = width + 'px';
         this.window.style.height = height + 'px';
     },
