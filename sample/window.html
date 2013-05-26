@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Window Demo</title>
+  <link rel="stylesheet" type="text/css" href="../style/window/window.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/window/black.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../draggable.js"></script>
+  <script type="text/javascript" src="../window.js"></script>
+  <style type="text/css">
+    body, button {font:12px arial;}
+    h1 {font:bold 24px times; text-align:center;}
+    h1 + hr {margin:10px 0;}
+    label {font-weight:bold;}
+    button {padding:5px 20px;}
+    a {color:#555; text-decoration:none; border-bottom:1px dotted #555;}
+    #wrapper {width:800px; margin:50px auto 0 auto;}
+    #frm_options {float:left; width:220px; height:266px; border:1px solid silver; padding:20px;}
+    #container {
+        float:right; width:530px; height:306px;
+        border:1px solid silver; background-color:#FFE0B2;
+    }
+    #about {font:10px tahoma; line-height:1.6; color:#555; text-align:center;}
+    .pretty-window {}
+    .pretty-window {}
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <h1>Protopack Window Demo</h1><hr/>
+    <form id="frm_options">
+      <input type="checkbox" id="chk_modal" name="chk_modal" value="modal" /><label for="chk_modal">Modal</label><br/>
+      <input type="checkbox" id="chk_draggable" name="chk_draggable" value="draggable" checked /><label for="chk_draggable">Draggable</label><br/>
+      <input type="checkbox" id="chk_transparent" name="chk_transparent" value="tranparent" checked /><label for="chk_transparent">Transparent Drag</label><br/>
+      <input type="checkbox" id="chk_header" name="chk_header" value="header" checked /><label for="chk_header">Header</label><br/>
+      <input type="checkbox" id="chk_close" name="chk_close" value="close" checked /><label for="chk_close">Close Button</label><br/>
+      <input type="checkbox" id="chk_styled" name="chk_styled" value="styled" /><label for="chk_styled">Custom Style</label><br/>
+      <input type="checkbox" id="chk_escape" name="chk_escape" value="escape" checked /><label for="chk_escape">Close on escape</label><br/>
+      <input type="checkbox" id="chk_autoclose" name="chk_autoclose" value="autoclose" /><label for="chk_autoclose">Close on click outside the window</label><br/>
+      <input type="checkbox" id="chk_bind" name="chk_bind" value="bind" /><label for="chk_bind">Bind to an element</label><br/><br/>
+      <hr>
+      <button type="button" onclick="setTitle()">Set Title</button>
+      <button type="button" onclick="setContent()">Set Content</button>
+      <button type="button" onclick="setSize()">Set Size</button>
+      <button type="button" onclick="setPosition()">Set Position</button>
+    </form>
+    <div id="container" style="position:relative; overflow:auto; display:none;"></div>
+    <div style="clear:both; margin-bottom:10px;"></div>
+    <hr/>
+    <div id="about">
+      <div><strong>Protopack Window</strong> v1.1</div>
+      <div>&copy; 2012-2013 <a href="http://mohsenkhahani.ir/" target="_blank">Mohsen Khahani</a></div>
+    </div>
+  </div>
+</body>
+<script>
+    var wnd,
+        frm = $('frm_options'),
+        offset = {
+            x: $('frm_options').measure('left') + 260,
+            y: $('frm_options').measure('top')
+        };
+
+    $('frm_options').select('input').invoke('observe', 'click', openWindow);
+
+    function openWindow() {
+        var parent = (frm.chk_bind.checked)? 'container' : document.body,
+            title = 'Window title',
+            content = 'Protopack Window is a DHTML Window Component based on Prototype JS framework',
+            options = {
+                modal: frm.chk_modal.checked,
+                draggable: frm.chk_draggable.checked,
+                transparentDrag: frm.chk_transparent.checked,
+                showHeader: frm.chk_header.checked,
+                closeButton: frm.chk_close.checked,
+                escape: frm.chk_escape.checked,
+                autoClose: frm.chk_autoclose.checked,
+                className: frm.chk_styled.checked? 'pwindow-black' : 'pwindow'
+            };
+        
+        if (frm.chk_bind.checked) {
+            $('container').show();
+            pos = {x: 110, y: 80};
+        } else {
+            $('container').hide();
+            pos = {x: offset.x + 120, y: offset.y + 80};
+        }
+        if (wnd) {
+          wnd.destroy();
+        }
+        wnd = new ProtopackWindow(options, parent),
+        wnd.setTitle(title);
+        wnd.setContent(content);
+        wnd.setSize(300, 150);
+        wnd.show(pos.x, pos.y);
+    }
+
+    function setTitle() {
+        wnd.setTitle('The title has been updated!');
+        wnd.show();
+    }
+
+    function setContent() {
+        wnd.setContent('The window content accepts a <b style="color:blue;">XHTML string</b> or an <b>element ID</b>.');
+        wnd.show();
+    }
+
+    function setSize() {
+        wnd.setSize(450, 250);
+        wnd.show();
+    }
+
+    function setPosition() {
+        pos.x = Math.floor((Math.random() * 400) + offset.x);
+        pos.y = Math.floor((Math.random() * 300) + offset.y);
+        wnd.show(pos.x, pos.y);
+    }
+
+    openWindow();
+</script>
+</html>
