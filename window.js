@@ -66,6 +66,7 @@ var ProtopackWindow = Class.create({
             this.destroy();
         }
         this.window = this._construct(target);
+        this._setPosition();
     },
 
     /**
@@ -324,12 +325,14 @@ var ProtopackWindow = Class.create({
      * Shows(unhides) the window
      *
      * @access  public
-     * @param   int     x   Window left position(px) - optional
-     * @param   int     y   Window top position(px) - optional
+     * @param   int   x   Window left position(px) - optional
+     * @param   int   y   Window top position(px) - optional
      * @return  void
      */
     show: function (x, y) {
-        this._setPosition(x, y);
+        if (x !== undefined && y !== undefined) {
+            this._setPosition(x, y);
+        }
         this.window.show();
         if (this.options.modal) {
             this._overlay.show();
