@@ -25,6 +25,7 @@
  *  v1.2 (June 3, 2013):
  *    - changed `show()` to `open()`
  *    - added `toggle()` function
+ *    - added `excludedElements` property
  *
  *  http://mohsenkhahani.ir/protopack
  */
