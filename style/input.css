@@ -1,25 +1,25 @@
-.pp-input {
+.pinput {
   position:relative;
   display:inline-block;
 }
-.pp-input button {
+.pinput button {
   position: absolute;
   top: 0;
   right: 0;
   width:20px;
   border: 1px outset #888888;
 }
-.pp-input button:active {
+.pinput button:active {
   border: 1px inset #888888;
 }
-.pp-input-popup {
+.pinput-popup {
   position: absolute;
+  z-index: 20;
   background-color: white;
   border: 1px solid #888888;
   overflow: auto;
   max-height: 400px;
   box-shadow: 5px 5px 5px #AAAAAA;
   -moz-box-shadow: 5px 5px 5px #AAAAAA;
-  z-index: 100;
   padding: 5px;
 }
