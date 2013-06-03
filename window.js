@@ -24,6 +24,7 @@
  *
  *  v1.2 (June 3, 2013):
  *    - changed `show()` to `open()`
+ *    - added `toggle()` function
  *
  *  http://mohsenkhahani.ir/protopack
  */
@@ -357,6 +358,20 @@ var ProtopackWindow = Class.create({
         }
         if (this.onClose) {
             this.onClose();
+        }
+    },
+
+    /**
+     * Opens/Closes the window
+     *
+     * @access  public
+     * @return  void
+     */
+    toggle: function () {
+        if (this.window.visible()) {
+            this.close();
+        } else {
+            this.open();
         }
     },
 
