@@ -1,9 +1,8 @@
 /**
- * Protopack is set of DHTML UI Components based on Prototype JS framework
- * © 2011-2012 Mohsen Khahani
- *
- * Licensed under the MIT license
- * http://mohsen.khahani.com/protopack
+ *  Protopack is set of DHTML UI Components based on Prototype JS framework
+ *  Copyright 2011-2013 Mohsen Khahani
+ *  Licensed under the MIT license
+ *  http://mohsenkhahani.ir/protopack
  */
 
 
@@ -23,42 +22,38 @@ if (Object.isUndefined(Prototype.Browser.IE6)) {
                              !window.XMLHttpRequest);
 }
 
-/**
- * Adds innerText property to all Elements
- */
 Element.addMethods({  
-    getInnerText: function (element) {
-        element = $(element);
-        return (element.innerText && !window.opera)? element.innerText :
-            element.innerHTML.stripScripts().unescapeHTML().replace(/[\n\r\s]+/g, ' ');
+    /**
+     * Cross browser solution for innerText property
+     */
+    getInnerText: function (self) {
+        self = $(self);
+        return (self.innerText && !window.opera)? self.innerText :
+            self.innerHTML.stripScripts().unescapeHTML().replace(/[\n\r\s]+/g, ' ');
+    },
+
+    /**
+     * Sets width of the element to width of the givven element
+     */
+    setWidthTo: function (self, element) {
+        var layout = new Element.Layout(self),
+            sourceWidth = element.getWidth(),
+            padding = layout.get('padding-left') + layout.get('padding-right'),
+            border  = layout.get('border-left')  + layout.get('border-right');
+        self.setStyle({width: sourceWidth - padding - border + 'px'});
+    },
+
+    /**
+     * Sets height of the element to height of the givven element
+     */
+    setHeightTo: function (self, element) {
+        var layout = new Element.Layout(self),
+            sourceHeight = element.getHeight(),
+            padding = layout.get('padding-top') + layout.get('padding-bottom'),
+            border  = layout.get('border-top')  + layout.get('border-bottom');
+        self.setStyle({height: sourceHeight + 'px'});
     }
 });
-
-/**
- * Sets width of the target element same as the source element
- */
-function setEqualWidth(sourceEl, targetEl) {
-    var e1 = $(sourceEl),
-        e2 = $(targetEl),
-        layout = new Element.Layout(e2),
-        sourceWidth = e1.getWidth(),
-        padding = layout.get('padding-left') + layout.get('padding-right'),
-        border  = layout.get('border-left')  + layout.get('border-right');
-    e2.setStyle({width: sourceWidth - padding - border + 'px'});
-}
-
-/**
- * Sets height of the target element same as the source element
- */
-function setEqualHeight(sourceEl, targetEl) {
-    var e1 = $(sourceEl),
-        e2 = $(targetEl),
-        layout = new Element.Layout(e2),
-        sourceHeight = e1.getHeight(),
-        padding = layout.get('padding-top') + layout.get('padding-bottom'),
-        border  = layout.get('border-top')  + layout.get('border-bottom');
-    e2.setStyle({height: sourceHeight + 'px'});
-}
 
 /**
  * Adds commas to a number string
