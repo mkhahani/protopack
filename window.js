@@ -4,7 +4,7 @@
  *  Licensed under the MIT license
  *  Created on May 6, 2012
  *
- *  Requirements:
+ *  Dependencies:
  *    - Prototype JS Framework v1.7+
  *    - draggable.js (optional)
  *
@@ -64,6 +64,7 @@ var ProtopackWindow = Class.create({
         this.className = this.options.className;
         this.focusHandler = this._onLostFocus.bind(this);
         this.escapeHandler = this._onEscape.bind(this);
+        this.excludedElements = [];     // don't fire _onLostFocus() for these elements
         target = (target === undefined)? document.body : $(target);
 
         if (this.window) {
@@ -237,7 +238,8 @@ var ProtopackWindow = Class.create({
     _onLostFocus: function (e) {
         var el = e.findElement();
         if (this.window.visible() && this.window !== el &&
-            this.window.descendants().indexOf(el) === -1) // => click outside of Window
+            this.window.descendants().indexOf(el) === -1 &&    // => click outside of Window
+            this.excludedElements.indexOf(el) === -1)
         {
             this.close();
         }
