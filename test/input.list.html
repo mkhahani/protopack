@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Protopack Input</title>
+  <link rel="stylesheet" type="text/css" href="../style/input.list.css" media="screen" />
+  <script type="text/javascript" src="../lib/prototype.js"></script>
+  <script type="text/javascript" src="../protopack.js"></script>
+  <script type="text/javascript" src="../window.js"></script>
+  <script type="text/javascript" src="../input.js"></script>
+  <script type="text/javascript" src="../input.list.js"></script>
+  <style type="text/css">
+    body, button {font:12px arial;}
+    body {background-color:silver;}
+    h1 {font:bold 16px times; text-align:center; margin-top:100px;}
+    button {height:24px;}
+    input[type=text] {width:300px;}
+    #wrapper {width:300px; margin:0 auto;}
+    #workspace {height:60px;}
+  </style>
+</head>
+<body>
+  <h1>Protopack Input v1.1</h1>
+  <div id="wrapper">
+    <div><input id="std_input" type="text" value="This is a standard HTML input" /></div>
+    <div><select id="std_select">
+      <option>Item #1</option>
+      <option>Item #2</option>
+      <option>Item #3</option>
+      <option>Item #4</option>
+      <option>Item #5</option>
+    <select/></div>
+    <div id="workspace"></div>
+    <hr/>
+    <div id="options">
+      <button onclick="updateList()">Update</button>
+    </div>
+  </div>
+</body>
+<script>
+  function updateList() {
+      var data = [
+        [1, 'Item #1'],
+        [2, 'Item #2'],
+        [3, 'Item #3'],
+        [4, 'Item #4'],
+        [5, 'Item #5'],
+        [6, 'Item #6'],
+        [7, 'Item #7'],
+        [8, 'Item #8'],
+        [9, 'Item #9']
+      ];
+      myInput.setList(data);
+  }
+  var myInput = new ProtopackInputList('workspace');
+  myInput.entry.id = 'the_id';
+  myInput.entry.name = 'the_name';
+  myInput.entry.value = 'MKH';
+  updateList();
+</script>
+</html>

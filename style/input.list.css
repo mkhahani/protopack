@@ -1,0 +1,26 @@
+.pinput-list {
+  position:relative;
+  display:inline-block;
+}
+.pinput-list button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width:20px;
+  border: 1px outset #888888;
+}
+.pinput-list button:active {
+  border: 1px inset #888888;
+}
+.pinput-list-dropdown {
+  position: absolute;
+  margin-top: 1px;
+  z-index: 20;
+  background-color: white;
+  box-shadow: 5px 5px 5px #AAAAAA;
+  -moz-box-shadow: 5px 5px 5px #AAAAAA;
+}
+.pinput-list-dropdown select {
+    width: 100%;
+    margin: 0;
+}
