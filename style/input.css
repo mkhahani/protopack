@@ -12,7 +12,7 @@
 .pinput button:active {
   border: 1px inset #888888;
 }
-.pinput-popup {
+.pinput-dropdown {
   position: absolute;
   z-index: 20;
   background-color: white;

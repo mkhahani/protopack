@@ -13,7 +13,7 @@
  *   - full CSS customizable
  *
  * v1.1 (June 3, 2013):
- *   - using ProtopackWindow as popup
+ *   - using ProtopackWindow as dropdown
  *
  *  http://mohsenkhahani.ir/protopack
  */
@@ -23,10 +23,10 @@
  * Default configuration
  */
 var ProtopackInputOptions = {
-    className   : 'pinput',
-    readonly    : true,
+    className : 'pinput',
+    readonly : true,
     buttonStyle : 'smart',  // [disabled, visible, smart]
-    popupStyle  : 'auto'    // [disabled, manually, auto]
+    dropdownStyle : 'auto'  // [disabled, manually, auto]
 };
 
 /**
@@ -36,13 +36,13 @@ var ProtopackInput = Class.create({
     Version: '1.1',
 
     initialize: function (target, options) {
-        this.options     = Object.clone(ProtopackInputOptions);
+        this.options = Object.clone(ProtopackInputOptions);
         Object.extend(this.options, options || {});
-        this.className   = this.options.className;
-        this.readonly    = this.options.readonly;
+        this.className = this.options.className;
+        this.readonly = this.options.readonly;
         this.buttonStyle = this.options.buttonStyle;
-        this.popupStyle  = this.options.popupStyle;
-        this.xhtml       = this._construct();
+        this.dropdownStyle = this.options.dropdownStyle;
+        this.xhtml = this._construct();
         if (target) {
             try {
                 $(target).insert(this.xhtml);
@@ -54,15 +54,15 @@ var ProtopackInput = Class.create({
     },
 
     _construct: function () {
-        var xhtml  = new Element('div', {'class': this.className});
+        var xhtml = new Element('div', {'class': this.className});
         this.entry = this._buildEntry();
         xhtml.insert(this.entry);
         if (this.buttonStyle !== 'disabled') {
             this.button = this._buildButton(xhtml);
             xhtml.insert(this.button);
         }
-        if (this.popupStyle !== 'disabled') {
-            this.popup = this._buildPopup(xhtml);
+        if (this.dropdownStyle !== 'disabled') {
+            this.dropdown = this._buildDropdown(xhtml);
         }
         return xhtml;
     },
@@ -92,53 +92,44 @@ var ProtopackInput = Class.create({
         return button;
     },
 
-    _buildPopup: function (xhtml) {
+    _buildDropdown: function (xhtml) {
         var options = {
-                className: this.className + '-popup',
+                className: this.className + '-dropdown',
                 modal: false,
                 draggable: false,
                 showHeader: false,
                 closeButton: false,
                 autoClose: true
             },
-            popup = new ProtopackWindow(options, xhtml);
-        popup.setContent('MKH--KHM');
-        popup.excludedElements.push(this.entry);
-        return popup;
-        
-        var popup = new Element('div', {'class': this.className + '-popup'}).hide();
-        popup.observe('mouseover', function () {this.hasFocus = true}.bind(this));
-        popup.observe('mouseout', function () {this.hasFocus = false}.bind(this));
-        document.observe('click', this._onPopupLostFocus.bind(this));
+            dropdown = new ProtopackWindow(options, xhtml);
+        dropdown.excludedElements.push(this.entry);
+        return dropdown;
     },
 
     _onInputClick: function (e) {
-        if (this.popupStyle === 'auto' && Event.isLeftClick(e)) {
-            this.popup.toggle();
+        if (this.dropdownStyle === 'auto' && Event.isLeftClick(e)) {
+            this.dropdown.toggle();
             //Event.stop(e); // To not be editable
         }
     },
 
     _onButtonClick: function (e) {
-        if (this.popupStyle === 'auto') {
-            this.popup.toggle();
+        if (this.dropdownStyle === 'auto') {
+            this.dropdown.toggle();
             //Event.stop(e);
         }
     },
 
-//=============================================================================
-// Public Functions
-//=============================================================================
     get: function () {
         return this.xhtml;
     },
 
     render: function () {
         if (Element.getLayout()) {  // Prototype 7+
-            if (this.popup.window.getWidth() < this.entry.getWidth()) {
-                this.popup.window.setWidthTo(this.entry);
+            if (this.dropdown.window.getWidth() < this.entry.getWidth()) {
+                this.dropdown.window.setWidthTo(this.entry);
             }
-            this.popup.window.style.top = this.entry.getHeight() + 'px';
+            this.dropdown.window.style.top = this.entry.getHeight() + 'px';
 
             if (this.buttonStyle !== 'disabled') {
                 var layout = new Element.Layout(this.entry);
@@ -151,7 +142,7 @@ var ProtopackInput = Class.create({
         }
     },
 
-    openPopup: function () {
-        this.popup.show();
+    openUp: function () {
+        this.dropdown.open();
     }
 });
