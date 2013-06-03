@@ -93,28 +93,28 @@
         wnd.setTitle(title);
         wnd.setContent(content);
         wnd.setSize(300, 150);
-        wnd.show(pos.x, pos.y);
+        wnd.open(pos.x, pos.y);
     }
 
     function setTitle() {
         wnd.setTitle('The title has been updated!');
-        wnd.show();
+        wnd.open();
     }
 
     function setContent() {
         wnd.setContent('The window content accepts a <b style="color:blue;">XHTML string</b> or an <b>element ID</b>.');
-        wnd.show();
+        wnd.open();
     }
 
     function setSize() {
         wnd.setSize(450, 250);
-        wnd.show();
+        wnd.open();
     }
 
     function setPosition() {
         pos.x = Math.floor((Math.random() * 400) + offset.x);
         pos.y = Math.floor((Math.random() * 300) + offset.y);
-        wnd.show(pos.x, pos.y);
+        wnd.open(pos.x, pos.y);
     }
 
     openWindow();

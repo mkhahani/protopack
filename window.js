@@ -1,28 +1,31 @@
 /**
- * Protopack Window is a DHTML Window Component based on Prototype JS framework
- * Copyright 2012-2013 Mohsen Khahani
- * Licensed under the MIT license
- * Created on May 6, 2012
+ *  Protopack Window is a DHTML Window Component based on Prototype JS framework
+ *  Copyright 2012-2013 Mohsen Khahani
+ *  Licensed under the MIT license
+ *  Created on May 6, 2012
  *
- * Requirements:
- *   - Prototype JS v1.7+
- *   - draggable.js (optional)
+ *  Requirements:
+ *    - Prototype JS Framework v1.7+
+ *    - draggable.js (optional)
  *
- * Features:
- *   - rich JavaScript popup window
- *   - draggable
- *   - modal support
- *   - full CSS customizable
- *   - mouse and keyboard events
- *   - many useful options
+ *  Features:
+ *    - rich JavaScript popup window
+ *    - draggable
+ *    - modal support
+ *    - full CSS customizable
+ *    - mouse and keyboard events
+ *    - many useful options
  *
- * v1.1 (May 25, 2013):
- *   - added `autoClose` option
- *   - fixed `overlay` positioning
- *   - many enhancements
- *   - code comments
+ *  v1.1 (May 25, 2013):
+ *    - added `autoClose` option
+ *    - fixed `overlay` positioning
+ *    - many enhancements
+ *    - code comments
  *
- * http://mohsenkhahani.ir/protopack
+ *  v1.2 (June 3, 2013):
+ *    - changed `show()` to `open()`
+ *
+ *  http://mohsenkhahani.ir/protopack
  */
 
 
@@ -44,7 +47,7 @@ var ProtopackWindowOptions = {
  * ProtopackWindow class
  */
 var ProtopackWindow = Class.create({
-    Version: '1.1',
+    Version: '1.2',
 
     /**
      * Window intializer
@@ -322,14 +325,14 @@ var ProtopackWindow = Class.create({
     },
 
     /**
-     * Shows(unhides) the window
+     * Shows the window (at the specified position)
      *
      * @access  public
      * @param   int   x   Window left position(px) - optional
      * @param   int   y   Window top position(px) - optional
      * @return  void
      */
-    show: function (x, y) {
+    open: function (x, y) {
         if (x !== undefined && y !== undefined) {
             this._setPosition(x, y);
         }
@@ -341,7 +344,7 @@ var ProtopackWindow = Class.create({
     },
 
     /**
-     * Closes(hides) the window
+     * Hides the window
      *
      * @access  public
      * @return  void
