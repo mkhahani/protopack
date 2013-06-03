@@ -4,16 +4,17 @@
  *  Licensed under the MIT license
  *  Created on September 17, 2011
  *
- * Requirements:
- *   - Prototype JS framework v1.7+
- *   - protopack.js
+ *  Dependencies:
+ *    - Prototype JS framework v1.7+
+ *    - protopack.js
+ *    - window.js
  *
- * Features:
- *   - replacement for standard input/select
- *   - full CSS customizable
+ *  Features:
+ *    - replacement for standard input
+ *    - full CSS customizable
  *
- * v1.1 (June 3, 2013):
- *   - using ProtopackWindow as dropdown
+ *  v1.1 (June 3, 2013):
+ *    - using ProtopackWindow as dropdown
  *
  *  http://mohsenkhahani.ir/protopack
  */
@@ -23,14 +24,14 @@
  * Default configuration
  */
 var ProtopackInputOptions = {
-    className : 'pinput',
+    className : 'pinput-list',
     readonly : true,
     buttonStyle : 'smart',  // [disabled, visible, smart]
     dropdownStyle : 'auto'  // [disabled, manually, auto]
 };
 
 /**
- * ProtopackInput base class
+ * ProtopackInput class
  */
 var ProtopackInput = Class.create({
     Version: '1.1',
@@ -42,28 +43,33 @@ var ProtopackInput = Class.create({
         this.readonly = this.options.readonly;
         this.buttonStyle = this.options.buttonStyle;
         this.dropdownStyle = this.options.dropdownStyle;
-        this.xhtml = this._construct();
+        this.xhtml = this._construct(target);
+    },
+
+    _construct: function (target) {
+        var xhtml = new Element('div', {'class': this.className});
+
+        this.entry = this._buildEntry();
+        xhtml.insert(this.entry);
+
+        if (this.buttonStyle !== 'disabled') {
+            this.button = this._buildButton(xhtml);
+            xhtml.insert(this.button);
+        }
+
+        if (this.dropdownStyle !== 'disabled') {
+            this.dropdown = this._buildDropdown(xhtml);
+        }
+
         if (target) {
             try {
-                $(target).insert(this.xhtml);
+                $(target).insert(xhtml);
                 this.render();
             } catch (err) {
                 throw new Error('The target element was not found.');
             }
         }
-    },
 
-    _construct: function () {
-        var xhtml = new Element('div', {'class': this.className});
-        this.entry = this._buildEntry();
-        xhtml.insert(this.entry);
-        if (this.buttonStyle !== 'disabled') {
-            this.button = this._buildButton(xhtml);
-            xhtml.insert(this.button);
-        }
-        if (this.dropdownStyle !== 'disabled') {
-            this.dropdown = this._buildDropdown(xhtml);
-        }
         return xhtml;
     },
 
@@ -73,7 +79,7 @@ var ProtopackInput = Class.create({
             entry.writeAttribute({readonly: true});
         }
         if (this.buttonStyle === 'smart') {
-            entry.observe('mousedown', function () {this.button.hide()}.bind(this));
+            entry.observe('mousedown', function () { this.button.hide(); }.bind(this));
         }
         entry.observe('mousedown', this._onInputClick.bind(this));
 
@@ -84,8 +90,8 @@ var ProtopackInput = Class.create({
         var button = new Element('button');
         if (this.buttonStyle === 'smart') {
             button.hide();
-            xhtml.observe('mouseover', function () {button.show()}.bind(this));
-            xhtml.observe('mouseout', function () {button.hide()}.bind(this));
+            xhtml.observe('mouseover', function () { button.show(); }.bind(this));
+            xhtml.observe('mouseout', function () { button.hide(); }.bind(this));
         }
         button.observe('click', this._onButtonClick.bind(this));
 
