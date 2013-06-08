@@ -43,7 +43,7 @@ var ProtopackInput = Class.create({
         this.readonly = this.options.readonly;
         this.buttonStyle = this.options.buttonStyle;
         this.dropdownStyle = this.options.dropdownStyle;
-        this.xhtml = this._construct(target);
+        this.xhtml = this._construct($(target));
     },
 
     _construct: function (target) {
@@ -62,12 +62,12 @@ var ProtopackInput = Class.create({
         }
 
         if (target) {
-            try {
+            if (['INPUT','SELECT'].indexOf(target.tagName.toUpperCase()) !== -1) {
+                $(target).insert({before:xhtml});
+            } else {
                 $(target).insert(xhtml);
-                this.render();
-            } catch (err) {
-                throw new Error('The target element was not found.');
             }
+            //this.render();
         }
 
         return xhtml;
@@ -115,7 +115,6 @@ var ProtopackInput = Class.create({
     _onInputClick: function (e) {
         if (this.dropdownStyle === 'auto' && Event.isLeftClick(e)) {
             this.dropdown.toggle();
-            //Event.stop(e); // To not be editable
         }
     },
 
