@@ -38,7 +38,6 @@ var ProtopackSelect = Class.create(ProtopackInput, {
         this.readonly = this.options.readonly;
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
-        this.listBox = null;
         this.selectItemHandler = this._selectItem.bind(this);
         this.xhtml = this._construct($(target));
         this.render();
@@ -53,7 +52,7 @@ var ProtopackSelect = Class.create(ProtopackInput, {
 
     _buildListBox: function (target) {
         var listBox = (target.tagName.toUpperCase() === 'SELECT')?
-            target : new Element('select', {size: 0});
+            target : new Element('select', {size:0});
         listBox.observe('click', this.selectItemHandler);
         return listBox;
     },
