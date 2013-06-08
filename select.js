@@ -67,7 +67,6 @@ var ProtopackSelect = Class.create(ProtopackInput, {
 
     render: function ($super) {
         $super();
-        //this.listBox.size = this.listBox.options.length;
         this.listBox.size = (this.listBox.options.length < this.options.listSize)?
             this.listBox.options.length : this.options.listSize;
     },
