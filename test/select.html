@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
   <title>Protopack Input</title>
-  <link rel="stylesheet" type="text/css" href="../style/input.list.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/select.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../protopack.js"></script>
   <script type="text/javascript" src="../window.js"></script>
   <script type="text/javascript" src="../input.js"></script>
-  <script type="text/javascript" src="../input.list.js"></script>
+  <script type="text/javascript" src="../select.js"></script>
   <style type="text/css">
     body, button {font:12px arial;}
     body {background-color:silver;}
@@ -21,14 +21,16 @@
 <body>
   <h1>Protopack Input v1.1</h1>
   <div id="wrapper">
-    <div><input id="std_input" type="text" value="This is a standard HTML input" /></div>
-    <div><select id="std_select">
-      <option>Item #1</option>
-      <option>Item #2</option>
-      <option>Item #3</option>
-      <option>Item #4</option>
-      <option>Item #5</option>
-    <select/></div>
+    <div>
+      <input id="std_input" type="text" value="This is a standard HTML input" />
+      <select id="std_select">
+        <option>Item #1</option>
+        <option>Item #2</option>
+        <option>Item #3</option>
+        <option>Item #4</option>
+        <option>Item #5</option>
+      <select/>
+    </div>
     <div id="workspace"></div>
     <hr/>
     <div id="options">
@@ -51,10 +53,10 @@
       ];
       myInput.setList(data);
   }
-  var myInput = new ProtopackInputList('workspace');
-  myInput.entry.id = 'the_id';
-  myInput.entry.name = 'the_name';
-  myInput.entry.value = 'MKH';
-  updateList();
+  var myInput = new ProtopackSelect('std_select');
+  //myInput.entry.id = 'the_id';
+  //myInput.entry.name = 'the_name';
+  //myInput.entry.value = 'MKH';
+  //updateList();
 </script>
 </html>

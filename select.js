@@ -1,5 +1,5 @@
 /**
- *  Protopack Input.List is a flexible DHTML Select Component based on Prototype JS framework
+ *  Protopack Select is a flexible DHTML Select Component based on Prototype JS framework
  *  Copyright 2011-2013 Mohsen Khahani
  *  Licensed under the MIT license
  *  Created on June 3, 2013
@@ -19,27 +19,29 @@
 /**
  * Default configuration
  */
-var ProtopackInputListOptions = {
-    className : 'pinput-list',
+var ProtopackSelectOptions = {
+    className : 'pselect',
     readonly : false,
     listSize: 8
 };
 
 /**
- * ProtopackInputList class
+ * ProtopackSelect class
  */
-var ProtopackInputList = Class.create(ProtopackInput, {
+var ProtopackSelect = Class.create(ProtopackInput, {
     Version: '1.0',
 
     initialize: function (target, options) {
-        this.options = Object.clone(ProtopackInputListOptions);
+        this.options = Object.clone(ProtopackSelectOptions);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
         this.readonly = this.options.readonly;
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
+        this.listBox = null;
         this.selectItemHandler = this._selectItem.bind(this);
-        this.xhtml = this._construct(target);
+        this.xhtml = this._construct($(target));
+        this.render();
     },
 
     _construct: function ($super, target) {
@@ -49,8 +51,9 @@ var ProtopackInputList = Class.create(ProtopackInput, {
         return xhtml;
     },
 
-    _buildListBox: function () {
-        var listBox = new Element('select', {size: 1});
+    _buildListBox: function (target) {
+        var listBox = (target.tagName.toUpperCase() === 'SELECT')?
+            target : new Element('select', {size: 0});
         listBox.observe('click', this.selectItemHandler);
         return listBox;
     },
@@ -60,6 +63,11 @@ var ProtopackInputList = Class.create(ProtopackInput, {
             this.entry.value = this.listBox.options[this.listBox.selectedIndex].text;
         }
         this.dropdown.close();
+    },
+
+    render: function ($super) {
+        $super();
+        this.listBox.size = this.listBox.options.length;
     },
 
     setList: function (list) {
@@ -73,6 +81,7 @@ var ProtopackInputList = Class.create(ProtopackInput, {
             this.listBox = $(list);
             this.dropdown.setContent(this.listBox);
         }
+        this.render();
     }
 
 });
