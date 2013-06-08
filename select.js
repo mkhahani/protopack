@@ -67,7 +67,9 @@ var ProtopackSelect = Class.create(ProtopackInput, {
 
     render: function ($super) {
         $super();
-        this.listBox.size = this.listBox.options.length;
+        //this.listBox.size = this.listBox.options.length;
+        this.listBox.size = (this.listBox.options.length < this.options.listSize)?
+            this.listBox.options.length : this.options.listSize;
     },
 
     setList: function (list) {
@@ -75,8 +77,6 @@ var ProtopackSelect = Class.create(ProtopackInput, {
             list.each(function (row) {
                 this.listBox.options[this.listBox.options.length] = new Option(row[1], row[0]);
             }.bind(this));
-            this.listBox.size = (list.length < this.options.listSize)?
-                list.length : this.options.listSize;
         } else {
             this.listBox = $(list);
             this.dropdown.setContent(this.listBox);
