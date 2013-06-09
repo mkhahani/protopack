@@ -73,6 +73,18 @@ var ProtopackSelect = Class.create(ProtopackInput, {
             this.listBox.options.length : this.options.listSize;
     },
 
+    setId: function (id) {
+        this.entry.id = id;
+    },
+
+    setName: function (name) {
+        this.entry.name = name;
+    },
+
+    setValue: function (value) {
+        this.entry.value = value;
+    },
+
     setList: function (list) {
         if (Object.isArray(list)) {
             list.each(function (row) {
