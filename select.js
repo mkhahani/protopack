@@ -53,14 +53,6 @@ var ProtopackSelect = Class.create(ProtopackInput, {
     _buildListBox: function (target) {
         var listBox = (target.tagName.toUpperCase() === 'SELECT')?
             target : new Element('select', {size:0});
-        if (!listBox.id.blank()) {
-            this.entry.id = listBox.id;
-            listBox.id = '';
-        }
-        if (!listBox.name.blank()) {
-            this.entry.name = listBox.name;
-            listBox.name = '';
-        }
         if (listBox.selectedIndex !== -1) {
             this.entry.value = listBox.options[listBox.selectedIndex].text;
         }
