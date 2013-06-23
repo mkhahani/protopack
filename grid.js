@@ -216,7 +216,6 @@ var ProtopackGrid = Class.create({
      */
     _createFooter: function () {
         var status = new Element('span', {'class':'status'}),
-            about  = new Element('span', {'class':'about'}).update('?'),
             footer = new Element('div', {'class':this._className + '-footer'}).insert(status);
             
         if (this.options.pagination) {
