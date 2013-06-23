@@ -1,19 +1,18 @@
 input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; vertical-align:middle;}
 .pgrid {border:1px solid #888888;}
-.pgrid table {width:100%; font:11px tahoma; border-spacing:0; border-collapse:collapse;}
+.pgrid table {font:11px tahoma; border-spacing:0; border-collapse:collapse;}
 .pgrid div, .pgrid input {outline:none;} /* webkit */
-.pgrid th, .pgrid td {user-select:none; -moz-user-select:none; -webkit-user-select:none;}
-.pgrid th {padding:0 5px;}
+.pgrid th, .pgrid td {user-select:none; -moz-user-select:none; -webkit-user-select:none; padding:0 5px;}
 .pgrid th.hidden {display:none;}
 .pgrid th.sortable {cursor:pointer;}
-.pgrid td {padding:0 5px; cursor:default;}
+.pgrid td {cursor:default;}
 .pgrid td.hidden {display:none;}
 .pgrid tfoot {background-color:#EEEEEE; color:#888888; font-size:10px;}
 .pgrid col.hidden {display:none;}
 .pgrid a:hover {text-decoration:none;}
 
 .pgrid-header {overflow:auto;}
-.pgrid-header table {color:white;}
+.pgrid-header table {width:100%; color:white;}
 .pgrid-header th {border-right:1px solid #DDD; height:20px; cursor:default;}
 .pgrid-header th:last-child {border-right:none;}
 .pgrid-header th img {vertical-align:middle; margin-right:3px;}
@@ -26,6 +25,7 @@ input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-bo
 .pgrid-header .filters select {width:100%; font:11px tahoma; padding:0; margin:2px 0;}
 
 .pgrid-body {overflow:auto;} /* set height for scrolled content */
+.pgrid-body table {width:100%;}
 .pgrid-body tr.even {background-color:#F5F5F5;}
 .pgrid-body tr.odd {background-color:#FFFFFF;}
 .pgrid-body tr.hover {background-color:#E3EFFF;}
@@ -34,14 +34,14 @@ input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-bo
 .pgrid-body td.selected {background-color:#FCC;}
 .pgrid-body td {height:20px;}
 
-.pgrid-footer {height:18px; background-color:#EEE; border-top:1px solid #DDD; font:10px tahoma;}
-.pgrid-footer .status {float:left; margin:3px 0 0 5px;}
-.pgrid-footer .about {float:right; padding:3px 5px; cursor:pointer;}
-.pgrid-footer .controls {text-align:right; padding-top:2px;}
-.pgrid-footer .controls input {height:14px; font:10px tahoma; padding:0 2px;}
-.pgrid-footer .controls input[type=button] {width:12px; padding:0; font:10px tahoma; border:none;}
-.pgrid-footer .controls input[type=button]:active {border:1px inset #DDD;}
-.pgrid-footer .controls input.first {background:url(first.png) 50% 50% no-repeat;}
-.pgrid-footer .controls input.prev {background:url(prev.png) 50% 50% no-repeat;}
-.pgrid-footer .controls input.next {background:url(next.png) 50% 50% no-repeat;}
-.pgrid-footer .controls input.last {background:url(last.png) 50% 50% no-repeat;}
+.pgrid-footer {background-color:#EEE; border-top:1px solid #DDD; padding:2px 5px;}
+.pgrid-footer table {margin-right:0; margin-left:auto; font:9px tahoma;}
+.pgrid-pager td {padding:0;}
+.pgrid-pager input {height:14px; font:10px tahoma;}
+.pgrid-pager input[type=text] {width:25px;}
+.pgrid-pager input[type=button] {width:12px; padding:0; border:none;}
+.pgrid-pager input[type=button]:active {border:1px inset #DDD;}
+.pgrid-pager input.first {background:url(first.png) 50% 50% no-repeat;}
+.pgrid-pager input.prev {background:url(prev.png) 50% 50% no-repeat;}
+.pgrid-pager input.next {background:url(next.png) 50% 50% no-repeat;}
+.pgrid-pager input.last {background:url(last.png) 50% 50% no-repeat;}

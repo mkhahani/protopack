@@ -215,16 +215,17 @@ var ProtopackGrid = Class.create({
      * Adds thead element to the table
      */
     _createFooter: function () {
-        var status = new Element('span', {'class':'status'}),
-            footer = new Element('div', {'class':this._className + '-footer'}).insert(status);
+        var footer = new Element('div', {'class':this._className + '-footer'});
             
         if (this.options.pagination) {
-            var ctrls = new Element('div', {'class':'controls'}),
-                input = new Element('input', {type:'text', size:2, value:'1'}),
-                next  = new Element('input', {type:'button', 'class':'next'}),
-                prev  = new Element('input', {type:'button', 'class':'prev'}),
-                last  = new Element('input', {type:'button', 'class':'last'}),
-                first = new Element('input', {type:'button', 'class':'first'});
+            var pager = new Element('table', {'class':this._className + '-pager'}),
+                tr = pager.insertRow(-1),
+                status = new Element('span', {'class':this._className + '-status'}),
+                input = new Element('input', {type:'text', value:'1'}),
+                first = new Element('input', {type:'button', 'class':'first'}),
+                prev = new Element('input', {type:'button', 'class':'prev'}),
+                next = new Element('input', {type:'button', 'class':'next'}),
+                last = new Element('input', {type:'button', 'class':'last'});
 
             next.observe('click', function() {
                 this._goToPage('next');
@@ -243,7 +244,7 @@ var ProtopackGrid = Class.create({
             }.bind(this));
 
             input.observe('keydown', function(e) {
-                if (e.keyCode == 13) {
+                if (e.keyCode === 13) {
                     this._goToPage(input.value);
                 }
             }.bind(this));
@@ -253,17 +254,18 @@ var ProtopackGrid = Class.create({
             this.pgLast = last;
             this.pgFirst = first;
             this.pageInput = input;
+            this.status = status;
 
-            ctrls.insert(first);
-            ctrls.insert(prev);
-            ctrls.insert(input);
-            ctrls.insert(next);
-            ctrls.insert(last);
-
-            footer.insert(ctrls);
+            pager.insert(new Element('tr'));
+            tr.insert(new Element('td').insert(status));
+            tr.insert(new Element('td').insert(first));
+            tr.insert(new Element('td').insert(prev));
+            tr.insert(new Element('td').insert(input));
+            tr.insert(new Element('td').insert(next));
+            tr.insert(new Element('td').insert(last));
+            footer.insert(pager);
         }
 
-        this.status = status;
         return footer;
     },
 
