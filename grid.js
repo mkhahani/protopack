@@ -218,7 +218,6 @@ var ProtopackGrid = Class.create({
         var status = new Element('span', {'class':'status'}),
             about  = new Element('span', {'class':'about'}).update('?'),
             footer = new Element('div', {'class':this._className + '-footer'}).insert(status);
-        footer.insert(about.observe('click', function() {alert('Protopack JS Grid v1.0 \nby Mohsen Khahani \nhttp://mohsenkhahani.ir');}));
             
         if (this.options.pagination) {
             var ctrls = new Element('div', {'class':'controls'}),
