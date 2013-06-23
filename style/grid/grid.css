@@ -35,13 +35,18 @@ input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-bo
 .pgrid-body td {height:20px;}
 
 .pgrid-footer {background-color:#EEE; border-top:1px solid #DDD; padding:2px 5px;}
-.pgrid-footer table {margin-right:0; margin-left:auto; font:9px tahoma;}
+.pgrid-footer table {font:9px tahoma;}
+.pgrid-pager {margin-right:0; margin-left:auto;}
 .pgrid-pager td {padding:0;}
 .pgrid-pager input {height:14px; font:10px tahoma;}
-.pgrid-pager input[type=text] {width:25px;}
-.pgrid-pager input[type=button] {width:12px; padding:0; border:none;}
+.pgrid-pager input[type=text] {width:15px; border:none; background:none; text-align:center;}
+.pgrid-pager input[type=text]:hover {border:1px solid #DDD;}
+.pgrid-pager input[type=text]:focus {width:25px; margin:0 2px; border:1px inset #DDD; background:white; text-align:left;}
+.pgrid-pager input[type=button] {width:12px; padding:0; border:none; background:transparent 50% 50% no-repeat;}
+.pgrid-pager input[type=button]:hover {border:1px solid #DDD;}
 .pgrid-pager input[type=button]:active {border:1px inset #DDD;}
-.pgrid-pager input.first {background:url(first.png) 50% 50% no-repeat;}
-.pgrid-pager input.prev {background:url(prev.png) 50% 50% no-repeat;}
-.pgrid-pager input.next {background:url(next.png) 50% 50% no-repeat;}
-.pgrid-pager input.last {background:url(last.png) 50% 50% no-repeat;}
+.pgrid-pager input.first {background-image:url(first.png);}
+.pgrid-pager input.prev {background-image:url(prev.png);}
+.pgrid-pager input.next {background-image:url(next.png);}
+.pgrid-pager input.last {background-image:url(last.png);}
+.pgrid-status {margin-right:5px;}
