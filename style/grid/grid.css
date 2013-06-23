@@ -1,6 +1,8 @@
+input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; vertical-align:middle;}
 .pgrid {border:1px solid #888888;}
 .pgrid table {width:100%; font:11px tahoma; border-spacing:0; border-collapse:collapse;}
 .pgrid div, .pgrid input {outline:none;} /* webkit */
+.pgrid th, .pgrid td {user-select:none; -moz-user-select:none; -webkit-user-select:none;}
 .pgrid th {padding:0 5px;}
 .pgrid th.hidden {display:none;}
 .pgrid th.sortable {cursor:pointer;}
@@ -30,7 +32,7 @@
 .pgrid-body tr.selected {background-color:#E3EFFF;}
 .pgrid-body tr.selected td {background:url(sel.png) repeat-x;}
 .pgrid-body td.selected {background-color:#FCC;}
-.pgrid-body td {height:20px; -moz-user-select:none; -webkit-user-select:none;}
+.pgrid-body td {height:20px;}
 
 .pgrid-footer {height:18px; background-color:#EEE; border-top:1px solid #DDD; font:10px tahoma;}
 .pgrid-footer .status {float:left; margin:3px 0 0 5px;}
