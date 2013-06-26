@@ -6,6 +6,8 @@
   <script type="text/javascript" src="../../lib/prototype.js"></script>
   <script type="text/javascript" src="../../source/protopack.js"></script>
   <script type="text/javascript" src="../../source/grid/grid.js"></script>
+  <script type="text/javascript" src="../../source/grid/grid.event.js"></script>
+  <script type="text/javascript" src="../../source/grid/grid.api.js"></script>
   <style type="text/css">
     body, button {font:12px arial;}
     body {background-color:silver;}
@@ -16,7 +18,7 @@
   </style>
 </head>
 <body>
-  <h1>Protopack Grid v1.2</h1>
+  <h1>Protopack Grid v1.3</h1>
   <div id="wrapper">
     <div id="workspace"></div>
     <hr/>
@@ -147,8 +149,8 @@
       pagination : true,
       rowClasses : true,
       mouseRollOver : true,
-      //rowSelect : false,
-      //cellSelect : true,
+      rowSelect : false,
+      cellSelect : true,
       cellClasses : true,
       footer : true,
       filtering : 'client',
@@ -157,8 +159,6 @@
 
   var gridEvents = {
     onDblClick : onDblClick,
-    onRowSelect : onRowSelect,
-    //onCellSelect : onCellSelect,
     //onRowOver   : onRowOver,
     //onRowOut    : onRowOut,
     //onKeyDown   : onKeyDown,
@@ -175,6 +175,8 @@
   myGrid.init(fillGrid);
   myGrid.sort('title', 'ASC');
   //myGrid.render();
+  myGrid.observe('grid:rowselect', onRowSelect);
+  myGrid.observe('grid:cellselect', onCellSelect);
 
   function fillGrid(page) {
     var offset = (page - 1) * limit;
