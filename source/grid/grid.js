@@ -1,40 +1,45 @@
 /**
- * Protopack Grid, a DHTML Grid Component based on Prototype JS framework
- * © 2011-2013 Mohsen Khahani
- *
+ * Protopack Grid is a DHTML Grid Component based on Prototype JS framework
+ * Copyright 2011-2013 Mohsen Khahani
  * Licensed under the MIT license
  * Created on July 10, 2011
+ *
+ *  Dependencies:
+ *    - Prototype JS Framework v1.7+
+ *
+ *  Features:
+ *    - rich JavaScript data grid
  *
  * http://mohsenkhahani.ir/protopack
  */
 
 
 /**
- * Default configuration
- */
-var ProtopackGridOptions = {
-    className     : 'pgrid',
-    header        : true,
-    footer        : true,
-    sorting       : 'client',   // ['client', 'server', false]
-    filtering     : false,      // ['client', 'server', false]
-    pagination    : false,      // depends on footer
-    keyNavigation : true,       // depends on rowSelect/cellSelect
-    rowSelect     : true,
-    cellSelect    : false,
-    mouseRollOver : true,
-    rowClasses    : false,
-    cellClasses   : false,
-    oddEvenRows   : true,
-    titleAlign    : 'left',
-    currencySymbol: '$'
-};
-
-/**
  * Grid base class
  */
-var ProtopackGrid = Class.create({
-    Version: '1.2',
+Protopack.Grid = Class.create({
+    version: '1.2',
+
+    /**
+     * Default configuration
+     */
+    options: {
+        className     : 'pgrid',
+        header        : true,
+        footer        : true,
+        sorting       : 'client',   // ['client', 'server', false]
+        filtering     : false,      // ['client', 'server', false]
+        pagination    : false,      // depends on footer
+        keyNavigation : true,       // depends on rowSelect/cellSelect
+        rowSelect     : true,
+        cellSelect    : false,
+        mouseRollOver : true,
+        rowClasses    : false,
+        cellClasses   : false,
+        oddEvenRows   : true,
+        titleAlign    : 'left',
+        currencySymbol: '$'
+    },
 
     /**
      * The grid intializer
@@ -46,7 +51,7 @@ var ProtopackGrid = Class.create({
      */
     initialize: function (target, layout, options, events) {
         var columnsByName = {};
-        this.options = ProtopackGridOptions;
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.events = events || {};
         this._columns = layout || [];
