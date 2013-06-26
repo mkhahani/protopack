@@ -14,6 +14,14 @@ if (typeof Prototype === 'undefined' || !Prototype.Version.match('1.7')) {
 }
 
 /**
+ * Main Protopack namespace
+ *
+ * @type    object
+ * @access  public
+ */
+var Protopack = Protopack || {};
+
+/**
  * Defines Prototype.Browser.IE6 as boolean
  */
 if (Object.isUndefined(Prototype.Browser.IE6)) {
