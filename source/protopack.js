@@ -19,7 +19,36 @@ if (typeof Prototype === 'undefined' || !Prototype.Version.match('1.7')) {
  * @type    object
  * @access  public
  */
-var Protopack = Protopack || {};
+var Protopack = Protopack || {
+
+    /**
+     * Adds `observe` and `fire` methods to passed object
+     * Thanks to `Ryan Johnson` for his `LivePipe UI`
+     */
+    extendEvents: function (object) {
+        Object.extend(object, {
+            _initObserve: function (event) {
+                this.observers = this.observers || {};
+                this.observers[event] = this.observers[event] || [];
+            },
+            observe: function (event, handler) {
+                this._initObserve(event);
+                if (!this.observers[event].include(handler)) {
+                    this.observers[event].push(handler)
+                }
+            },
+            fire: function (event) {
+                this._initObserve(event);
+                if (this.observers[event] !== undefined) {
+                    for (var i = 0; i < this.observers[event].length; i++) {
+                        var args = $A(arguments).slice(1);
+                        this.observers[event][i].apply(this, args);
+                    }
+                }
+            }
+        });
+    }
+};
 
 /**
  * Defines Prototype.Browser.IE6 as boolean
