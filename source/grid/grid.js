@@ -36,7 +36,7 @@ Protopack.Grid = Class.create({
         rowHover      : false,
         cellHover     : false,
         rowClasses    : false,
-        cellClasses   : false,
+        colClasses    : false,
         oddEvenRows   : true,
         titleAlign    : 'left',
         currencySymbol: '$'
