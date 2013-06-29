@@ -8,15 +8,15 @@ Protopack.Grid.addMethods({
      */
     _click: function(e) {
         var celEl = e.findElement('td'),
-            rowEl;
-        if (celEl !== document) {
             rowEl = celEl.up('tr');
-            if (this.options.rowSelect) {
-                this._selectRow(rowEl);
-            }
-            if (this.options.cellSelect) {
-                this._selectCell(celEl);
-            }
+        if (celEl === document || rowEl === undefined) {
+            return;
+        }
+        if (this.options.rowSelect) {
+            this._selectRow(rowEl);
+        }
+        if (this.options.cellSelect) {
+            this._selectCell(celEl);
         }
         this.fire('grid:click', rowEl.rowIndex, celEl.cellIndex, e);
         // fixme: we need getColumnByIndex() to achieve column attributes
