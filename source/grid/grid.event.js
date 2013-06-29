@@ -6,25 +6,20 @@ Protopack.Grid.addMethods({
     /**
      * Occurs when clicking on the body of the grid
      */
-    _bodyClick: function(e) {
-        var rowEl = e.findElement('tr'),
-            celEl = e.findElement('td');
-
-        if (rowEl !== document) {
+    _click: function(e) {
+        var celEl = e.findElement('td'),
+            rowEl;
+        if (celEl !== document) {
+            rowEl = celEl.up('tr');
             if (this.options.rowSelect) {
                 this._selectRow(rowEl);
             }
-            this.fire('grid:rowselect', rowEl.rowIndex, e);
-        }
-
-        if (celEl !== document) {
-            rowEl = celEl.up('tr');
             if (this.options.cellSelect) {
                 this._selectCell(celEl);
             }
-            this.fire('grid:cellselect', rowEl.rowIndex, celEl.cellIndex, e);
-            // fixme: we need getColumnByIndex() to achieve column attributes
         }
+        this.fire('grid:click', rowEl.rowIndex, celEl.cellIndex, e);
+        // fixme: we need getColumnByIndex() to achieve column attributes
     },
 
     /**

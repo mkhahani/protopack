@@ -176,8 +176,7 @@
   //myGrid.render();
 
   // Events
-  //myGrid.observe('grid:rowselect', function(rowIndex, event) {console.log('onRowSelect:' + rowIndex);});
-  //myGrid.observe('grid:cellselect', function(rowIndex, cellIndex, event) {console.log('onCellSelect: (' + rowIndex + ',' + cellIndex + ')');});
+  myGrid.observe('grid:click', function(rowIndex, cellIndex, event) {console.log('onClick: (' + rowIndex + ',' + cellIndex + ')');});
   //myGrid.observe('grid:rowover', function(rowIndex, event) {console.log('onRowOver:' + rowIndex);});
   //myGrid.observe('grid:rowout', function(rowIndex, event) {console.log('onRowOut:' + rowIndex);});
   //myGrid.observe('grid:cellover', function(rowIndex, cellIndex, event) {console.log('onCellOver: (' + rowIndex + ',' + cellIndex + ')');});

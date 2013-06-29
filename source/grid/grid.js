@@ -93,7 +93,7 @@ Protopack.Grid = Class.create({
 
         // Grid Body
         body.tabIndex = '1';
-        Event.observe(body, 'click', this._bodyClick.bind(this));
+        Event.observe(body, 'click', this._click.bind(this));
         Event.observe(body, 'mouseover', this._mouseOver.bind(this));
         Event.observe(body, 'mouseout', this._mouseOut.bind(this));
         Event.observe(body, 'keydown', this._onKeyDown.bind(this));
