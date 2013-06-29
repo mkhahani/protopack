@@ -33,7 +33,8 @@ Protopack.Grid = Class.create({
         keyNavigation : true,       // depends on rowSelect/cellSelect
         rowSelect     : true,
         cellSelect    : false,
-        mouseRollOver : true,
+        rowHover      : false,
+        cellHover     : false,
         rowClasses    : false,
         cellClasses   : false,
         oddEvenRows   : true,
@@ -93,6 +94,8 @@ Protopack.Grid = Class.create({
         // Grid Body
         body.tabIndex = '1';
         Event.observe(body, 'click', this._bodyClick.bind(this));
+        Event.observe(body, 'mouseover', this._mouseOver.bind(this));
+        Event.observe(body, 'mouseout', this._mouseOut.bind(this));
         Event.observe(body, 'keydown', this._onKeyDown.bind(this));
         this.body = body;
         this.table = table;
@@ -316,24 +319,6 @@ Protopack.Grid = Class.create({
     _insertRow: function(data, index) {
         var tr = this.table.tBodies[0].insertRow(index);
         this._createCells(tr, data);
-        if (this.options.mouseRollOver) {
-            Event.observe(tr, 'mouseover', function() {
-                this._highlightRow(tr);
-            }.bind(this));
-            Event.observe(tr, 'mouseout', function() {
-                this._unHighlightRow(tr);
-            }.bind(this));
-        }
-        if (this.events.onRowOver) {
-            Event.observe(tr, 'mouseover', function(e) {
-                this.events.onRowOver(tr.rowIndex, e);
-            }.bind(this));
-        }
-        if (this.events.onRowOut) {
-            Event.observe(tr, 'mouseout', function(e) {
-                this.events.onRowOut(tr.rowIndex, e);
-            }.bind(this));
-        }
         if (this.events.onDblClick) {
             Event.observe(tr, 'dblclick', function(e) {
                 this.events.onDblClick(tr.rowIndex, e);
@@ -548,6 +533,21 @@ Protopack.Grid = Class.create({
      */
     _unHighlightRow: function(rowEl) {
         rowEl.removeClassName('hover');
+    },
+
+    /**
+    /**
+     * Highlights a cell on mouse rollover
+     */
+    _highlightCell: function(cellEl) {
+        cellEl.addClassName('hover');
+    },
+
+    /**
+     * Clears highlighted cell
+     */
+    _unHighlightCell: function(cellEl) {
+        cellEl.removeClassName('hover');
     },
 
     /**

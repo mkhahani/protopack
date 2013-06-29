@@ -148,7 +148,8 @@
       oddEvenRows : true,*/
       pagination : true,
       rowClasses : true,
-      mouseRollOver : true,
+      rowHover : true,
+      cellHover : false,
       rowSelect : false,
       cellSelect : true,
       cellClasses : true,
@@ -159,8 +160,6 @@
 
   var gridEvents = {
     onDblClick : onDblClick,
-    //onRowOver   : onRowOver,
-    //onRowOut    : onRowOut,
     //onKeyDown   : onKeyDown,
     onFilter   : onFilter,
     onSort   : onSort
@@ -175,8 +174,14 @@
   myGrid.init(fillGrid);
   myGrid.sort('title', 'ASC');
   //myGrid.render();
-  myGrid.observe('grid:rowselect', onRowSelect);
-  myGrid.observe('grid:cellselect', onCellSelect);
+
+  // Events
+  //myGrid.observe('grid:rowselect', function(rowIndex, event) {console.log('onRowSelect:' + rowIndex);});
+  //myGrid.observe('grid:cellselect', function(rowIndex, cellIndex, event) {console.log('onCellSelect: (' + rowIndex + ',' + cellIndex + ')');});
+  //myGrid.observe('grid:rowover', function(rowIndex, event) {console.log('onRowOver:' + rowIndex);});
+  //myGrid.observe('grid:rowout', function(rowIndex, event) {console.log('onRowOut:' + rowIndex);});
+  //myGrid.observe('grid:cellover', function(rowIndex, cellIndex, event) {console.log('onCellOver: (' + rowIndex + ',' + cellIndex + ')');});
+  //myGrid.observe('grid:cellout', function(rowIndex, cellIndex, event) {console.log('onCellOut: (' + rowIndex + ',' + cellIndex + ')');});
 
   function fillGrid(page) {
     var offset = (page - 1) * limit;
@@ -189,22 +194,6 @@
 
   function onDblClick(rowIndex, event) {
     console.log('onDblClick:' + rowIndex);
-  }
-
-  function onRowSelect(rowIndex, event) {
-    console.log('onRowSelect:' + rowIndex);
-  }
-
-  function onRowOver(rowIndex, event) {
-    console.log('onRowOver');
-  }
-
-  function onRowOut(rowIndex, event) {
-    console.log('onRowOut');
-  }
-
-  function onCellSelect(rowIndex, cellIndex, event) {
-    console.log('onCellSelect: (' + rowIndex + ',' + cellIndex + ')');
   }
 
   function onKeyDown(event) {

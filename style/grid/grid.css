@@ -31,6 +31,7 @@ input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-bo
 .pgrid-body tr.hover {background-color:#E3EFFF;}
 .pgrid-body tr.selected {background-color:#E3EFFF;}
 .pgrid-body tr.selected td {background:url(sel.png) repeat-x;}
+.pgrid-body td.hover {background-color:#E3EFFF;}
 .pgrid-body td.selected {background-color:#FCC;}
 .pgrid-body td {height:20px;}
 
