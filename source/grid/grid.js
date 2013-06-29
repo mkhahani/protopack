@@ -30,14 +30,14 @@ Protopack.Grid = Class.create({
         sorting       : 'client',   // ['client', 'server', false]
         filtering     : false,      // ['client', 'server', false]
         pagination    : false,      // depends on footer
-        keyNavigation : true,       // depends on rowSelect/cellSelect
+        keyboard      : false,      // depends on rowSelect/cellSelect
         rowSelect     : true,
         cellSelect    : false,
         rowHover      : false,
         cellHover     : false,
         rowClasses    : false,
         colClasses    : false,
-        oddEvenRows   : true,
+        oddEvenRows   : false,
         titleAlign    : 'left',
         currencySymbol: '$'
     },
@@ -97,7 +97,9 @@ Protopack.Grid = Class.create({
         Event.observe(body, 'dblclick', this._dblClick.bind(this));
         Event.observe(body, 'mouseover', this._mouseOver.bind(this));
         Event.observe(body, 'mouseout', this._mouseOut.bind(this));
-        Event.observe(body, 'keydown', this._onKeyDown.bind(this));
+        if (this.options.keyboard) {
+            Event.observe(body, 'keydown', this._keyDown.bind(this));
+        }
         this.body = body;
         this.table = table;
         this._createColumns();
@@ -415,78 +417,6 @@ Protopack.Grid = Class.create({
     },
 
     /**
-     * Trigers on key down
-     */
-    _onKeyDown: function (e) {
-        if (this.options.keyNavigation) {
-            this._keyNavigation(e);
-        }
-
-        // calling user defined event
-        if (this.events.onKeyDown) {
-            this.events.onKeyDown(e);
-        }
-    },
-
-    /**
-     * Implements keyboard navgiation
-     */
-    _keyNavigation: function(e) {
-        var key = e.keyCode;
-
-        // up/down navigation on rows/cells
-        if (key === 38 || key === 40) {
-            if (this.selectedRow) {
-                var row = this.selectedRow.rowIndex + key - 40,
-                    rowEl = this.table.tBodies[0].rows[row];
-                if (rowEl) {
-                    //this._selectRow(rowEl);
-                    if (this.events.onRowSelect) {
-                        this.events.onRowSelect(row + 1, e);
-                    }
-                }
-            } else if (this.selectedCell) {
-                var row = this.selectedCell.up('tr').rowIndex + key - 40,
-                    rowEl = this.table.tBodies[0].rows[row];
-                if (rowEl) {
-                    var cell = this.selectedCell.cellIndex;
-                    this._selectCell(rowEl.cells[cell]);
-                    if (this.events.onCellSelect) {
-                        this.events.onCellSelect(row + 1, this._columns[cell].name, e);
-                    }
-                }
-            }
-        }
-
-        // left/right navigation on cells
-        if (key === 37 || key === 39) {
-            if (this.selectedCell) {
-                var rowEl = this.selectedCell.up('tr'),
-                    cell = this.selectedCell.cellIndex + key - 38,
-                    cellEl = rowEl.cells[cell];
-                if (cellEl) {
-                    this._selectCell(cellEl);
-                    if (this.events.onCellSelect) {
-                        this.events.onCellSelect(rowEl.rowIndex, this._columns[cell].name, e);
-                    }
-                }
-            }
-        }
-
-        // deselecting row/cell on Esc
-        if (key === 27) {
-            if (this.selectedRow) {
-                this.selectedRow.removeClassName('selected');
-                this.selectedRow = null;
-            }
-            if (this.selectedCell) {
-                this.selectedCell.removeClassName('selected');
-                this.selectedCell = null;
-            }
-        }
-    },
-
-    /**
      * Inserts data into table
      */
     _load: function(data) {
@@ -537,22 +467,30 @@ Protopack.Grid = Class.create({
      * Selects a grid row
      */
     _selectRow: function(rowEl) {
-        if (this.selectedRow) {
-            this.selectedRow.removeClassName('selected');
+        if (this.options.rowSelect) {
+            if (this.selectedRow) {
+                this.selectedRow.removeClassName('selected');
+            }
+            if (rowEl) {
+                rowEl.addClassName('selected');
+            }
+            this.selectedRow = rowEl;
         }
-        rowEl.addClassName('selected');
-        this.selectedRow = rowEl;
     },
 
     /**
      * Selects a grid cell
      */
     _selectCell: function(cellEl) {
-        if (this.selectedCell) {
-            this.selectedCell.removeClassName('selected');
+        if (this.options.cellSelect) {
+            if (this.selectedCell) {
+                this.selectedCell.removeClassName('selected');
+            }
+            if (cellEl) {
+                cellEl.addClassName('selected');
+            }
+            this.selectedCell = cellEl;
         }
-        cellEl.addClassName('selected');
-        this.selectedCell = cellEl;
     },
 
     /**

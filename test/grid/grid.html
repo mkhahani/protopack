@@ -144,22 +144,22 @@
       /*width : '400px',
       height : '100px',
       autoRowClass : true,
-      autoCellClass : true,
-      oddEvenRows : true,*/
+      autoCellClass : true,*/
+      oddEvenRows : true,
       pagination : true,
       rowClasses : true,
       colClasses : true,
       rowHover : true,
       cellHover : false,
-      rowSelect : false,
-      cellSelect : true,
+      rowSelect : true,
+      cellSelect : false,
+      keyboard : true,
       footer : true,
       filtering : 'client',
       sorting : 'client'
   };
 
   var gridEvents = {
-    //onKeyDown   : onKeyDown,
     onFilter   : onFilter,
     onSort   : onSort
   }
@@ -176,7 +176,7 @@
 
   // Events
   //myGrid.observe('grid:click', function(rowIndex, cellIndex, event) {console.log('onClick: (' + rowIndex + ',' + cellIndex + ')');});
-  myGrid.observe('grid:dblclick', function(rowIndex, cellIndex, event) {console.log('onDblClick: (' + rowIndex + ',' + cellIndex + ')');});
+  //myGrid.observe('grid:dblclick', function(rowIndex, cellIndex, event) {console.log('onDblClick: (' + rowIndex + ',' + cellIndex + ')');});
   //myGrid.observe('grid:rowover', function(rowIndex, event) {console.log('onRowOver:' + rowIndex);});
   //myGrid.observe('grid:rowout', function(rowIndex, event) {console.log('onRowOut:' + rowIndex);});
   //myGrid.observe('grid:cellover', function(rowIndex, cellIndex, event) {console.log('onCellOver: (' + rowIndex + ',' + cellIndex + ')');});
@@ -189,10 +189,6 @@
     //myGrid.loadData(data, 8);
     myGrid.loadData(dataObj2);
     //myGrid.loadData(dataArr);
-  }
-
-  function onKeyDown(event) {
-    console.log('onKeyDown: (' + event.keyCode + ')');
   }
 
   function onFilter(data) {
