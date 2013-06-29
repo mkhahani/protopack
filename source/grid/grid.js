@@ -411,19 +411,7 @@ Protopack.Grid = Class.create({
                 el.setAttribute('style', data.style);
             }
         }
-        if (col.onClick) {
-            el.observe('click', function() {
-               this._onCellClick(el, col.onClick);
-            }.bind(this));
-        }
         return el;
-    },
-
-    /**
-     * Trigers on cell click
-     */
-    _onCellClick: function (el, func) {
-        func(el.up('tr').rowIndex);
     },
 
     /**
