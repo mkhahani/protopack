@@ -94,6 +94,7 @@ Protopack.Grid = Class.create({
         // Grid Body
         body.tabIndex = '1';
         Event.observe(body, 'click', this._click.bind(this));
+        Event.observe(body, 'dblclick', this._dblClick.bind(this));
         Event.observe(body, 'mouseover', this._mouseOver.bind(this));
         Event.observe(body, 'mouseout', this._mouseOut.bind(this));
         Event.observe(body, 'keydown', this._onKeyDown.bind(this));
@@ -319,12 +320,6 @@ Protopack.Grid = Class.create({
     _insertRow: function(data, index) {
         var tr = this.table.tBodies[0].insertRow(index);
         this._createCells(tr, data);
-        if (this.events.onDblClick) {
-            Event.observe(tr, 'dblclick', function(e) {
-                this.events.onDblClick(tr.rowIndex, e);
-            }.bind(this));
-        }
-
         return tr;
     },
 

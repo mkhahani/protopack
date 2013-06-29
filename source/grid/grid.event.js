@@ -4,7 +4,7 @@
 Protopack.Grid.addMethods({
 
     /**
-     * Occurs when clicking on the body of the grid
+     * Occurs when clicking on the grid body
      */
     _click: function(e) {
         var celEl = e.findElement('td'),
@@ -20,6 +20,18 @@ Protopack.Grid.addMethods({
         }
         this.fire('grid:click', rowEl.rowIndex, celEl.cellIndex, e);
         // fixme: we need getColumnByIndex() to achieve column attributes
+    },
+
+    /**
+     * Occurs when double clicking on the grid body
+     */
+    _dblClick: function(e) {
+        var celEl = e.findElement('td'),
+            rowEl = celEl.up('tr');
+        if (celEl === document || rowEl === undefined) {
+            return;
+        }
+        this.fire('grid:dblclick', rowEl.rowIndex, celEl.cellIndex, e);
     },
 
     /**

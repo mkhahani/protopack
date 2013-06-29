@@ -159,7 +159,6 @@
   };
 
   var gridEvents = {
-    onDblClick : onDblClick,
     //onKeyDown   : onKeyDown,
     onFilter   : onFilter,
     onSort   : onSort
@@ -176,7 +175,8 @@
   //myGrid.render();
 
   // Events
-  myGrid.observe('grid:click', function(rowIndex, cellIndex, event) {console.log('onClick: (' + rowIndex + ',' + cellIndex + ')');});
+  //myGrid.observe('grid:click', function(rowIndex, cellIndex, event) {console.log('onClick: (' + rowIndex + ',' + cellIndex + ')');});
+  myGrid.observe('grid:dblclick', function(rowIndex, cellIndex, event) {console.log('onDblClick: (' + rowIndex + ',' + cellIndex + ')');});
   //myGrid.observe('grid:rowover', function(rowIndex, event) {console.log('onRowOver:' + rowIndex);});
   //myGrid.observe('grid:rowout', function(rowIndex, event) {console.log('onRowOut:' + rowIndex);});
   //myGrid.observe('grid:cellover', function(rowIndex, cellIndex, event) {console.log('onCellOver: (' + rowIndex + ',' + cellIndex + ')');});
@@ -189,10 +189,6 @@
     //myGrid.loadData(data, 8);
     myGrid.loadData(dataObj2);
     //myGrid.loadData(dataArr);
-  }
-
-  function onDblClick(rowIndex, event) {
-    console.log('onDblClick:' + rowIndex);
   }
 
   function onKeyDown(event) {
