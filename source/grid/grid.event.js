@@ -12,8 +12,12 @@ Protopack.Grid.addMethods({
         if (celEl === document || rowEl === undefined) {
             return;
         }
-        this._selectRow(rowEl);
-        this._selectCell(celEl);
+        if (this.options.rowSelect) {
+            this._selectRow(rowEl);
+        }
+        if (this.options.cellSelect) {
+            this._selectCell(celEl);
+        }
         this.fire('grid:click', rowEl.sectionRowIndex, celEl.cellIndex, e);
         // fixme: we need getColumnByIndex() to achieve column attributes
     },
@@ -82,31 +86,33 @@ Protopack.Grid.addMethods({
     _keyDown: function(e) {
         var key = e.keyCode;
 
-        // up/down navigation on rows/cells
-        if (key === 38 || key === 40) {
-            var cell = 0,
-                rowEl;
-            if (this.selectedCell) {
-                cell = this.selectedCell.cellIndex;
-                row = this.selectedCell.up('tr').sectionRowIndex + key - 39;
-            } else {
-                row = this.selectedRow? this.selectedRow.sectionRowIndex + key - 39 : 0;
+        if (this.options.rowSelect || this.options.cellSelect) {
+            // up/down navigation on rows/cells
+            if (key === 38 || key === 40) {
+                var cell = 0,
+                    rowEl;
+                if (this.selectedCell) {
+                    cell = this.selectedCell.cellIndex;
+                    row = this.selectedCell.up('tr').sectionRowIndex + key - 39;
+                } else {
+                    row = this.selectedRow? this.selectedRow.sectionRowIndex + key - 39 : 0;
+                }
+                rowEl = this.table.tBodies[0].rows[row];
+                if (rowEl) {
+                    this._selectRow(rowEl);
+                    this._selectCell(rowEl.cells[cell]);
+                }
             }
-            rowEl = this.table.tBodies[0].rows[row];
-            if (rowEl) {
-                this._selectRow(rowEl);
-                this._selectCell(rowEl.cells[cell]);
-            }
-        }
 
-        // left/right navigation on cells
-        if (key === 37 || key === 39) {
-            if (this.selectedCell) {
-                var cell = this.selectedCell.cellIndex + key - 38,
-                    rowEl = this.selectedCell.up('tr'),
-                    cellEl = rowEl.cells[cell];
-                if (cellEl) {
-                    this._selectCell(cellEl);
+            // left/right navigation on cells
+            if (key === 37 || key === 39) {
+                if (this.selectedCell) {
+                    var cell = this.selectedCell.cellIndex + key - 38,
+                        rowEl = this.selectedCell.up('tr'),
+                        cellEl = rowEl.cells[cell];
+                    if (cellEl) {
+                        this._selectCell(cellEl);
+                    }
                 }
             }
         }

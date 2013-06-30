@@ -467,30 +467,26 @@ Protopack.Grid = Class.create({
      * Selects a grid row
      */
     _selectRow: function(rowEl) {
-        if (this.options.rowSelect) {
-            if (this.selectedRow) {
-                this.selectedRow.removeClassName('selected');
-            }
-            if (rowEl) {
-                rowEl.addClassName('selected');
-            }
-            this.selectedRow = rowEl;
+        if (this.selectedRow) {
+            this.selectedRow.removeClassName('selected');
         }
+        if (rowEl) {
+            rowEl.addClassName('selected');
+        }
+        this.selectedRow = rowEl;
     },
 
     /**
      * Selects a grid cell
      */
     _selectCell: function(cellEl) {
-        if (this.options.cellSelect) {
-            if (this.selectedCell) {
-                this.selectedCell.removeClassName('selected');
-            }
-            if (cellEl) {
-                cellEl.addClassName('selected');
-            }
-            this.selectedCell = cellEl;
+        if (this.selectedCell) {
+            this.selectedCell.removeClassName('selected');
         }
+        if (cellEl) {
+            cellEl.addClassName('selected');
+        }
+        this.selectedCell = cellEl;
     },
 
     /**
