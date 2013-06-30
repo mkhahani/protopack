@@ -28,10 +28,9 @@ Protopack.Grid.addMethods({
     _dblClick: function(e) {
         var celEl = e.findElement('td'),
             rowEl = celEl.up('tr');
-        if (celEl === document || rowEl === undefined) {
-            return;
+        if (celEl !== document && rowEl !== undefined) {
+            this.fire('grid:dblclick', rowEl.sectionRowIndex, celEl.cellIndex, e);
         }
-        this.fire('grid:dblclick', rowEl.sectionRowIndex, celEl.cellIndex, e);
     },
 
     /**
@@ -86,9 +85,10 @@ Protopack.Grid.addMethods({
     _keyDown: function(e) {
         var key = e.keyCode;
 
+        // row/cell navigation
         if (this.options.rowSelect || this.options.cellSelect) {
             // up/down navigation on rows/cells
-            if (key === 38 || key === 40) {
+            if (key === 40 || key === 38) {
                 var cell = 0,
                     rowEl;
                 if (this.selectedCell) {
@@ -121,11 +121,7 @@ Protopack.Grid.addMethods({
             }
         }
 
-        // deselects row/cell on Esc
-        if (key === 27) {
-            this._selectRow(null);
-            this._selectCell(null);
-        }
+        this.fire('grid:keydown', e);        
     }
 
 });

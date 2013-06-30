@@ -181,6 +181,7 @@
   //myGrid.observe('grid:rowout', function(rowIndex, event) {console.log('onRowOut:' + rowIndex);});
   //myGrid.observe('grid:cellover', function(rowIndex, cellIndex, event) {console.log('onCellOver: (' + rowIndex + ',' + cellIndex + ')');});
   //myGrid.observe('grid:cellout', function(rowIndex, cellIndex, event) {console.log('onCellOut: (' + rowIndex + ',' + cellIndex + ')');});
+  myGrid.observe('grid:keydown', function(event) {console.log('onKeyDown:' + event.keyCode);});
 
   function fillGrid(page) {
     var offset = (page - 1) * limit;
