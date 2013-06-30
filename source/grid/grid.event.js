@@ -99,13 +99,17 @@ Protopack.Grid.addMethods({
                 }
                 rowEl = this.table.tBodies[0].rows[row];
                 if (rowEl) {
-                    this._selectRow(rowEl);
-                    this._selectCell(rowEl.cells[cell]);
+                    if (this.options.rowSelect) {
+                        this._selectRow(rowEl);
+                    }
+                    if (this.options.rowCell) {
+                        this._selectCell(rowEl.cells[cell]);
+                    }
                 }
             }
 
             // left/right navigation on cells
-            if (key === 37 || key === 39) {
+            if (this.options.cellSelect && (key === 37 || key === 39)) {
                 if (this.selectedCell) {
                     var cell = this.selectedCell.cellIndex + key - 38,
                         rowEl = this.selectedCell.up('tr'),
