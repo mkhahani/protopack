@@ -122,6 +122,29 @@ Protopack.Grid.addMethods({
         }
 
         this.fire('grid:keydown', e);        
+    },
+
+    /**
+     * Occurs when clicking on title of a grid column
+     */
+    _titleClick: function(e) {
+        var celEl = e.findElement('th'),
+            colObj;
+        if (celEl === document) {
+            return;
+        }
+        colObj = this._columns[celEl.cellIndex];
+        if (!colObj.sortType) {
+            return;
+        }
+        this._sortBy = colObj.name;
+        this._sortOrder = (this._sortOrder === 'ASC')? 'DESC' : 'ASC';
+        if (this.options.sorting === 'client') {
+            this.sort(this._sortBy, this._sortOrder);
+        } else {
+            this.fire('grid:sort', this._sortBy, this._sortOrder, e);
+            this.setSort(this._sortBy, this._sortOrder);
+        }
     }
 
 });

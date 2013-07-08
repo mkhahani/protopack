@@ -93,12 +93,12 @@ Protopack.Grid = Class.create({
 
         // Grid Body
         body.tabIndex = '1';
-        Event.observe(body, 'click', this._click.bind(this));
-        Event.observe(body, 'dblclick', this._dblClick.bind(this));
-        Event.observe(body, 'mouseover', this._mouseOver.bind(this));
-        Event.observe(body, 'mouseout', this._mouseOut.bind(this));
+        body.observe('click', this._click.bind(this));
+        body.observe('dblclick', this._dblClick.bind(this));
+        body.observe('mouseover', this._mouseOver.bind(this));
+        body.observe('mouseout', this._mouseOut.bind(this));
         if (this.options.keyboard) {
-            Event.observe(body, 'keydown', this._keyDown.bind(this));
+            body.observe('keydown', this._keyDown.bind(this));
         }
         this.body = body;
         this.table = table;
@@ -119,12 +119,11 @@ Protopack.Grid = Class.create({
      * Adds header to grid
      */
     _createHeader: function () {
-        var header   = new Element('div', {'class':this._className + '-header'}),
-            table    = new Element('table'),
-            trTitle  = table.insertRow(-1),
+        var header = new Element('div', {'class':this._className + '-header'}),
+            table = new Element('table'),
+            trTitles = table.insertRow(-1),
             trFilter = table.insertRow(-1),
-            ignore   = 0,
-            sortType = this.options.sorting;
+            ignore = 0;
 
         // Titles
         this._columns.each( function (column) {
@@ -144,29 +143,20 @@ Protopack.Grid = Class.create({
                 if (column.width) {
                     th.setAttribute('width', column.width);
                 }
-                if (sortType && column.sortType) {
-                    //var sortFunc = (sortType === 'client')? this.sort : this.events.onSort;
-                    th.observe('click', function () {
-                        this._sortBy = column.name;
-                        this._sortOrder = (this._sortOrder === 'ASC')? 'DESC' : 'ASC';
-                        //sortFunc.bind(this, this._sortBy, this._sortOrder)();
-                        if (sortType === 'client') {
-                            this.sort(this._sortBy, this._sortOrder);
-                        } else {
-                            this.events.onSort(this._sortBy, this._sortOrder);
-                            this.setSort(this._sortBy, this._sortOrder);
-                        }
-                    }.bind(this));
+                if (this.options.sorting && column.sortType) {
                     th.addClassName('sortable');
                 }
             }
-            trTitle.className = 'titles';
-            Element.insert(trTitle, th.insert(column.title));
+            trTitles.className = 'titles';
+            Element.insert(trTitles, th.insert(column.title));
             if (column.hasOwnProperty('colSpan')) {
                 th.setAttribute('colspan', column.colSpan);
                 ignore = column.colSpan - 1;
             }
         }.bind(this));
+        if (this.options.sorting) {
+            Event.observe(trTitles, 'click', this._titleClick.bind(this));
+        }
 
         // Filter
         if (this.options.filtering) {
@@ -464,7 +454,7 @@ Protopack.Grid = Class.create({
     },
 
     /**
-     * Selects a grid row
+     * Selects a grid row or clears the selection if null is passed
      */
     _selectRow: function(rowEl) {
         if (this.selectedRow) {
@@ -477,7 +467,7 @@ Protopack.Grid = Class.create({
     },
 
     /**
-     * Selects a grid cell
+     * Selects a grid cell or clears the selection if null is passed
      */
     _selectCell: function(cellEl) {
         if (this.selectedCell) {
