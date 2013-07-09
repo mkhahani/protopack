@@ -148,7 +148,7 @@ Protopack.Grid.addMethods({
     },
 
     /**
-     * Occurs when clicking on title of a grid column
+     * Occurs on filter form changes
      */
     _filter: function(e) {
         var query = e.findElement().up('form').serialize(true);
