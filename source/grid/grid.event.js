@@ -145,6 +145,18 @@ Protopack.Grid.addMethods({
             this.fire('grid:sort', this._sortBy, this._sortOrder, e);
             this.setSort(this._sortBy, this._sortOrder);
         }
+    },
+
+    /**
+     * Occurs when clicking on title of a grid column
+     */
+    _filter: function(e) {
+        var query = e.findElement().up('form').serialize(true);
+        if (this.options.filtering === 'client') {
+            this.filter(query);
+        } else {
+            this.fire('grid:filter', query, e);
+        }
     }
 
 });

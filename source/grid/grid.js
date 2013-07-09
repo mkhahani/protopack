@@ -183,19 +183,11 @@ Protopack.Grid = Class.create({
                                 if (column.width) {
                                     input.style.width = column.width + 'px';
                                 }
-                                input.observe('keydown', function(e) {
-                                    if (e.keyCode == 13) {
-                                        filterFunc.bind(this)(form.serialize(true));
-                                    }
-                                }.bind(this));
                                 td.insert(input);
                                 break;
                             case 'list':
                                 var select = new Element('select', {name:column.name});
                                 select.style.width = column.width + 'px';
-                                select.observe('change', function() {
-                                    filterFunc.bind(this)(form.serialize(true));
-                                }.bind(this));
                                 td.insert(select);
                                 break;
                         }
@@ -207,6 +199,7 @@ Protopack.Grid = Class.create({
                     ignore = column.colSpan - 1;
                 }
             }.bind(this));
+            Event.observe(trFilter, 'change', this._filter.bind(this));
         } else {
             header.insert(table);
         }
