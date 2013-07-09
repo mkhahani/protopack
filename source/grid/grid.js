@@ -38,7 +38,6 @@ Protopack.Grid = Class.create({
         rowClasses    : false,
         colClasses    : false,
         oddEvenRows   : false,
-        titleAlign    : 'left',
         currencySymbol: '$'
     },
 
@@ -132,7 +131,6 @@ Protopack.Grid = Class.create({
                 return;
             }
             var th = new Element('th');
-            th.setAttribute('align', this.options.titleAlign);
             if (column.hidden) {
                 th.addClassName('hidden');
                 th.setAttribute('width', 0);
