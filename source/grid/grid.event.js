@@ -127,7 +127,7 @@ Protopack.Grid.addMethods({
     /**
      * Occurs when clicking on title of a grid column
      */
-    _titleClick: function(e) {
+    _sort: function(e) {
         var celEl = e.findElement('th'),
             colObj;
         if (celEl === document) {

@@ -155,7 +155,7 @@ Protopack.Grid = Class.create({
             }
         }.bind(this));
         if (this.options.sorting) {
-            Event.observe(trTitles, 'click', this._titleClick.bind(this));
+            Event.observe(trTitles, 'click', this._sort.bind(this));
         }
 
         // Filter
