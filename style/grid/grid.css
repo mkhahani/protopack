@@ -13,7 +13,7 @@ input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-bo
 
 .pgrid-header {overflow:auto;}
 .pgrid-header table {width:100%; color:white;}
-.pgrid-header th {border-right:1px solid #DDD; height:20px; cursor:default;}
+.pgrid-header th {text-align:left; border-right:1px solid #DDD; height:20px; cursor:default;}
 .pgrid-header th:last-child {border-right:none;}
 .pgrid-header th img {vertical-align:middle; margin-right:3px;}
 .pgrid-header th.sorted-asc {background:url(up.png) right no-repeat}

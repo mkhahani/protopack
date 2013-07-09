@@ -1,0 +1,54 @@
+input, select, button {box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; vertical-align:middle;}
+.pgrid {border:1px solid #888888;}
+.pgrid table {font:11px tahoma; border-spacing:0; border-collapse:collapse; direction:rtl;}
+.pgrid div, .pgrid input {outline:none;} /* webkit */
+.pgrid th, .pgrid td {user-select:none; -moz-user-select:none; -webkit-user-select:none; padding:0 5px;}
+.pgrid th.hidden {display:none;}
+.pgrid th.sortable {cursor:pointer;}
+.pgrid td {cursor:default;}
+.pgrid td.hidden {display:none;}
+.pgrid tfoot {background-color:#EEEEEE; color:#888888; font-size:10px;}
+.pgrid col.hidden {display:none;}
+.pgrid a:hover {text-decoration:none;}
+
+.pgrid-header {overflow:auto;}
+.pgrid-header table {width:100%; color:white;}
+.pgrid-header th {text-align:right; border-left:1px solid #DDD; height:20px; cursor:default;}
+.pgrid-header th:last-child {border-left:none;}
+.pgrid-header th img {vertical-align:middle; margin-left:3px;}
+.pgrid-header th.sorted-asc {background:url(up.png) left no-repeat}
+.pgrid-header th.sorted-desc {background:url(down.png) left no-repeat}
+.pgrid-header form {margin:0;}
+.pgrid-header .titles {background-color:#666;}
+.pgrid-header .filters {border-bottom:1px solid #DDD; }
+.pgrid-header .filters input {width:100%; font:11px tahoma; padding:0 2px; margin:2px 0;}
+.pgrid-header .filters select {width:100%; font:11px tahoma; padding:0; margin:2px 0;}
+
+.pgrid-body {overflow:auto;} /* set height for scrolled content */
+.pgrid-body table {width:100%;}
+.pgrid-body tr.even {background-color:#F5F5F5;}
+.pgrid-body tr.odd {background-color:#FFFFFF;}
+.pgrid-body tr.hover {background-color:#E3EFFF;}
+.pgrid-body tr.selected {background-color:#E3EFFF;}
+.pgrid-body tr.selected td {background:url(sel.png) repeat-x;}
+.pgrid-body td.hover {background-color:#E3EFFF;}
+.pgrid-body td.selected {background-color:#FCC;}
+.pgrid-body td {height:20px;}
+
+.pgrid-footer {background-color:#EEE; border-top:1px solid #DDD; padding:2px 5px;}
+.pgrid-footer table {font:9px tahoma; direction:ltr;}
+.pgrid-pager {margin-right:0; margin-left:auto;}
+.pgrid-pager td {padding:0;}
+.pgrid-pager input {height:14px; font:10px tahoma;}
+.pgrid-pager input[type=text] {width:15px; border:none; background:none; text-align:center;}
+.pgrid-pager input[type=text]:hover {border:1px solid #DDD;}
+.pgrid-pager input[type=text]:focus {width:25px; margin:0 2px; border:1px inset #DDD; background:white; text-align:left;}
+.pgrid-pager input[type=button] {width:12px; padding:0; border:none; background:transparent 50% 50% no-repeat;}
+.pgrid-pager input[type=button]:hover {border:1px solid #DDD;}
+.pgrid-pager input[type=button]:active {border:1px inset #DDD;}
+.pgrid-pager input.first {background-image:url(first.png);}
+.pgrid-pager input.prev {background-image:url(prev.png);}
+.pgrid-pager input.next {background-image:url(next.png);}
+.pgrid-pager input.last {background-image:url(last.png);}
+.pgrid-status {margin-right:5px;}
+
