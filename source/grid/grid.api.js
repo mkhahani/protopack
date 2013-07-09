@@ -85,7 +85,7 @@ Protopack.Grid.addMethods({
         var rows = this.table.tBodies[0].select('tr');
         if (this.options.rowClasses) {
             rows.each(function (tr, i) {
-                tr.addClassName('row' + i);
+                tr.addClassName('r-' + i);
             });
         }
         if (this.options.oddEvenRows) {
@@ -117,7 +117,7 @@ Protopack.Grid.addMethods({
     },
 
     /**
-     * Clears all selected rows
+     * Clears all selected rows/cells
      */
     clearSelection: function() {
         this.table.tBodies[0].select('.selected').invoke('removeClassName', 'selected');

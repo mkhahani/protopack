@@ -137,6 +137,7 @@ Protopack.Grid = Class.create({
                 th.addClassName('hidden');
                 th.setAttribute('width', 0);
             } else {
+                th.addClassName('t-' + column.name);
                 if (column.image) {
                     th.insert(new Element('img', {src:column.image}));
                 }
@@ -317,7 +318,7 @@ Protopack.Grid = Class.create({
                 key = Object.isArray(rowData)? index : column.name,
                 el = this._createElement(column, rowData[key]);
             if (this.options.colClasses) {
-                cell.addClassName('col-' + key);
+                cell.addClassName('c-' + key);
             }
             if (column.hidden) {
                 cell.addClassName('hidden');
