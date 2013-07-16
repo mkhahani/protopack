@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <title>Protopack Input</title>
+  <title>Protopack Select</title>
   <link rel="stylesheet" type="text/css" href="../style/select.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
@@ -13,18 +13,17 @@
     body {background-color:silver;}
     h1 {font:bold 16px times; text-align:center; margin-top:100px;}
     button {height:24px;}
-    input[type=text] {width:300px;}
+    input[type=text], select {width:300px;}
     #wrapper {width:300px; margin:0 auto;}
-    #workspace {height:60px;}
   </style>
 </head>
 <body>
-  <h1>Protopack Input v1.1</h1>
+  <h1>Protopack Select</h1>
   <div id="wrapper">
     <div>
-      <input id="std_input" type="text" value="This is a standard HTML input" />
+      <input id="std_input" type="text" value="This is a standard HTML INPUT" />
       <select id="std_select">
-        <option>Item #1</option>
+        <option>This is a standard HTML SELECT</option>
         <option>Item #2</option>
         <option>Item #3</option>
         <option>Item #4</option>
@@ -32,10 +31,6 @@
       <select/>
     </div>
     <div id="workspace"></div>
-    <hr/>
-    <div id="options">
-      <button onclick="updateList()">Update</button>
-    </div>
   </div>
 </body>
 <script>
@@ -51,12 +46,10 @@
         [8, 'Item #8'],
         [9, 'Item #9']
       ];
-      myInput.setList(data);
+      mySelect.setData(data);
   }
-  var myInput = new ProtopackSelect('std_select');
-  //myInput.entry.id = 'the_id';
-  //myInput.entry.name = 'the_name';
-  //myInput.entry.value = 'MKH';
-  //updateList();
+  var mySelect = new ProtopackSelect('workspace');
+  mySelect.setText('This is combination of INPUT & SELECT :)');
+  updateList();
 </script>
 </html>

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
   <title>Protopack Tree</title>
-  <link rel="stylesheet" type="text/css" href="../style/tree/tree.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/tree/classic/classic.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
   <script type="text/javascript" src="../source/tree/tree.js"></script>
@@ -13,11 +14,11 @@
     button {height:24px;}
     #wrapper {width:400px; margin:0 auto;}
     #workspace {height:400px; border:1px solid grey; background-color:white; overflow:auto;}
-    #mkh_tree {margin-top:10px;}
+    #mkh_tree {padding:20px;}
   </style>
 </head>
 <body>
-  <h1>Protopack Tree v1.1</h1>
+  <h1>Protopack Tree</h1>
   <div id="wrapper">
     <div id="workspace"></div>
     <hr/>
@@ -43,10 +44,10 @@
     var data = [
         //[0, -1, 'Root'],
         [1, 0, 'Item1', {id:'node1', className:'item-class', seq:3, style:{color:'red', fontWeight:'bold'}}],
-        [2, 0, 'Item2', {id:'node2', title:'This is a hint', seq:1}],
+        [2, 1, 'Item2', {id:'node2', title:'This is a hint', seq:1}],
         [4, 3, 'Item4', {id:'node4', href:'javascript:alert("linkable node!")', target:'_blank'}],
         [5, 3, 'Item5', {id:'node5', checked: true}],
-        [3, 2, 'Item3', {id:'node3'}],
+        [3, 0, 'Item3', {id:'node3'}],
         [6, 5, 'Item6', {id:'node6'}],
         [7, 2, 'Item7', {id:'node7'}],
         [8, 7, 'Item8', {id:'node8', seq:2}],
@@ -59,7 +60,8 @@
     var frm = $('frm_options'),
         options = {
           multiSelect: frm.chk_multi_select.checked,
-          interactive: frm.chk_interactive.checked
+          interactive: frm.chk_interactive.checked,
+          //className: 'ptree-tango'
         },
         events = {
           nodeclick: treeClick,
@@ -69,6 +71,8 @@
     tree = new ProtopackTree('workspace', options, events);
     tree.setId('mkh_tree');
     tree.loadData(data);
+    //tree.setCaption('Root');
+    tree.setClassName('ptree-tango');
   }
 
   function treeClick(node, e) {

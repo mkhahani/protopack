@@ -1,10 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
   <title>Protopack TreeSelect</title>
-  <link rel="stylesheet" type="text/css" href="../style/treeselect.rtl.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/treeselect.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
+  <script type="text/javascript" src="../source/window/window.js"></script>
   <script type="text/javascript" src="../source/input/input.js"></script>
   <script type="text/javascript" src="../source/tree/tree.js"></script>
   <script type="text/javascript" src="../source/treeselect/treeselect.js"></script>
@@ -15,7 +17,6 @@
     button {height:24px;}
     input[type=text] {width:300px;}
     #wrapper {width:300px; margin:0 auto;}
-    #workspace {height:60px;}
   </style>
 </head>
 <body>
@@ -68,11 +69,17 @@
       [8, 7, 'Item8'],
       [9, 7, 'Item9'],
       [10, 0, 'Item10']
-  ];
+      ],
+      options = {
+          multiSelect:false,
+          interactive:true,
+          defaultState:'collapse'
+      };
   //var myCombo = new ProtopackTreeSelect('workspace');
-  var myCombo = new ProtopackTreeSelect('workspace', {multiSelect:false, interactive:true, defaultState:'collapse'}, {onSelect: onTreeSelect});
+  var myCombo = new ProtopackTreeSelect('workspace', options, {onSelect: onTreeSelect});
   myCombo.setId('the_treeselect');
   myCombo.loadData(data);
+  myCombo.tree.setClassName('ptree-tango');
   //myCombo.render();
   //$('workspace').update(combo.get());
   //combo.render();
