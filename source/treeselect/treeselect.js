@@ -1,46 +1,56 @@
 /**
- *  Protopack TreeSelect, a DHTML Tree Select Component based on Prototype JS framework
- *  © 2011-2012 Mohsen Khahani
+ * Protopack TreeSelect is a DHTML tree combobox component based on Prototype JS framework
  *
- *  Licensed under the MIT license
- *  Created on October 5, 2011
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2011-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.1
+ * @created     October 5, 2011
+ * @url         http://mohsenkhahani.ir/protopack
  *
- *  http://mohsen.khahani.com/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ *    - Protopack Input
+ *    - Protopack Tree
  */
 
-
-/**
- * Default configuration
- */
-var ProtopackTreeSelectOptions = {
-    className   : 'pp-treeselect',
-    editable    : true,
-    multiSelect : false,
-    interactive : false,
-    defaultState: 'expand'
-}
 
 /**
  * TreeSelect base class
  */
 var ProtopackTreeSelect = Class.create(ProtopackInput, {
-    Version: '1.0',
+    /**
+     * Default configuration
+     */
+    options: {
+        className   : 'ptreeselect',
+        editable    : true,
+        multiSelect : false,
+        interactive : false,
+        defaultState: 'expand'
+    },
 
     /**
-     * initiates ProtopackTreeSelect object
+     * TreeSelect initializer
+     *
+     * @param   mixed   target  Target element or element ID
+     * @param   object  options Input options
+     * @param   object  events  Tree events
+     *
+     * @return  Object  A class instance of TreeSelect
      */
     initialize: function (target, options, events) {
-        this.options     = Object.clone(ProtopackTreeSelectOptions);
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
-        this.events      = events || {};
-        this.className   = this.options.className;
-        this.editable    = this.options.editable;
+        this.events = events || {};
+        this.className = this.options.className;
+        this.editable = this.options.editable;
         this.multiSelect = this.options.multiSelect;
-        this.readonly    = true;
+        this.readonly = true;
         this.buttonStyle = 'disabled';
-        this.popupStyle  = 'auto';
-        this.value       = [];
-        this.xhtml       = this._construct();
+        this.dropdownStyle = 'auto';
+        this.value = [];
+        this.xhtml = this._construct();
         if (target) {
             $(target).insert(this.xhtml);
             //this.render();
@@ -51,7 +61,6 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
         var xhtml = $super(),   // Calling constructor of the Parent Class
             entry = new Element('input', {type:'hidden'}),
             options = {multiSelect: this.multiSelect, 
-                       className: this.className + '-tree',
                        interactive:this.options.interactive,
                        defaultState:this.options.defaultState},
             tree = new ProtopackTree(null, 
@@ -61,7 +70,7 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
         this.valueEntry = entry;
         this.tree = tree;
         xhtml.insert(entry);
-        return xhtml.insert(this.popup.update(tree.xhtml));
+        return xhtml.insert(this.dropdown.setContent(tree.xhtml));
     },
 
     _updateTree: function () {
@@ -83,7 +92,7 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
         } else {
             this.value = this.valueEntry.value = node.id;
             this.text = this.entry.value = node.text;
-            this.popup.hide();
+            this.dropdown.close();
         }
         if (this.events.onSelect) {
             this.events.onSelect();
@@ -93,10 +102,6 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
     loadData: function (data) {
         this.tree.loadData(data);
         this.render();
-    },
-
-    render: function ($super) {
-        $super();
     },
 
     setId: function (id) {
