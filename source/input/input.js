@@ -36,16 +36,18 @@ var ProtopackInput = Class.create({
      * @return  Object  A class instance of Input 
      */
     initialize: function (target, options) {
-        this.options = Object.clone(ProtopackInputOptions);
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
-        this.readonly = this.options.readonly;
         this.buttonStyle = this.options.buttonStyle;
         this.dropdownStyle = this.options.dropdownStyle;
-        this.xhtml = this._construct($(target));
+        if (target) {
+            this.target = $(target);
+            this.xhtml = this._construct();
+        }
     },
 
-    _construct: function (target) {
+    _construct: function () {
         var xhtml = new Element('div', {'class': this.className});
 
         this.entry = this._buildEntry();
@@ -60,12 +62,8 @@ var ProtopackInput = Class.create({
             this.dropdown = this._buildDropdown(xhtml);
         }
 
-        if (target) {
-            if (['INPUT','SELECT'].indexOf(target.tagName.toUpperCase()) !== -1) {
-                $(target).insert({before:xhtml});
-            } else {
-                $(target).insert(xhtml);
-            }
+        if (this.target) {
+            this.target.insert(xhtml);
             //this.render();
         }
 
@@ -73,8 +71,8 @@ var ProtopackInput = Class.create({
     },
 
     _buildEntry: function () {
-        var entry = new Element('input', {type: 'text'});
-        if (this.readonly) {
+        var entry = (this.entry)? (this.entry) : new Element('input', {type: 'text'});
+        if (this.options.readonly) {
             entry.writeAttribute({readonly: true});
         }
         if (this.buttonStyle === 'smart') {
@@ -126,6 +124,12 @@ var ProtopackInput = Class.create({
 
     get: function () {
         return this.xhtml;
+    },
+
+    grab: function (target) {
+        this.entry = $(target);
+        this.xhtml.update();
+        this.xhtml = this._construct();
     },
 
     render: function () {
