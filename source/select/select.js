@@ -1,38 +1,42 @@
 /**
- *  Protopack Select is a flexible DHTML Select Component based on Prototype JS framework
- *  Copyright 2011-2013 Mohsen Khahani
- *  Licensed under the MIT license
- *  Created on June 3, 2013
+ * Protopack Select is a DHTML replacement for standard SELECT, based on Prototype JS framework
  *
- *  Dependencies:
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2011-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.1
+ * @created     June 3, 2013
+ * @url         http://mohsenkhahani.ir/protopack
+ *
+ * @dependency
  *    - Prototype JS framework v1.7+
- *    - input.js
- *
- *  Features:
- *    - replacement for standard select
- *    - full CSS customizable
- *
- *  http://mohsenkhahani.ir/protopack
+ *    - Protopack Input
  */
 
 
 /**
- * Default configuration
- */
-var ProtopackSelectOptions = {
-    className : 'pselect',
-    readonly : false,
-    listSize: 8
-};
-
-/**
- * ProtopackSelect class
+ * ProtopackSelect base class
  */
 var ProtopackSelect = Class.create(ProtopackInput, {
-    Version: '1.0',
+    /**
+     * Default configuration
+     */
+    options: {
+        className : 'pselect',
+        readonly  : false,
+        listSize  : 8
+    },
 
+    /**
+     * Select initializer
+     *
+     * @param   mixed   target  Target element or element ID
+     * @param   object  options Select options
+     *
+     * @return  Object  A class instance of Select
+     */
     initialize: function (target, options) {
-        this.options = Object.clone(ProtopackSelectOptions);
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
         this.readonly = this.options.readonly;
@@ -43,7 +47,6 @@ var ProtopackSelect = Class.create(ProtopackInput, {
             this.target = $(target);
             this.xhtml = this._construct();
         }
-        //console.log(this.xhtml);
         //this.render();
     },
 
