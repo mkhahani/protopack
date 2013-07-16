@@ -13,6 +13,7 @@
  *    - window.js
  */
 
+
 /**
  * Protopack Input base class
  */
@@ -31,9 +32,9 @@ var ProtopackInput = Class.create({
      * Input intializer
      *
      * @param   mixed   target  Target element or element ID
-     * @param   Object  options Input options {className, multiSelect}
+     * @param   object  options Input options {className, multiSelect}
      *
-     * @return  Object  A class instance of Input 
+     * @return  object  A class instance of Input 
      */
     initialize: function (target, options) {
         this.options = Object.clone(this.options);
@@ -137,14 +138,14 @@ var ProtopackInput = Class.create({
         }
         this.dropdown.window.style.top = this.entry.getHeight() + 1 + 'px';
 
-        if (this.buttonStyle !== 'disabled') {
+        /*if (this.buttonStyle !== 'disabled') {
             var layout = new Element.Layout(this.entry);
             this.button.setHeightTo(this.entry);
             this.button.style.marginTop = layout.get('margin-top') + 'px';
             this.button.style.marginBottom = layout.get('margin-bottom') + 'px';
             this.button.style.paddingTop = layout.get('padding-top') + 'px';
             this.button.style.paddingBottom = layout.get('padding-bottom') + 'px';
-        }
+        }*/
     },
 
     setId: function (id) {
