@@ -1,0 +1,23 @@
+/**
+ *  Tree Classic style
+ *  http://mohsenkhahani.ir/protopack
+ */
+
+.ptree {line-height:12px;}
+.ptree ul {list-style:none; margin:0; padding-left:20px; background:url(h-line.png) repeat-y;}
+.ptree > ul {background:none; padding:0;}
+.ptree .last > ul {background:none;}
+.ptree span {display:inline-block; width:18px; height:18px; vertical-align:middle;}
+.ptree span {background:url(states.png) no-repeat;}
+.ptree span.close {background-position:0 -18px;}
+.ptree span.open {background-position:0 -36px;}
+.ptree .first > span {background-position:-36px 0;}
+.ptree .last > span {background-position:-18px 0;}
+.ptree .first.last > span {background-position:0 -54px;}
+.ptree .first > span.close {background-position:-36px -18px;}
+.ptree .first > span.open {background-position:-36px -36px;}
+.ptree .last > span.close {background-position:-18px -18px;}
+.ptree .last > span.open {background-position:-18px -36px;}
+.ptree .first.last > span.close {background-position:-54px -18px;}
+.ptree .first.last > span.open {background-position:-54px -36px;}
+.ptree .node {display:inline-block; padding:0 2px;}

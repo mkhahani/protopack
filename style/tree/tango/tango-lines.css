@@ -1,0 +1,23 @@
+/**
+ *  Tree Tango style
+ *  http://mohsenkhahani.ir/protopack
+ */
+
+.ptree-tango {line-height:12px;}
+.ptree-tango ul {list-style:none; margin:0; padding-left:20px; background:url(h-line.png) repeat-y;}
+.ptree-tango > ul {background:none; padding:0;}
+.ptree-tango .last > ul {background:none;}
+.ptree-tango span {display:inline-block; width:18px; height:18px; vertical-align:middle;}
+.ptree-tango span {background:url(states.png) no-repeat;}
+.ptree-tango span.close {background-position:0 -18px;}
+.ptree-tango span.open {background-position:0 -36px;}
+.ptree-tango .first > span {background-position:-36px 0;}
+.ptree-tango .last > span {background-position:-18px 0;}
+.ptree-tango .first.last > span {background-position:0 -54px;}
+.ptree-tango .first > span.close {background-position:-36px -18px;}
+.ptree-tango .first > span.open {background-position:-36px -36px;}
+.ptree-tango .last > span.close {background-position:-18px -18px;}
+.ptree-tango .last > span.open {background-position:-18px -36px;}
+.ptree-tango .first.last > span.close {background-position:-54px -18px;}
+.ptree-tango .first.last > span.open {background-position:-54px -36px;}
+.ptree-tango .node {display:inline-block;}
