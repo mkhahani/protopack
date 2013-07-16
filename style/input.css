@@ -1,12 +1,16 @@
+* { /* let's reset box-sizing model */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+}
 .pinput {
-  position:relative;
-  display:inline-block;
+  position: relative;
 }
 .pinput button {
   position: absolute;
   top: 0;
   right: 0;
-  width:20px;
+  width: 20px;
   border: 1px outset #888888;
 }
 .pinput button:active {
@@ -15,11 +19,11 @@
 .pinput-dropdown {
   position: absolute;
   z-index: 20;
+  max-height: 400px;
+  overflow: auto;
+  padding: 5px;
   background-color: white;
   border: 1px solid #888888;
-  overflow: auto;
-  max-height: 400px;
   box-shadow: 5px 5px 5px #AAAAAA;
   -moz-box-shadow: 5px 5px 5px #AAAAAA;
-  padding: 5px;
 }

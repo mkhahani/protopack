@@ -13,5 +13,5 @@
 .ptree-tango .node {margin-left:3px; cursor:pointer;}
 .ptree-tango .node a {padding:1px 2px;}
 .ptree-tango .node.hover {color:blue;}
-.ptree-tango .node.selected {background-color:darkblue;}
+.ptree-tango .node.selected {background-color:#d86060;}
 .ptree-tango .node.selected a {color:white;}
