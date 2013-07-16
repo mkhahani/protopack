@@ -1,41 +1,40 @@
 /**
- *  Protopack Input is a DHTML Input Component based on Prototype JS framework
- *  Copyright 2011-2013 Mohsen Khahani
- *  Licensed under the MIT license
- *  Created on September 17, 2011
+ * Protopack Input is a base class for other Protopack components
  *
- *  Dependencies:
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2011-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.2
+ * @created     September 17, 2011
+ * @url         http://mohsenkhahani.ir/protopack
+ *
+ * @dependency
  *    - Prototype JS framework v1.7+
- *    - protopack.js
  *    - window.js
- *
- *  Features:
- *    - replacement for standard input
- *    - full CSS customizable
- *
- *  v1.1 (June 3, 2013):
- *    - using ProtopackWindow as dropdown
- *
- *  http://mohsenkhahani.ir/protopack
  */
 
-
 /**
- * Default configuration
- */
-var ProtopackInputOptions = {
-    className : 'pinput-list',
-    readonly : true,
-    buttonStyle : 'smart',  // [disabled, visible, smart]
-    dropdownStyle : 'auto'  // [disabled, manually, auto]
-};
-
-/**
- * ProtopackInput class
+ * Protopack Input base class
  */
 var ProtopackInput = Class.create({
-    Version: '1.1',
+    /**
+     * Default configuration
+     */
+    options: {
+        className : 'pinput',
+        readonly : true,
+        buttonStyle : 'smart',  // [disabled, visible, smart]
+        dropdownStyle : 'auto'  // [disabled, manually, auto]
+    },
 
+    /**
+     * Input intializer
+     *
+     * @param   mixed   target  Target element or element ID
+     * @param   Object  options Input options {className, multiSelect}
+     *
+     * @return  Object  A class instance of Input 
+     */
     initialize: function (target, options) {
         this.options = Object.clone(ProtopackInputOptions);
         Object.extend(this.options, options || {});
@@ -130,20 +129,18 @@ var ProtopackInput = Class.create({
     },
 
     render: function () {
-        if (Element.getLayout()) {  // Prototype 7+
-            if (this.dropdown.window.getWidth() < this.entry.getWidth()) {
-                this.dropdown.window.setWidthTo(this.entry);
-            }
-            this.dropdown.window.style.top = this.entry.getHeight() + 'px';
+        if (this.dropdown.window.getWidth() < this.entry.getWidth()) {
+            this.dropdown.window.style.width = this.entry.getWidth() + 'px';
+        }
+        this.dropdown.window.style.top = this.entry.getHeight() + 1 + 'px';
 
-            if (this.buttonStyle !== 'disabled') {
-                var layout = new Element.Layout(this.entry);
-                this.button.setHeightTo(this.entry);
-                this.button.style.marginTop = layout.get('margin-top') + 'px';
-                this.button.style.marginBottom = layout.get('margin-bottom') + 'px';
-                this.button.style.paddingTop = layout.get('padding-top') + 'px';
-                this.button.style.paddingBottom = layout.get('padding-bottom') + 'px';
-            }
+        if (this.buttonStyle !== 'disabled') {
+            var layout = new Element.Layout(this.entry);
+            this.button.setHeightTo(this.entry);
+            this.button.style.marginTop = layout.get('margin-top') + 'px';
+            this.button.style.marginBottom = layout.get('margin-bottom') + 'px';
+            this.button.style.paddingTop = layout.get('padding-top') + 'px';
+            this.button.style.paddingBottom = layout.get('padding-bottom') + 'px';
         }
     },
 
