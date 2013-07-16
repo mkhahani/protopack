@@ -101,8 +101,9 @@ var ProtopackTree = Class.create({
         this.dataObj = dataObj;
         tree = this.getTreeNodes(this.dataObj.nodes);
         this.tree.update(tree);
-        // console.log(this.dataById);
-        // console.log(this.nodeById);
+        try {
+            tree.down('li').addClassName('first');
+        } catch(err) {};
     },
 
     getTreeNodes: function (nodes) {
@@ -111,7 +112,7 @@ var ProtopackTree = Class.create({
         nodes.each( function (node, i) {
             var options = {multiSelect:this.multiSelect, interactive:this.options.interactive},
                 nodeObj = new ProtopackTreeNode(node, options);
-            nodeObj.div.addClassName(this.className + '-node');
+            nodeObj.div.addClassName('node');
             if (this.multiSelect) {
                 nodeObj.div.down('label').observe('click', this._onLabelClick.bind(this));
                 if (nodeObj.data.checked) {
@@ -119,7 +120,10 @@ var ProtopackTree = Class.create({
                 }
             }
             if (node.nodes.length !== 0) {
-                nodeObj.li.down('span').addClassName('plus');
+                nodeObj.li.down('span').addClassName('close');
+            }
+            if (i === nodes.length - 1) {
+                nodeObj.li.addClassName('last');
             }
             ul.insert(nodeObj.li);
             this.nodeById[node.id] = nodeObj;
@@ -136,14 +140,14 @@ var ProtopackTree = Class.create({
             nodeObj = this.dataObj.getNode(nodeId);
             ul = this.getTreeNodes(nodeObj.nodes);
             node.div.up('li').insert(ul);
-            node.div.previous('span').className = 'minus';
+            node.div.previous('span').className = 'open';
         } else {
             if (ul.visible()) {
                 ul.hide();
-                node.div.previous('span').className = 'plus';
+                node.div.previous('span').className = 'close';
             } else {
                 ul.show();
-                node.div.previous('span').className = 'minus';
+                node.div.previous('span').className = 'open';
             }
         }
 
@@ -157,7 +161,7 @@ var ProtopackTree = Class.create({
         }
     },
 
-    render: function () {
+    render: function () {   // TODO: how about partial rendering
         if (!this.options.interactive) {
             return;
         }
@@ -165,9 +169,9 @@ var ProtopackTree = Class.create({
         nodes.each(function (node) {
             if (node.next()) {
                 if (node.next().visible()) {
-                    node.previous('span').className = 'minus';
+                    node.previous('span').className = 'open';
                 } else {
-                    node.previous('span').className = 'plus';
+                    node.previous('span').className = 'close';
                 }
             } else {
                 node.previous('span').className = 'l';
@@ -248,20 +252,21 @@ var ProtopackTree = Class.create({
     _onToggleNode: function (e) {
         this.expand(e.memo.id);
         return;
+
         var div = e.memo.element,
             ul = div.next('ul');
         if (ul === undefined) {
             var nodeObj = this.dataObj.getNode(e.memo.id);
             ul = this.getTreeNodes(nodeObj.nodes);
             div.up('li').insert(ul);
-            div.previous('span').className = 'minus';
+            div.previous('span').className = 'open';
         } else {
             if (ul.visible()) {
                 ul.hide();
-                div.previous('span').className = 'plus';
+                div.previous('span').className = 'close';
             } else {
                 ul.show();
-                div.previous('span').className = 'minus';
+                div.previous('span').className = 'open';
             }
         }
     },
@@ -404,7 +409,7 @@ var ProtopackTree = Class.create({
             this.caption.update(caption);
         } else {
             //rootNode = new ProtopackTreeNode(this.multiSelect, this.caption);
-            this.caption = new Element('div', {'class': this.className + '-caption'}).update(caption);
+            this.caption = new Element('div', {'class': 'caption'}).update(caption);
             this.tree.insert({before: this.caption});
         }
         return this.caption;
@@ -537,7 +542,7 @@ var ProtopackTreeNode = Class.create({
         nodeItem.observe('mouseout', this._onMouseOut.bind(this));
 
         if (options.interactive) {
-            var expander = new Element('span', {'class':'spacer'});
+            var expander = new Element('span');
             expander.observe('click', this._onToggleNode.bind(this)),
             container.insert(expander);
         }
