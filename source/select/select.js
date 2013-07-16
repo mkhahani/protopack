@@ -39,20 +39,24 @@ var ProtopackSelect = Class.create(ProtopackInput, {
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
         this.selectItemHandler = this._selectItem.bind(this);
-        this.xhtml = this._construct($(target));
-        this.render();
+        if (target) {
+            this.target = $(target);
+            this.xhtml = this._construct();
+        }
+        //console.log(this.xhtml);
+        //this.render();
     },
 
-    _construct: function ($super, target) {
-        var xhtml = $super(target);   // Calling constructor of the parent class
-        this.listBox = this._buildListBox(target);
+    _construct: function ($super) {
+        var xhtml = $super();   // Calling constructor of the parent class
+        this.listBox = this._buildListBox();
         this.dropdown.setContent(this.listBox);
+        this.render();
         return xhtml;
     },
 
-    _buildListBox: function (target) {
-        var listBox = (target.tagName.toUpperCase() === 'SELECT')?
-            target : new Element('select', {size:0});
+    _buildListBox: function () {
+        var listBox = new Element('select', {size:0});
         if (listBox.selectedIndex !== -1) {
             this.entry.value = listBox.options[listBox.selectedIndex].text;
         }
@@ -73,25 +77,13 @@ var ProtopackSelect = Class.create(ProtopackInput, {
             this.listBox.options.length : this.options.listSize;
     },
 
-    setId: function (id) {
-        this.entry.id = id;
-    },
-
-    setName: function (name) {
-        this.entry.name = name;
-    },
-
-    setValue: function (value) {
-        this.entry.value = value;
-    },
-
-    setList: function (list) {
-        if (Object.isArray(list)) {
-            list.each(function (row) {
+    setData: function (data) {
+        if (Object.isArray(data)) {
+            data.each(function (row) {
                 this.listBox.options[this.listBox.options.length] = new Option(row[1], row[0]);
             }.bind(this));
         } else {
-            this.listBox = $(list);
+            this.listBox = $(data);
             this.dropdown.setContent(this.listBox);
         }
         this.render();
