@@ -1,53 +1,52 @@
 /**
- * Protopack Tree, a DHTML Tree Component based on Prototype JS framework
- * © 2011-2012 Mohsen Khahani
+ * Protopack Tree is a DHTML tree component based on Prototype JS framework
  *
- * Licensed under the MIT license
- * Created on October 4, 2011
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2011-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.2
+ * @created     October 4, 2011
+ * @url         http://mohsenkhahani.ir/protopack
  *
- * http://mohsen.khahani.com/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
  */
 
 
 /**
- * Default configuration
- */
-var ProtopackTreeOptions = {
-    className: 'ptree',
-    multiSelect: false,
-    interactive: true,
-    expanded: false
-};
-
-/**
- * Tree base class
+ * Protopack Tree base class
  */
 var ProtopackTree = Class.create({
-    Version: '1.0',
+    /**
+     * Default configuration
+     */
+    options: {
+        className: 'ptree',
+        multiSelect: false,
+        interactive: true,
+        expanded: false     // TODO: not implemented yet
+    },
 
     /**
-     * Initiates the tree
+     * Tree initializer
      *
-     * @target  JS Object/String        Target element(ID) as tree container
-     * @options ProtopackTreeOptions    Tree options: {className, multiSelect}
-     * @events  JS Object               Tree events: {nodeclick, nodemouseover, nodemouseout}
+     * @param   mixed   target  Target element or element ID
+     * @param   object  options Input options {className, multiSelect}
+     * @param   object  events  Tree events {nodeclick, nodemouseover, nodemouseout}
      *
-     * @return  JS Object               A class instance of Tree 
+     * @return  Object  A class instance of Tree 
      */
     initialize: function (target, options, events) {
         this.events = events || {};
-        this.options = Object.clone(ProtopackTreeOptions);
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.multiSelect = this.options.multiSelect;
         this.className = this.options.className;
         this.selected = (this.multiSelect)? [] : null;
         this.dataById = {};
         this.nodeById = {};
-        this.tree = this._construct();
+        this.tree = this._construct(target);
         this._createEvents();
-        if (target) {
-            $(target).update(this.tree);
-        }
         // default checked inputs does not work on IE6
         //if (Prototype.Browser.IE6) {
             //this._refresh.bind(this).delay(0.1);
@@ -55,12 +54,17 @@ var ProtopackTree = Class.create({
     },
 
     /**
-     * Tree constructor
+     * Builds tree structure
      *
-     * @return  String      XHTML tree
+     * @param   string  target  ID of the target element
+     * @return  string  XHTML grid
      */
-    _construct: function () {
-        return new Element('div', {'class': this.className});
+    _construct: function (target) {
+        var tree = new Element('div', {'class': this.className});
+        if (target) {
+            $(target).update(tree);
+        }
+        return tree;
     },
 
     /**
@@ -91,7 +95,7 @@ var ProtopackTree = Class.create({
         data.each( function (row, i) {
             dataById[row[0]] = row;
         });
-        this.dataById = dataById
+        this.dataById = dataById;
 
         parseData(0, dataObj);
         this.dataObj = dataObj;
@@ -195,7 +199,7 @@ var ProtopackTree = Class.create({
     _refresh: function () {
         this.data.each( function (row, index) {
             var inputs = this.tree.select('input[type=checkbox][value=' + row[0] + ']');
-                checked = row[3]? row[3]['checked'] : false;
+                checked = row[3]? row[3].checked : false;
             inputs[0].checked = checked;
         }.bind(this));
     },
@@ -248,7 +252,7 @@ var ProtopackTree = Class.create({
             ul = div.next('ul');
         if (ul === undefined) {
             var nodeObj = this.dataObj.getNode(e.memo.id);
-            var ul = this.getTreeNodes(nodeObj.nodes);
+            ul = this.getTreeNodes(nodeObj.nodes);
             div.up('li').insert(ul);
             div.previous('span').className = 'minus';
         } else {
@@ -269,12 +273,12 @@ var ProtopackTree = Class.create({
         if (this.multiSelect) {
             this.selected.each(function (id) {
                 this.dataById[id].data.checked = false;
-                this.dataById[id].div.down('input').checked = false;
+                this.nodeById[id].div.down('input').checked = false;
             }.bind(this));
             this.selected.clear();
         } else {
             if (this.selected !== null && this.dataById[this.selected]) {
-                this.dataById[this.selected].div.removeClassName('selected');
+                this.nodeById[this.selected].div.removeClassName('selected');
             }
             this.selected = null;
         }
@@ -284,7 +288,7 @@ var ProtopackTree = Class.create({
      * Occurs on node click and updates the 'selected' attribute of the tree
      */
     _selectNode: function (id) {
-        if (typeof this.dataById[id] == 'undefined') return;
+        if (this.dataById[id] === undefined) return;
         if (this.multiSelect) {
             var checked = this.dataById[id].data.checked,
                 i = this.selected.indexOf(id);
@@ -294,10 +298,10 @@ var ProtopackTree = Class.create({
                 this.selected.push(id);
             }
             this.dataById[id].data.checked = !checked;
-            this.dataById[id].div.down('input').checked = !checked;
+            this.nodeById[id].div.down('input').checked = !checked;
         } else {
             this.clearSelection();
-            this.dataById[id].div.addClassName('selected');
+            this.nodeById[id].div.addClassName('selected');
             this.selected = id;
         }
     },
@@ -306,11 +310,11 @@ var ProtopackTree = Class.create({
      * Updates the 'selected' attribute of the tree and selects appropriate node(s)
      */
     setSelected: function (sel) {
+        function doSelect(id) {
+            this.dataById[id].data.checked = true;
+            this.dataById[id].node.down('input').checked = true;
+        }
         if (this.multiSelect) {
-            function doSelect(id) {
-                this.dataById[id].data.checked = true;
-                this.dataById[id].node.down('input').checked = true;
-            };
             this.clearSelection();
             if (Object.isArray(sel)) {
                 sel = sel.uniq();
@@ -382,10 +386,10 @@ var ProtopackTree = Class.create({
     },
 
     numberOfChildren: function (id) {
-        var count = 0
+        var count = 0;
         this.data.each( function (node) {
             if (node[1] == id) {
-                count++
+                count++;
             }
         });
         return count;
@@ -443,7 +447,7 @@ var TreeDataObj = Class.create({
             }
         });
 
-        if (res == false) {
+        if (res === false) {
             this.nodes.each(function(node) {
                 res = node.getNode(id);
                 if (res) {
@@ -502,10 +506,11 @@ var ProtopackTreeNode = Class.create({
 
     _construct: function (options) {
         var container = new Element('li'),
-            nodeItem  = new Element('div');
+            nodeItem  = new Element('div'),
+            textEl;
         if (options.multiSelect) {
-            var checkbox = new Element('input', {type: 'checkbox', value: this.id}),
-                textEl = new Element('label').update(this.label);
+            var checkbox = new Element('input', {type: 'checkbox', value: this.id});
+            textEl = new Element('label').update(this.label);
             if (typeof this.data.checked != 'undefined') {
                 checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
             } else {
@@ -513,7 +518,7 @@ var ProtopackTreeNode = Class.create({
             }
             nodeItem.insert(checkbox);
         } else {
-            var textEl = new Element('a').update(this.label);
+            textEl = new Element('a').update(this.label);
             if (typeof this.data.href != 'undefined') {
                 textEl.writeAttribute({href: this.data.href});
                 if (typeof this.data.target != 'undefined') {
