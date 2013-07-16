@@ -64,7 +64,6 @@ var ProtopackInput = Class.create({
 
         if (this.target) {
             this.target.insert(xhtml);
-            //this.render();
         }
 
         return xhtml;
@@ -146,6 +145,18 @@ var ProtopackInput = Class.create({
             this.button.style.paddingTop = layout.get('padding-top') + 'px';
             this.button.style.paddingBottom = layout.get('padding-bottom') + 'px';
         }
+    },
+
+    setId: function (id) {
+        this.entry.id = id;
+    },
+
+    setName: function (name) {
+        this.entry.name = name;
+    },
+
+    setText: function (text) {
+        this.entry.value = text;
     },
 
     openUp: function () {
