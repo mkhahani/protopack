@@ -44,7 +44,7 @@ var ProtopackTree = Class.create({
         this.selected = (this.multiSelect)? [] : null;
         this.dataById = {};
         this.nodeById = {};
-        this.tree = this._construct(target);
+        this.xhtml = this._construct(target);
         this._createEvents();
         // default checked inputs does not work on IE6
         //if (Prototype.Browser.IE6) {
@@ -99,7 +99,7 @@ var ProtopackTree = Class.create({
         parseData(0, dataObj);
         this.dataObj = dataObj;
         tree = this.getTreeNodes(this.dataObj.nodes);
-        this.tree.update(tree);
+        this.xhtml.update(tree);
         try {
             tree.down('li').addClassName('first');
         } catch(err) {};
@@ -164,7 +164,7 @@ var ProtopackTree = Class.create({
         if (!this.options.interactive) {
             return;
         }
-        var nodes = this.tree.select('div');
+        var nodes = this.xhtml.select('div');
         nodes.each(function (node) {
             if (node.next()) {
                 if (node.next().visible()) {
@@ -179,10 +179,10 @@ var ProtopackTree = Class.create({
     },
 
     _createEvents: function () {
-        this.tree.observe('node:click', this._onNodeClick.bind(this));
-        this.tree.observe('node:mouseover', this._onNodeMouseOver.bind(this));
-        this.tree.observe('node:mouseout', this._onNodeMouseOut.bind(this));
-        this.tree.observe('node:toggle', this._onToggleNode.bind(this));
+        this.xhtml.observe('node:click', this._onNodeClick.bind(this));
+        this.xhtml.observe('node:mouseover', this._onNodeMouseOver.bind(this));
+        this.xhtml.observe('node:mouseout', this._onNodeMouseOut.bind(this));
+        this.xhtml.observe('node:toggle', this._onToggleNode.bind(this));
     },
 
     _sort: function (node1, node2) {
@@ -201,7 +201,7 @@ var ProtopackTree = Class.create({
 
     _refresh: function () {
         this.data.each( function (row, index) {
-            var inputs = this.tree.select('input[type=checkbox][value=' + row[0] + ']');
+            var inputs = this.xhtml.select('input[type=checkbox][value=' + row[0] + ']');
                 checked = row[3]? row[3].checked : false;
             inputs[0].checked = checked;
         }.bind(this));
@@ -400,7 +400,7 @@ var ProtopackTree = Class.create({
     },
 
     setId: function (id) {
-        this.tree.id = id;
+        this.xhtml.id = id;
     },
 
     setCaption: function (caption) {
@@ -409,13 +409,13 @@ var ProtopackTree = Class.create({
         } else {
             //rootNode = new ProtopackTreeNode(this.multiSelect, this.caption);
             this.caption = new Element('div', {'class': 'caption'}).update(caption);
-            this.tree.insert({before: this.caption});
+            this.xhtml.insert({before: this.caption});
         }
         return this.caption;
     },
 
     setClassName: function (className) {
-        this.tree.className = className;
+        this.xhtml.className = className;
     }
 
 });
