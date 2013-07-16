@@ -41,7 +41,6 @@ var ProtopackTree = Class.create({
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.multiSelect = this.options.multiSelect;
-        this.className = this.options.className;
         this.selected = (this.multiSelect)? [] : null;
         this.dataById = {};
         this.nodeById = {};
@@ -60,7 +59,7 @@ var ProtopackTree = Class.create({
      * @return  string  XHTML grid
      */
     _construct: function (target) {
-        var tree = new Element('div', {'class': this.className});
+        var tree = new Element('div', {'class': this.options.className});
         if (target) {
             $(target).update(tree);
         }
@@ -413,6 +412,10 @@ var ProtopackTree = Class.create({
             this.tree.insert({before: this.caption});
         }
         return this.caption;
+    },
+
+    setClassName: function (className) {
+        this.tree.className = className;
     }
 
 });
