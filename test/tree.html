@@ -7,6 +7,9 @@
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
   <script type="text/javascript" src="../source/tree/tree.js"></script>
+  <script type="text/javascript" src="../source/tree/tree.data.js"></script>
+  <script type="text/javascript" src="../source/tree/tree.node.js"></script>
+  <script type="text/javascript" src="../source/tree/tree.event.js"></script>
   <style type="text/css">
     body, button {font:12px arial;}
     body {background-color:silver;}
@@ -73,17 +76,22 @@
     tree.loadData(data);
     //tree.setCaption('Root');
     tree.setClassName('ptree-tango');
+    //tree.observe('tree:click', treeClick);
+    //tree.observe('tree:mouseover', treeMouseOver);
+    //tree.observe('tree:mouseout', treeMouseOut);
   }
 
-  function treeClick(node, e) {
-    //alert(tree.numberOfChildren(node.id));
-    //alert(tree.hasChild(node.id));
-    //tree.setSelected(node.id);
-    //alert(tree2.selected);
+  function treeClick(node) {
+    console.log('tree.click: ');
+    console.log(node);
   }
-  function treeMouseOver(node, value, e) {
+  function treeMouseOver(node) {
+    console.log('tree.mouseover: ');
+    console.log(node);
   }
-  function treeMouseOut(node, value, e) {
+  function treeMouseOut(node) {
+    console.log('tree.mouseout: ');
+    console.log(node);
   }
   
   function test() {
