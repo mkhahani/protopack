@@ -104,7 +104,7 @@ var ProtopackInput = Class.create({
                 closeButton: false,
                 autoClose: true
             },
-            dropdown = new ProtopackWindow(options, xhtml);
+            dropdown = new Protopack.Window(options, xhtml);
         dropdown.excludedElements.push(this.entry);
         return dropdown;
     },
