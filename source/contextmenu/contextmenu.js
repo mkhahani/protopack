@@ -15,22 +15,22 @@
 
 
 /**
- * Default configuration
- */
-var ProtopackContextMenuOptions = {
-    className       : 'pwindow'
-};
-
-/**
  * Protopack ContextMenu base class
  */
 Protopack.ContextMenu = Class.create(Protopack.Window, {
 
     /**
+     * Default configuration
+     */
+    options: {
+        className: 'pwindow'
+    },
+
+    /**
      * The menu intializer
      */
     initialize: function(options, target) {
-        this.options = ProtopackContextMenuOptions;
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
         this.options.modal = false;
