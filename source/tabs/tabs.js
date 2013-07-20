@@ -20,9 +20,9 @@ var ProtopackTabsOptions = {
 };
 
 /**
- * ProtopackInput base class
+ * Protopack Tabs base class
  */
-var ProtopackTabs = Class.create({
+Protopack.Tabs = Class.create({
     Version: '1.2',
 
     /**
@@ -32,7 +32,7 @@ var ProtopackTabs = Class.create({
      */
     initialize: function (target, options) {
         if (!$(target)) {
-            throw new Error('ProtopackTabs.initialize(): Could not find the target element "' + target + '".');
+            throw new Error('Protopack.Tabs.initialize(): Could not find the target element "' + target + '".');
         }
         this._target = $(target);
         this.options = Object.clone(ProtopackTabsOptions);

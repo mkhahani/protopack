@@ -17,6 +17,7 @@
  * Protopack Tree base class
  */
 Protopack.Tree = Class.create({
+
     /**
      * Default configuration
      */

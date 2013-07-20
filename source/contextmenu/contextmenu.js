@@ -17,9 +17,9 @@ var ProtopackContextMenuOptions = {
 };
 
 /**
- * ProtopackContextMenu class
+ * Protopack ContextMenu base class
  */
-var ProtopackContextMenu = Class.create(Protopack.Window, {
+Protopack.ContextMenu = Class.create(Protopack.Window, {
     Version: '1.0',
 
     /**

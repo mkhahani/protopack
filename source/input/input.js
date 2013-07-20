@@ -18,6 +18,7 @@
  * Protopack Input base class
  */
 Protopack.Input = Class.create({
+
     /**
      * Default configuration
      */

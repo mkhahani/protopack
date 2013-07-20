@@ -18,9 +18,9 @@ var ProtopackProgressOptions = {
 }
 
 /**
- * ProtopackProgress base class
+ * Protopack Progress base class
  */
-var ProtopackProgress = Class.create({
+Protopack.Progress = Class.create({
     version : '1.0',
 
     /**
