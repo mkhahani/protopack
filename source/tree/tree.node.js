@@ -24,7 +24,7 @@ Protopack.Tree.Node = Class.create({
      * @access  private
      * @param   array   node [id, pid, text, data]
      * @param   object  options
-     * @return  Object  A class instance of TreeNode
+     * @return  Object  A class instance of Tree Node
      */
     initialize: function (node, options) {
         this.id   = node.id;
@@ -33,8 +33,14 @@ Protopack.Tree.Node = Class.create({
         this.data = node.data || {};
         // this.style       = node[4] || {};
         // this.seq         = this.attrib.seq || 0;
-        this.li    = this._construct(options);
-        this.eventParams = {id:this.id, pid:this.pid, text:this.text, element:this.div};
+        this.li = this._construct(options);
+        this.element = this.div;
+        this.eventParams = {
+            id: this.id,
+            pid: this.pid,
+            text: this.text,
+            element: this.div
+        };
     },
 
     _construct: function (options) {
@@ -81,18 +87,18 @@ Protopack.Tree.Node = Class.create({
     },
 
     _onClick: function (e) {
-        e.element().fire('node:click', this.eventParams);
+        e.element().fire('node:click', this);
     },
 
     _onMouseOver: function (e) {
-        e.element().fire('node:mouseover', this.eventParams);
+        e.element().fire('node:mouseover', this);
     },
 
     _onMouseOut: function (e) {
-        e.element().fire('node:mouseout', this.eventParams);
+        e.element().fire('node:mouseout', this);
     },
 
     _onToggleNode: function (e) {
-        e.element().fire('node:toggle', this.eventParams);
+        e.element().fire('node:toggle', this);
     }
 });

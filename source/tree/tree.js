@@ -46,7 +46,7 @@ Protopack.Tree = Class.create({
         this.dataById = {};
         this.nodeById = {};
         this.xhtml = this._construct(target);
-        this._createEvents();
+        Protopack.extendEvents(this);
         // default checked inputs does not work on IE6
         //if (Prototype.Browser.IE6) {
             //this._refresh.bind(this).delay(0.1);
@@ -64,6 +64,13 @@ Protopack.Tree = Class.create({
         if (target) {
             $(target).update(tree);
         }
+
+        // Events
+        tree.observe('node:click', this.click.bind(this));
+        tree.observe('node:mouseover', this.mouseOver.bind(this));
+        tree.observe('node:mouseout', this.mouseOut.bind(this));
+        tree.observe('node:toggle', this._onToggleNode.bind(this));
+
         return tree;
     },
 
@@ -179,13 +186,6 @@ Protopack.Tree = Class.create({
         });
     },
 
-    _createEvents: function () {
-        this.xhtml.observe('node:click', this._onNodeClick.bind(this));
-        this.xhtml.observe('node:mouseover', this._onNodeMouseOver.bind(this));
-        this.xhtml.observe('node:mouseout', this._onNodeMouseOut.bind(this));
-        this.xhtml.observe('node:toggle', this._onToggleNode.bind(this));
-    },
-
     _sort: function (node1, node2) {
         var n1 = node1[2].toLowerCase(),
             n2 = node2[2].toLowerCase(),
@@ -214,36 +214,6 @@ Protopack.Tree = Class.create({
     _onLabelClick: function (e) {
         var input = e.element().previous();
         input.checked = !input.checked;
-    },
-
-    /**
-     * Occurs on clicking a node and trigers user defined function if exists
-     */
-    _onNodeClick: function (e) {
-        this._selectNode(e.memo.id);
-        if (this.events.nodeclick) {
-            this.events.nodeclick(e.memo, e);
-        }
-    },
-
-    /**
-     * Occurs on moving mouse over a node and trigers user defined function if exists
-     */
-    _onNodeMouseOver: function (e) {
-        e.memo.element.addClassName('hover');
-        if (this.events.nodemouseover) {
-            this.events.nodemouseover(e.memo, e);
-        }
-    },
-
-    /**
-     * Occurs on moving mouse out of a node and trigers user defined function if exists
-     */
-    _onNodeMouseOut: function (e) {
-        e.memo.element.removeClassName('hover');
-        if (this.events.nodemouseout) {
-            this.events.nodemouseout(e.memo, e);
-        }
     },
 
     /**
