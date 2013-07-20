@@ -1,4 +1,19 @@
 /**
+ * Protopack Progressbar is a DHTML progressbar component based on Prototype JS framework
+ *
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.0
+ * @created     Aug 24, 2012
+ * @url         http://mohsenkhahani.ir/protopack
+ *
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ */
+
+
+/**
  * Protopack Progress, a DHTML progressbar component for Prototype
  */
 
