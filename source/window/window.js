@@ -1,33 +1,16 @@
 /**
  *  Protopack Window is a DHTML Window Component based on Prototype JS framework
- *  Copyright 2012-2013 Mohsen Khahani
- *  Licensed under the MIT license
- *  Created on May 6, 2012
  *
- *  Dependencies:
- *    - Prototype JS Framework v1.7+
- *    - draggable.js (optional)
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.3
+ * @created     May 6, 2012
+ * @url         http://mohsenkhahani.ir/protopack
  *
- *  Features:
- *    - rich JavaScript popup window
- *    - draggable
- *    - modal support
- *    - full CSS customizable
- *    - mouse and keyboard events
- *    - many useful options
- *
- *  v1.1 (May 25, 2013):
- *    - added `autoClose` option
- *    - fixed `overlay` positioning
- *    - many enhancements
- *    - code comments
- *
- *  v1.2 (June 3, 2013):
- *    - changed `show()` to `open()`
- *    - added `toggle()` function
- *    - added `excludedElements` property
- *
- *  http://mohsenkhahani.ir/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ *    - Protopack Draggable (optional)
  */
 
 
