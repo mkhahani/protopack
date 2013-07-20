@@ -14,34 +14,30 @@
 
 
 /**
- * Protopack Progress, a DHTML progressbar component for Prototype
- */
-
-/**
- * Default configuration
- */
-var ProtopackProgressOptions = {
-    className    : 'protopack-progress',
-    start        : 0,
-    end          : 10,
-    position     : 0,
-    step         : 1,
-    valueType    : 'ratio',     // [none, number, ratio, percent]
-    valuePos     : 'right',     // [center, left, right, float]
-    valuePostfix : '',          // Bytes, Seconds, ...
-    direction    : 'horizontal' // Not emplemented yet
-}
-
-/**
  * Protopack Progress base class
  */
 Protopack.Progressbar = Class.create({
 
     /**
+     * Default configuration
+     */
+    options: {
+        className    : 'protopack-progress',
+        start        : 0,
+        end          : 10,
+        position     : 0,
+        step         : 1,
+        valueType    : 'ratio',     // [none, number, ratio, percent]
+        valuePos     : 'right',     // [center, left, right, float]
+        valuePostfix : '',          // Bytes, Seconds, ...
+        direction    : 'horizontal' // Not emplemented yet
+    },
+
+    /**
      * The grid intializer
      */
     initialize: function(target, options) {
-        this.options   = ProtopackProgressOptions;
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
         this.start     = this.options.start;
