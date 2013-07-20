@@ -16,7 +16,7 @@
 /**
  * Protopack Draggable base class
  */
-var Protopack.Draggable = Class.create({
+Protopack.Draggable = Class.create({
 
     /**
      * Default configuration
