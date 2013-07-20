@@ -62,16 +62,16 @@ Protopack.Window = Class.create({
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
-        this.focusHandler = this._onLostFocus.bind(this);
-        this.escapeHandler = this._onEscape.bind(this);
-        this.excludedElements = [];     // don't fire _onLostFocus() for these elements
+        this.focusHandler = this.onLostFocus.bind(this);
+        this.escapeHandler = this.onEscape.bind(this);
+        this.excludedElements = [];     // don't fire onLostFocus() for these elements
         target = (target === undefined)? document.body : $(target);
 
         if (this.window) {
             this.destroy();
         }
-        this.window = this._construct(target);
-        this._setPosition();
+        this.window = this.construct(target);
+        this.setPosition();
     },
 
     /**
@@ -81,23 +81,23 @@ Protopack.Window = Class.create({
      * @param   string  target  ID of the target element
      * @return  string  XHTML window
      */
-    _construct: function (target) {
-        var window = this._createWindow();
+    construct: function (target) {
+        var window = this.buildWindow();
 
         if (this.options.modal) {
-            this._overlay = this._createOverlay(target);
+            this.overlay = this.buildOverlay(target);
         }
 
         if (this.options.showHeader) {
-            this._header = this._createHeader();
-            window.insert(this._header);
+            this.header = this.buildHeader();
+            window.insert(this.header);
         }
 
-        this._body = this._createBody();
-        window.insert(this._body);
+        this.body = this.buildBody();
+        window.insert(this.body);
 
         if (this.options.closeButton) {
-            window.insert(this._createClose());
+            window.insert(this.buildClose());
         }
 
         target.insert(window);
@@ -105,7 +105,7 @@ Protopack.Window = Class.create({
         if (this.options.draggable) {
             if (typeof ProtopackDraggable !== 'undefined') {
                 new ProtopackDraggable(window,
-                                       this._header? this._header : window, 
+                                       this.header? this.header : window, 
                                        {transparent: this.options.transparentDrag});
             } else if (typeof Draggable !== 'undefined') {
                 var options = {};
@@ -125,7 +125,7 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  object  Window element
      */
-    _createWindow: function () {
+    buildWindow: function () {
         return new Element('div', {'class': this.className}).hide();
     },
 
@@ -135,7 +135,7 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  object  Overlay element
      */
-    _createOverlay: function (target) {
+    buildOverlay: function (target) {
         var overlay = new Element('div', {'class': this.className + '-overlay'});
         overlay.style.position = (target === document.body)? 'fixed' : 'absolute';
         overlay.observe('mousedown', function (e) {
@@ -155,10 +155,10 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  object  Window header element
      */
-    _createHeader: function () {
+    buildHeader: function () {
         var header = new Element('div', {'class': this.className + '-header'}),
             title = new Element('div', {'class': this.className + '-title'});
-        this._title = title;
+        this.title = title;
 
         return header.insert(title);
     },
@@ -169,10 +169,10 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  object  Window body element
      */
-    _createBody: function () {
+    buildBody: function () {
         var body = new Element('div', {'class': this.className + '-body'}),
             content = new Element('div', {'class': this.className + '-content'});
-        this._content = content;
+        this.content = content;
 
         return body.insert(content);
     },
@@ -183,7 +183,7 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  object  Close button element
      */
-    _createClose: function () {
+    buildClose: function () {
         var btnClose = new Element('span', {'class': this.className + '-close'});
         btnClose.observe('click', this.close.bind(this));
         return btnClose;
@@ -195,7 +195,7 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  void
      */
-    _startDocEvents: function () {
+    startDocEvents: function () {
         if (this.options.autoClose) {
             document.observe('mousedown', this.focusHandler);
         }
@@ -210,7 +210,7 @@ Protopack.Window = Class.create({
      * @access  private
      * @return  void
      */
-    _stopDocEvents: function () {
+    stopDocEvents: function () {
         document.stopObserving('mousedown', this.focusHandler);
         document.stopObserving('keydown', this.escapeHandler);
     },
@@ -222,7 +222,7 @@ Protopack.Window = Class.create({
      * @param   object  e   Keybord event
      * @return  void
      */
-    _onEscape: function (e) {
+    onEscape: function (e) {
         if (this.window.visible() && e.keyCode === Event.KEY_ESC) {
             this.close();
         }
@@ -235,7 +235,7 @@ Protopack.Window = Class.create({
      * @param   object  e   Mouse event
      * @return  void
      */
-    _onLostFocus: function (e) {
+    onLostFocus: function (e) {
         var el = e.findElement();
         if (this.window.visible() && this.window !== el &&
             this.window.descendants().indexOf(el) === -1 &&    // => click outside of Window
@@ -253,7 +253,7 @@ Protopack.Window = Class.create({
      * @param   int     y   Window top position(px) - optional
      * @return  void
      */
-    _setPosition: function (x, y) {
+    setPosition: function (x, y) {
         if (x !== undefined && y !== undefined) {
             try {
                 this.window.style.left = x + 'px';
@@ -298,8 +298,8 @@ Protopack.Window = Class.create({
      * @return  void
      */
     setTitle: function (title) {
-        if (this._title) {
-            this._title.update(title);
+        if (this.title) {
+            this.title.update(title);
         }
     },
 
@@ -311,7 +311,7 @@ Protopack.Window = Class.create({
      * @return  void
      */
     setContent: function (content) {
-        this._content.update(content);
+        this.content.update(content);
     },
 
     /**
@@ -337,13 +337,13 @@ Protopack.Window = Class.create({
      */
     open: function (x, y) {
         if (x !== undefined && y !== undefined) {
-            this._setPosition(x, y);
+            this.setPosition(x, y);
         }
         this.window.show();
         if (this.options.modal) {
-            this._overlay.show();
+            this.overlay.show();
         }
-        this._startDocEvents();
+        this.startDocEvents();
     },
 
     /**
@@ -353,10 +353,10 @@ Protopack.Window = Class.create({
      * @return  void
      */
     close: function () {
-        this._stopDocEvents();
+        this.stopDocEvents();
         this.window.hide();
-        if (this._overlay) {
-            this._overlay.hide();
+        if (this.overlay) {
+            this.overlay.hide();
         }
         if (this.onClose) {
             this.onClose();
@@ -385,9 +385,9 @@ Protopack.Window = Class.create({
      */
     destroy: function () {
         this.window.remove();
-        if (this._overlay) {
-            this._overlay.remove();
-            this._overlay = null;
+        if (this.overlay) {
+            this.overlay.remove();
+            this.overlay = null;
         }
     }
 });
