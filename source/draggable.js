@@ -1,11 +1,15 @@
 /**
- *  Protopack Draggable, a drag & drop library based on Prototype JS framework
- *  © 2012 Mohsen Khahani
+ *  Protopack Draggable is a drag & drop library based on Prototype JS framework
  *
- *  Licensed under the MIT license
- *  Created on May 6, 2012
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.0
+ * @created     May 6, 2012
+ * @url         http://mohsenkhahani.ir/protopack
  *
- *  http://mohsen.khahani.com/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
  */
 
 
@@ -60,7 +64,6 @@ var Protopack.Draggable = Class.create({
     stopDrag: function(e) {
         Event.stopObserving(document, 'mousemove', this.goDragFunc);
         Event.stopObserving(this.clickObj, 'mouseup', this.stopDragFunc);
-        //Event.stop(e);
         this.dragObj.relativize();
         if (this.options.transparent) {
             this.dragObj.setOpacity(1);
@@ -74,6 +77,5 @@ var Protopack.Draggable = Class.create({
         this.dragObj.style.top  = y - this.cursorOffset[1] + 'px';
         Event.stop(e);
     }
-
 });
 
