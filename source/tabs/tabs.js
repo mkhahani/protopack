@@ -1,11 +1,15 @@
 /**
  * Protopack Tabs is a DHTML Tabs Component based on Prototype JS framework
- * © 2012 Mohsen Khahani
  *
- * Licensed under the MIT license
- * Created on August 4, 2012
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.2
+ * @created     August 4, 2012
+ * @url         http://mohsenkhahani.ir/protopack
  *
- * http://mohsen.khahani.com/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
  */
 
 
