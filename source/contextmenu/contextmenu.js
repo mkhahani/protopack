@@ -1,11 +1,16 @@
 /**
  * Protopack Context Menu is a DHTML Context Menu Component based on Prototype JS framework
- * © 2013 Mohsen Khahani
  *
- * Licensed under the MIT license
- * Created on May 14, 2013
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.0
+ * @created     May 14, 2013
+ * @url         http://mohsenkhahani.ir/protopack
  *
- * http://mohsenkhahani.ir/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ *    - Protopack Window
  */
 
 
