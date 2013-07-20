@@ -27,7 +27,6 @@ var ProtopackTabsOptions = {
  * Protopack Tabs base class
  */
 Protopack.Tabs = Class.create({
-    Version: '1.2',
 
     /**
      * The tabs intializer
