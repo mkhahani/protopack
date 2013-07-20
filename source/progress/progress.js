@@ -36,7 +36,6 @@ var ProtopackProgressOptions = {
  * Protopack Progress base class
  */
 Protopack.Progressbar = Class.create({
-    version : '1.0',
 
     /**
      * The grid intializer
