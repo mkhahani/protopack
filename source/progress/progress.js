@@ -14,7 +14,7 @@
 
 
 /**
- * Protopack Progress base class
+ * Protopack Progressbar base class
  */
 Protopack.Progressbar = Class.create({
 
@@ -22,7 +22,7 @@ Protopack.Progressbar = Class.create({
      * Default configuration
      */
     options: {
-        className    : 'protopack-progress',
+        className    : 'pprogressbar',
         start        : 0,
         end          : 10,
         position     : 0,
@@ -34,7 +34,7 @@ Protopack.Progressbar = Class.create({
     },
 
     /**
-     * The grid intializer
+     * Progressbar intializer
      */
     initialize: function(target, options) {
         this.options = Object.clone(this.options);
@@ -48,7 +48,7 @@ Protopack.Progressbar = Class.create({
     },
 
     /**
-     * Creates the grid structure and fills it with givven data
+     * Creates the progressbar structure
      */
     _constructor: function(target) {
         var progress  = new Element('div', {'class':'bar'}).update('&nbsp;'),
@@ -172,5 +172,4 @@ Protopack.Progressbar = Class.create({
         }
         this._update();
     }
-
 });
