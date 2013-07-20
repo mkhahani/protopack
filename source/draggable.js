@@ -10,16 +10,16 @@
 
 
 /**
- * Default configuration
- */
-var ProtopackDraggableOptions = {
-    transparent: true
-};
-
-/**
  * Protopack Draggable base class
  */
 var Protopack.Draggable = Class.create({
+
+    /**
+     * Default configuration
+     */
+    options: {
+        transparent: true
+    },
 
     /**
      * The intializer
@@ -31,7 +31,7 @@ var Protopack.Draggable = Class.create({
         if (clickableEl === undefined) {
             clickableEl = draggableEl;
         }
-        this.options = ProtopackDraggableOptions;
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
 
         this.dragObj = draggableEl;
