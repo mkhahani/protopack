@@ -17,7 +17,6 @@
  * Protopack Grid base class
  */
 Protopack.Grid = Class.create({
-    version: '1.3',
 
     /**
      * Default configuration
