@@ -14,22 +14,22 @@
 
 
 /**
- * Default configuration
- */
-var ProtopackTabsOptions = {
-    className  : 'ptabs',
-    findTabs   : true,
-    hover      : false,
-    defaultTab : 1
-};
-
-/**
  * Protopack Tabs base class
  */
 Protopack.Tabs = Class.create({
 
     /**
-     * The tabs intializer
+     * Default configuration
+     */
+    options: {
+        className  : 'ptabs',
+        findTabs   : true,
+        hover      : false,
+        defaultTab : 1
+    },
+
+    /**
+     * Tabs intializer
      * @param   string  target  ID of the target element
      * @param   object  options
      */
@@ -38,7 +38,7 @@ Protopack.Tabs = Class.create({
             throw new Error('Protopack.Tabs.initialize(): Could not find the target element "' + target + '".');
         }
         this._target = $(target);
-        this.options = Object.clone(ProtopackTabsOptions);
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         if (this.options.findTabs) {this._construct();}
     },
