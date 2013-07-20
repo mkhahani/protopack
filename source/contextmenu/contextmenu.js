@@ -25,7 +25,6 @@ var ProtopackContextMenuOptions = {
  * Protopack ContextMenu base class
  */
 Protopack.ContextMenu = Class.create(Protopack.Window, {
-    Version: '1.0',
 
     /**
      * The menu intializer
