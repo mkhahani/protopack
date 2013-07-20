@@ -32,33 +32,34 @@
 
 
 /**
- * Default configuration
- */
-var ProtopackWindowOptions = {
-    className       : 'pwindow',
-    modal           : true,
-    draggable       : true,
-    transparentDrag : true,
-    escape          : true,
-    autoClose       : false,
-    showHeader      : true,
-    closeButton     : true
-};
-
-/**
- * ProtopackWindow class
+ * Protopack Window base class
  */
 Protopack.Window = Class.create({
+
+    /**
+     * Default configuration
+     */
+    options: {
+        className       : 'pwindow',
+        modal           : true,
+        draggable       : true,
+        transparentDrag : true,
+        escape          : true,
+        autoClose       : false,
+        showHeader      : true,
+        closeButton     : true
+    },
+
     /**
      * Window intializer
      *
      * @access  private
-     * @param   object  options Combination of ProtopackWindowOptions
+     * @param   object  options Window options
      * @param   string  target  ID of the target element
      * @return  void
      */
     initialize: function (options, target) {
-        this.options = ProtopackWindowOptions;
+        this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.className = this.options.className;
         this.focusHandler = this._onLostFocus.bind(this);
