@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2011-2013 Mohsen Khahani
  * @license     MIT
- * @version     1.2
+ * @version     1.3
  * @created     October 4, 2011
  * @url         http://mohsenkhahani.ir/protopack
  *
@@ -88,7 +88,7 @@ Protopack.Tree = Class.create({
                 }
             });
         }
-        var dataObj = new TreeDataObj(0, -1, 'root', null),
+        var dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
             dataById = {},
             tree;
 
@@ -424,68 +424,6 @@ Protopack.Tree = Class.create({
 //=================================================================================================
 
 /**
- * TreeDataObj base class
- */
-var TreeDataObj = Class.create({
-
-    initialize: function (id, pid, name, data) {
-        this.id = id;
-        this.pid = pid;
-        this.name = name;
-        this.data = data || null;
-        this.nodes = [];
-    },
-
-    addNode: function(id, pid, name, data) {
-        var parent = this.getNode(pid),
-            node = new TreeDataObj(id, pid, name, data);
-        parent.nodes.push(node);
-        return node;
-    },
-
-    getNode: function(id) {
-        if (this.id == id) {
-            return this;
-        }
-
-        var res = false;
-        this.nodes.each(function(node) {
-            if (node.id == id) {
-                res = node;
-                throw $break;
-            }
-        });
-
-        if (res === false) {
-            this.nodes.each(function(node) {
-                res = node.getNode(id);
-                if (res) {
-                    throw $break;
-                }
-            });
-        }
-
-        return res;
-    },
-
-    getNodes: function(recursive) {
-        var nodes = this.nodes.clone();
-        if (recursive) {
-            this.nodes.each(function(node) {
-                var res = node.getNodes(true);
-                nodes = nodes.concat(res);
-                // res.each(function(r) {
-                    // nodes.push(r);
-                // });
-            });
-        }
-        return nodes;
-    }
-});
-
-//=================================================================================================
-
-/**
  * Protopack TreeNode base class
  */
 Protopack.TreeNode = Class.create({
@@ -505,7 +443,7 @@ Protopack.TreeNode = Class.create({
     initialize: function (node, options) {
         this.id    = node.id;
         this.pid   = node.pid;
-        this.label = node.name;
+        this.label = node.text;
         this.data  = node.data || {};
         // this.style       = node[4] || {};
         // this.seq         = this.attrib.seq || 0;
