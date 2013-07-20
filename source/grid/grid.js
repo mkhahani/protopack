@@ -1,16 +1,15 @@
 /**
  * Protopack Grid is a DHTML Grid Component based on Prototype JS framework
- * Copyright 2011-2013 Mohsen Khahani
- * Licensed under the MIT license
- * Created on July 10, 2011
  *
- * Dependencies:
- *   - Prototype JS Framework v1.7+
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2011-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.3
+ * @created     July 10, 2011
+ * @url         http://mohsenkhahani.ir/protopack
  *
- * Features:
- *   - rich JavaScript data grid
- *
- * http://mohsenkhahani.ir/protopack
+ * @dependency
+ *    - Prototype JS framework v1.7+
  */
 
 
