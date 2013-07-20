@@ -18,7 +18,8 @@
 /**
  * TreeSelect base class
  */
-var ProtopackTreeSelect = Class.create(ProtopackInput, {
+Protopack.TreeSelect = Class.create(Protopack.Input, {
+
     /**
      * Default configuration
      */
@@ -63,7 +64,7 @@ var ProtopackTreeSelect = Class.create(ProtopackInput, {
             options = {multiSelect: this.multiSelect, 
                        interactive:this.options.interactive,
                        defaultState:this.options.defaultState},
-            tree = new ProtopackTree(null, 
+            tree = new Protopack.Tree(null, 
                                      options, 
                                      {nodeclick: this._onSelect.bind(this)});
 

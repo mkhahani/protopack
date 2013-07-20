@@ -15,9 +15,9 @@
 
 
 /**
- * ProtopackSelect base class
+ * Protopack Select base class
  */
-var ProtopackSelect = Class.create(ProtopackInput, {
+Protopac.kSelect = Class.create(Protopack.Input, {
     /**
      * Default configuration
      */

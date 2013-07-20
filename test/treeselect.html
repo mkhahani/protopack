@@ -75,8 +75,8 @@
           interactive:true,
           defaultState:'collapse'
       };
-  //var myCombo = new ProtopackTreeSelect('workspace');
-  var myCombo = new ProtopackTreeSelect('workspace', options, {onSelect: onTreeSelect});
+  //var myCombo = new Protopack.TreeSelect('workspace');
+  var myCombo = new Protopack.TreeSelect('workspace', options, {onSelect: onTreeSelect});
   myCombo.setId('the_treeselect');
   myCombo.loadData(data);
   myCombo.tree.setClassName('ptree-tango');

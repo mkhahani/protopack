@@ -17,7 +17,7 @@
 /**
  * Protopack Input base class
  */
-var ProtopackInput = Class.create({
+Protopack.Input = Class.create({
     /**
      * Default configuration
      */

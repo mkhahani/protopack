@@ -16,7 +16,7 @@
 /**
  * Protopack Tree base class
  */
-var ProtopackTree = Class.create({
+Protopack.Tree = Class.create({
     /**
      * Default configuration
      */
@@ -110,7 +110,7 @@ var ProtopackTree = Class.create({
         //nodes.sort( function (n1, n2) {return n1.data.seq - n2.data.seq;} );
         nodes.each( function (node, i) {
             var options = {multiSelect:this.multiSelect, interactive:this.options.interactive},
-                nodeObj = new ProtopackTreeNode(node, options);
+                nodeObj = new Protopack.TreeNode(node, options);
             nodeObj.div.addClassName('node');
             if (this.multiSelect) {
                 nodeObj.div.down('label').observe('click', this._onLabelClick.bind(this));
@@ -407,7 +407,7 @@ var ProtopackTree = Class.create({
         if (this.caption) {
             this.caption.update(caption);
         } else {
-            //rootNode = new ProtopackTreeNode(this.multiSelect, this.caption);
+            //rootNode = new Protopack.TreeNode(this.multiSelect, this.caption);
             this.caption = new Element('div', {'class': 'caption'}).update(caption);
             this.xhtml.insert({before: this.caption});
         }
@@ -485,9 +485,9 @@ var TreeDataObj = Class.create({
 //=================================================================================================
 
 /**
- * ProtopackTreeNode base class
+ * Protopack TreeNode base class
  */
-var ProtopackTreeNode = Class.create({
+Protopack.TreeNode = Class.create({
 
     /**
      * Initiates the tree node
