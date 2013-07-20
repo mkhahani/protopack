@@ -17,9 +17,9 @@ var ProtopackDraggableOptions = {
 };
 
 /**
- * ProtopackDraggable class
+ * Protopack Draggable base class
  */
-var ProtopackDraggable = Class.create({
+var Protopack.Draggable = Class.create({
     Version: '1.0',
 
     /**

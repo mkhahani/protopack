@@ -86,8 +86,8 @@ Protopack.Window = Class.create({
         target.insert(window);
 
         if (this.options.draggable) {
-            if (typeof ProtopackDraggable !== 'undefined') {
-                new ProtopackDraggable(window,
+            if (typeof Protopack.Draggable !== 'undefined') {
+                new Protopack.Draggable(window,
                                        this.header? this.header : window, 
                                        {transparent: this.options.transparentDrag});
             } else if (typeof Draggable !== 'undefined') {
