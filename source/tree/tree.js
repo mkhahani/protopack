@@ -120,7 +120,6 @@ Protopack.Tree = Class.create({
                 nodeObj = new Protopack.Tree.Node(node, options);
             nodeObj.div.addClassName('node');
             if (this.multiSelect) {
-                nodeObj.div.down('label').observe('click', this._onLabelClick.bind(this));
                 if (nodeObj.data.checked) {
                     this.selected.push(nodeObj.id);
                 }
@@ -206,14 +205,6 @@ Protopack.Tree = Class.create({
                 checked = row[3]? row[3].checked : false;
             inputs[0].checked = checked;
         }.bind(this));
-    },
-
-    /**
-     * Adds click functionality to labels
-     */
-    _onLabelClick: function (e) {
-        var input = e.element().previous();
-        input.checked = !input.checked;
     },
 
     /**
