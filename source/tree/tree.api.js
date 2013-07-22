@@ -4,6 +4,17 @@
 Protopack.Tree.addMethods({
 
     /**
+     * Fetches node object
+     *
+     * @access  public
+     * @param   mixed   Node ID (int/string)
+     * @return  object  Node object
+     */
+    getNode: function (id) {
+        return this.nodeById[id];
+    },
+
+    /**
      * Returns text or array of text of the given node IDs
      */
     getText: function (ids) {
