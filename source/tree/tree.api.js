@@ -39,32 +39,73 @@ Protopack.Tree.addMethods({
         return this.caption;
     },
 
-    expand: function (nodeId, deep) {
-        if (!this.nodeById[nodeId]) return;
-        var node = this.nodeById[nodeId],
+    /**
+     * Expands node
+     *
+     * @access  public
+     * @param   string  id      Node ID to be expanded
+     * @param   bool    deep    Whether goes through it's children or not
+     * @return  void
+     */
+    expand: function (id, deep) {
+        if (!this.nodeById[id]) return;
+        var node = this.nodeById[id],
             ul = node.element.next('ul'),
             nodeObj;
         if (ul === undefined) {
-            nodeObj = this.dataObj.getNode(nodeId);
+            nodeObj = this.dataObj.getNode(id);
             ul = this.getTreeNodes(nodeObj.nodes);
-            node.element.up('li').insert(ul);
-            node.expander.className = 'open';
+            node.outer.insert(ul);
         } else {
-            if (ul.visible()) {
-                ul.hide();
-                node.expander.className = 'close';
-            } else {
-                ul.show();
-                node.expander.className = 'open';
-            }
+            ul.show();
+        }
+        if (ul.children.length > 0) {
+            node.expander.className = 'open';
         }
 
         if (deep) {
             if (!nodeObj) {
-                nodeObj = this.dataObj.getNode(nodeId);
+                nodeObj = this.dataObj.getNode(id);
             }
             nodeObj.nodes.each(function(nObj) {
                 this.expand(nObj.id, true);
+            }.bind(this));
+        }
+    },
+
+    /**
+     * Collapses node
+     *
+     * @access  public
+     * @param   string  id      Node ID to be collapsed
+     * @param   bool    deep    Whether goes through it's children or not
+     * @return  void
+     */
+    collapse: function (id, deep) {
+        if (!this.nodeById[id]) return;
+        var node = this.nodeById[id],
+            ul = node.element.next('ul'),
+            nodeObj;
+        if (ul === undefined) {
+            if (deep) {
+                nodeObj = this.dataObj.getNode(id);
+                ul = this.getTreeNodes(nodeObj.nodes);
+                node.outer.insert(ul);
+            } else {
+                return;
+            }
+        }
+        ul.hide();
+        if (ul.children.length > 0) {
+            node.expander.className = 'close';
+        }
+
+        if (deep) {
+            if (!nodeObj) {
+                nodeObj = this.dataObj.getNode(id);
+            }
+            nodeObj.nodes.each(function(nObj) {
+                this.collapse(nObj.id, true);
             }.bind(this));
         }
     },

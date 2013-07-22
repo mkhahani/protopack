@@ -31,7 +31,12 @@ Protopack.Tree.addMethods({
      * Occurs on node expand/collapse
      */
     toggle: function(e) {
-        this.expand(e.memo.id);
+        var id = e.memo.id;
+        if (this.nodeById[id].expander.className === 'close') {
+            this.expand(id);
+        } else {
+            this.collapse(id);
+        }
         this.fire('tree:toggle', e.memo);
     },
 
