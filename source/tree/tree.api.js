@@ -22,12 +22,19 @@ Protopack.Tree.addMethods({
         this.xhtml.className = className;
     },
 
+    /**
+     * Adds/Updates tree caption
+     *
+     * @access  public
+     * @param   string  XHTML caption
+     * @return  object  Caption element
+     */
     setCaption: function (caption) {
         if (this.caption) {
             this.caption.update(caption);
         } else {
             this.caption = new Element('div', {'class': 'caption'}).update(caption);
-            this.xhtml.insert({before: this.caption});
+            this.xhtml.insert({top: this.caption});
         }
         return this.caption;
     },
