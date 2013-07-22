@@ -86,19 +86,19 @@ Protopack.Tree.Node = Class.create({
         return container;
     },
 
-    click: function (e) {
-        e.element().fire('node:click', this);
+    click: function () {
+        this.element.fire('node:click', this);
     },
 
-    mouseOver: function (e) {
-        e.element().fire('node:mouseover', this);
+    mouseOver: function () {
+        this.element.fire('node:mouseover', this);
     },
 
-    mouseOut: function (e) {
-        e.element().fire('node:mouseout', this);
+    mouseOut: function () {
+        this.element.fire('node:mouseout', this);
     },
 
-    toggle: function (e) {
-        e.element().fire('node:toggle', this);
+    toggle: function () {
+        this.element.fire('node:toggle', this);
     }
 });
