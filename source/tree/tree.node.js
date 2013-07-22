@@ -64,6 +64,7 @@ Protopack.Tree.Node = Class.create({
             var expander = new Element('span');
             expander.observe('click', this.toggle.bind(this)),
             container.insert(expander);
+            this.expander = expander;
         }
         this.element = nodeItem;
         container.insert(nodeItem);

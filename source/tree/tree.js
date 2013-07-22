@@ -129,7 +129,7 @@ Protopack.Tree = Class.create({
                 }
             }
             if (node.nodes.length !== 0) {
-                nodeObj.outer.down('span').addClassName('close');
+                nodeObj.expander.addClassName('close');
             }
             if (i === nodes.length - 1) {
                 nodeObj.outer.addClassName('last');
@@ -150,14 +150,14 @@ Protopack.Tree = Class.create({
             nodeObj = this.dataObj.getNode(nodeId);
             ul = this.getTreeNodes(nodeObj.nodes);
             node.element.up('li').insert(ul);
-            node.element.previous('span').className = 'open';
+            node.expander.className = 'open';
         } else {
             if (ul.visible()) {
                 ul.hide();
-                node.element.previous('span').className = 'close';
+                node.expander.className = 'close';
             } else {
                 ul.show();
-                node.element.previous('span').className = 'open';
+                node.expander.className = 'open';
             }
         }
 
@@ -179,12 +179,12 @@ Protopack.Tree = Class.create({
         nodes.each(function (node) {
             if (node.next()) {
                 if (node.next().visible()) {
-                    node.previous('span').className = 'open';
+                    node.expander.className = 'open';
                 } else {
-                    node.previous('span').className = 'close';
+                    node.expander.className = 'close';
                 }
             } else {
-                node.previous('span').className = 'l';
+                node.expander.className = 'l';
             }
         });
     },
