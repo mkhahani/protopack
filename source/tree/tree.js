@@ -23,22 +23,20 @@ Protopack.Tree = Class.create({
      */
     options: {
         className: 'ptree',
-        multiSelect: false,
         interactive: true,
+        multiSelect: false,
         expanded: false     // TODO: not implemented yet
     },
 
     /**
      * Tree initializer
      *
-     * @param   mixed   target  Target element or element ID
-     * @param   object  options Input options {className, multiSelect}
-     * @param   object  events  Tree events {nodeclick, nodemouseover, nodemouseout}
+     * @param   mixed   target  Container element/ID
+     * @param   object  options Tree options
      *
      * @return  Object  A class instance of Tree 
      */
-    initialize: function (target, options, events) {
-        this.events = events || {};
+    initialize: function (target, options) {
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.multiSelect = this.options.multiSelect;
