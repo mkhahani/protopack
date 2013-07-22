@@ -69,7 +69,7 @@ Protopack.Tree = Class.create({
         tree.observe('node:click', this.click.bind(this));
         tree.observe('node:mouseover', this.mouseOver.bind(this));
         tree.observe('node:mouseout', this.mouseOut.bind(this));
-        tree.observe('node:toggle', this._onToggleNode.bind(this));
+        tree.observe('node:toggle', this.toggle.bind(this));
 
         return tree;
     },
@@ -214,31 +214,6 @@ Protopack.Tree = Class.create({
     _onLabelClick: function (e) {
         var input = e.element().previous();
         input.checked = !input.checked;
-    },
-
-    /**
-     * Expands/Collapse node
-     */
-    _onToggleNode: function (e) {
-        this.expand(e.memo.id);
-        return;
-
-        var div = e.memo.element,
-            ul = div.next('ul');
-        if (ul === undefined) {
-            var nodeObj = this.dataObj.getNode(e.memo.id);
-            ul = this.getTreeNodes(nodeObj.nodes);
-            div.up('li').insert(ul);
-            div.previous('span').className = 'open';
-        } else {
-            if (ul.visible()) {
-                ul.hide();
-                div.previous('span').className = 'close';
-            } else {
-                ul.show();
-                div.previous('span').className = 'open';
-            }
-        }
     },
 
     /**
