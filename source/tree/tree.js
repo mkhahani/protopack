@@ -139,6 +139,7 @@ Protopack.Tree = Class.create({
     },
 
     expand: function (nodeId, deep) {
+        if (!this.nodeById[nodeId]) return;
         var node = this.nodeById[nodeId],
             ul = node.div.next('ul'),
             nodeObj;
