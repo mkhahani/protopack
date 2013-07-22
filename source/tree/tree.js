@@ -82,7 +82,11 @@ Protopack.Tree = Class.create({
      */
     loadData: function (data) {
         var parseData = function (parent, nodeObj) {
+<<<<<<< HEAD
                 var store = data.partition(function (row) {
+=======
+                var store = data.partition(function(row) {
+>>>>>>> dc788395c90f414b508acfa7267687f2a20b4e93
                         return row[1] == parent;
                     }),
                     i;
@@ -97,13 +101,23 @@ Protopack.Tree = Class.create({
                },
             tree,
             i;
+<<<<<<< HEAD
+=======
+
+        for (i = 0; i < data.length; i++) {
+            this.dataById[data[i][0]] = data[i];
+        }
+>>>>>>> dc788395c90f414b508acfa7267687f2a20b4e93
 
         this.dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
         parseData(0, this.dataObj);
         tree = this.getTreeNodes(this.dataObj.nodes);
         this.xhtml.update(tree);
 
+<<<<<<< HEAD
         // The most first node
+=======
+>>>>>>> dc788395c90f414b508acfa7267687f2a20b4e93
         try {
             tree.down('li').addClassName('first');
         } catch (err) {}
