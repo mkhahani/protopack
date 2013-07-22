@@ -158,26 +158,5 @@ Protopack.Tree.addMethods({
             this.data.splice(index, 1);
         }
         this.insertNode(node);
-    },
-
-    hasChild: function (id) {
-        var res = false;
-        this.data.each( function (node) {
-            if (node[1] == id) {
-                res = true;
-                throw $break;
-            }
-        });
-        return res;
-    },
-
-    numberOfChildren: function (id) {
-        var count = 0;
-        this.data.each( function (node) {
-            if (node[1] == id) {
-                count++;
-            }
-        });
-        return count;
     }
 });
