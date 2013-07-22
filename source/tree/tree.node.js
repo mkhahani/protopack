@@ -1,5 +1,5 @@
 /**
- * Protopack Tree Node is a class for building tree node
+ * Protopack Tree Node is a class for building tree nodes
  *
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2013 Mohsen Khahani
@@ -33,7 +33,7 @@ Protopack.Tree.Node = Class.create({
         this.data = node.data || {};
         // this.style       = node[4] || {};
         // this.seq         = this.attrib.seq || 0;
-        this.li = this._construct(options);
+        this.li = this.construct(options);
         this.element = this.div;
         this.eventParams = {
             id: this.id,
@@ -43,7 +43,7 @@ Protopack.Tree.Node = Class.create({
         };
     },
 
-    _construct: function (options) {
+    construct: function (options) {
         var container = new Element('li'),
             nodeItem  = new Element('div'),
             textEl;
@@ -71,13 +71,13 @@ Protopack.Tree.Node = Class.create({
         if (typeof this.data.dir != 'undefined') nodeItem.writeAttribute({dir: this.data.dir});
         if (typeof this.data.className != 'undefined') nodeItem.addClassName(this.data.className);
         if (typeof this.data.style != 'undefined') nodeItem.setStyle(this.data.style);
-        nodeItem.observe('click', this._onClick.bind(this));
-        nodeItem.observe('mouseover', this._onMouseOver.bind(this));
-        nodeItem.observe('mouseout', this._onMouseOut.bind(this));
+        nodeItem.observe('click', this.click.bind(this));
+        nodeItem.observe('mouseover', this.mouseOver.bind(this));
+        nodeItem.observe('mouseout', this.mouseOut.bind(this));
 
         if (options.interactive) {
             var expander = new Element('span');
-            expander.observe('click', this._onToggleNode.bind(this)),
+            expander.observe('click', this.toggle.bind(this)),
             container.insert(expander);
         }
         this.div = nodeItem;
@@ -86,19 +86,19 @@ Protopack.Tree.Node = Class.create({
         return container;
     },
 
-    _onClick: function (e) {
+    click: function (e) {
         e.element().fire('node:click', this);
     },
 
-    _onMouseOver: function (e) {
+    mouseOver: function (e) {
         e.element().fire('node:mouseover', this);
     },
 
-    _onMouseOut: function (e) {
+    mouseOut: function (e) {
         e.element().fire('node:mouseout', this);
     },
 
-    _onToggleNode: function (e) {
+    toggle: function (e) {
         e.element().fire('node:toggle', this);
     }
 });
