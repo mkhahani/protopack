@@ -14,21 +14,12 @@ Protopack.Tree.addMethods({
         return this.nodeById[id];
     },
 
-    /**
-     * Returns text or array of text of the given node IDs
-     */
-    getText: function (ids) {
-        if (Object.isArray(ids)) {
-            return ids.map(function (id) {
-                return this.nodeById[id].text;
-            }.bind(this));
-        } else {
-            return this.nodeById[ids].text;
-        }
-    },
-
     setId: function (id) {
         this.xhtml.id = id;
+    },
+
+    setClassName: function (className) {
+        this.xhtml.className = className;
     },
 
     setCaption: function (caption) {
@@ -39,10 +30,6 @@ Protopack.Tree.addMethods({
             this.xhtml.insert({before: this.caption});
         }
         return this.caption;
-    },
-
-    setClassName: function (className) {
-        this.xhtml.className = className;
     },
 
     expand: function (nodeId, deep) {
