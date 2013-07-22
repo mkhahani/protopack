@@ -9,10 +9,10 @@ Protopack.Tree.addMethods({
     getText: function (ids) {
         if (Object.isArray(ids)) {
             return ids.map(function (id) {
-                return this.dataById[id].text;
+                return this.nodeById[id].text;
             }.bind(this));
         } else {
-            return this.dataById[ids].text;
+            return this.nodeById[ids].text;
         }
     },
 
@@ -69,8 +69,8 @@ Protopack.Tree.addMethods({
      */
     setSelected: function (sel) {
         function doSelect(id) {
-            this.dataById[id].data.checked = true;
-            this.dataById[id].node.down('input').checked = true;
+            this.nodeById[id].data.checked = true;
+            this.nodeById[id].element.down('input').checked = true;
         }
         if (this.multiSelect) {
             this.clearSelection();

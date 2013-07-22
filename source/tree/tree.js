@@ -41,7 +41,6 @@ Protopack.Tree = Class.create({
         Object.extend(this.options, options || {});
         this.multiSelect = this.options.multiSelect;
         this.selected = (this.multiSelect)? [] : null;
-        this.dataById = {};
         this.nodeById = {};
         this.xhtml = this._construct(target);
         Protopack.extendEvents(this);
@@ -98,10 +97,6 @@ Protopack.Tree = Class.create({
                },
             tree,
             i;
-
-        for (i = 0; i < data.length; i++) {
-            this.dataById[data[i][0]] = data[i];
-        }
 
         this.dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
         parseData(0, this.dataObj);
@@ -209,12 +204,12 @@ Protopack.Tree = Class.create({
     clearSelection: function () {
         if (this.multiSelect) {
             this.selected.each(function (id) {
-                this.dataById[id].data.checked = false;
+                this.nodeById[id].data.checked = false;
                 this.nodeById[id].element.down('input').checked = false;
             }.bind(this));
             this.selected.clear();
         } else {
-            if (this.selected !== null && this.dataById[this.selected]) {
+            if (this.selected !== null && this.nodeById[this.selected]) {
                 this.nodeById[this.selected].element.removeClassName('selected');
             }
             this.selected = null;
