@@ -116,23 +116,25 @@ Protopack.Tree = Class.create({
 
     getTreeNodes: function (nodes) {
         var ul = new Element('ul'),
-            options = {multiSelect: this.multiSelect, interactive: this.options.interactive};
+            options = {multiSelect: this.multiSelect, interactive: this.options.interactive},
+            nodeObj;
         //nodes.sort( function (n1, n2) {return n1.data.seq - n2.data.seq;} );
         nodes.each( function (node, i) {
-            var nodeObj = new Protopack.Tree.Node(node, options);
-            nodeObj.div.addClassName('node');
+            this.fire('tree:nodecreate', node);
+            nodeObj = new Protopack.Tree.Node(node, options);
+            nodeObj.element.addClassName('node');
             if (this.multiSelect) {
                 if (nodeObj.data.checked) {
                     this.selected.push(nodeObj.id);
                 }
             }
             if (node.nodes.length !== 0) {
-                nodeObj.li.down('span').addClassName('close');
+                nodeObj.outer.down('span').addClassName('close');
             }
             if (i === nodes.length - 1) {
-                nodeObj.li.addClassName('last');
+                nodeObj.outer.addClassName('last');
             }
-            ul.insert(nodeObj.li);
+            ul.insert(nodeObj.outer);
             this.nodeById[node.id] = nodeObj;
         }.bind(this));
 
@@ -142,20 +144,20 @@ Protopack.Tree = Class.create({
     expand: function (nodeId, deep) {
         if (!this.nodeById[nodeId]) return;
         var node = this.nodeById[nodeId],
-            ul = node.div.next('ul'),
+            ul = node.element.next('ul'),
             nodeObj;
         if (ul === undefined) {
             nodeObj = this.dataObj.getNode(nodeId);
             ul = this.getTreeNodes(nodeObj.nodes);
-            node.div.up('li').insert(ul);
-            node.div.previous('span').className = 'open';
+            node.element.up('li').insert(ul);
+            node.element.previous('span').className = 'open';
         } else {
             if (ul.visible()) {
                 ul.hide();
-                node.div.previous('span').className = 'close';
+                node.element.previous('span').className = 'close';
             } else {
                 ul.show();
-                node.div.previous('span').className = 'open';
+                node.element.previous('span').className = 'open';
             }
         }
 
@@ -216,12 +218,12 @@ Protopack.Tree = Class.create({
         if (this.multiSelect) {
             this.selected.each(function (id) {
                 this.dataById[id].data.checked = false;
-                this.nodeById[id].div.down('input').checked = false;
+                this.nodeById[id].element.down('input').checked = false;
             }.bind(this));
             this.selected.clear();
         } else {
             if (this.selected !== null && this.dataById[this.selected]) {
-                this.nodeById[this.selected].div.removeClassName('selected');
+                this.nodeById[this.selected].element.removeClassName('selected');
             }
             this.selected = null;
         }
@@ -241,10 +243,10 @@ Protopack.Tree = Class.create({
                 this.selected.push(id);
             }
             this.nodeById[id].data.checked = !checked;
-            this.nodeById[id].div.down('input').checked = !checked;
+            this.nodeById[id].element.down('input').checked = !checked;
         } else {
             this.clearSelection();
-            this.nodeById[id].div.addClassName('selected');
+            this.nodeById[id].element.addClassName('selected');
             this.selected = id;
         }
     },

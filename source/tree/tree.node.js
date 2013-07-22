@@ -31,46 +31,31 @@ Protopack.Tree.Node = Class.create({
         this.pid  = node.pid;
         this.text = node.text;
         this.data = node.data || {};
-        // this.style       = node[4] || {};
-        // this.seq         = this.attrib.seq || 0;
-        this.li = this.construct(options);
-        this.element = this.div;
-        this.eventParams = {
-            id: this.id,
-            pid: this.pid,
-            text: this.text,
-            element: this.div
-        };
+        this.innerHTML = node.innerHTML;
+        this.outer = this.construct(options);
     },
 
     construct: function (options) {
         var container = new Element('li'),
             nodeItem  = new Element('div'),
-            textEl;
-        if (options.multiSelect) {
-            var checkbox = new Element('input', {type: 'checkbox', value: this.id});
-            textEl = new Element('label').update(this.text);
-            if (typeof this.data.checked != 'undefined') {
-                checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
-            } else {
-                this.data.checked = false;
-            }
-            nodeItem.insert(checkbox);
-        } else {
-            textEl = new Element('a').update(this.text);
-            if (typeof this.data.href != 'undefined') {
-                textEl.writeAttribute({href: this.data.href});
-                if (typeof this.data.target != 'undefined') {
-                    textEl.writeAttribute({target: this.data.target});
+            innerHTML;
+        if (!this.innerHTML) {
+            if (options.multiSelect) {
+                var checkbox = new Element('input', {type: 'checkbox', value: this.id});
+                innerHTML = new Element('div');
+                if (typeof this.data.checked != 'undefined') {
+                    checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
+                } else {
+                    this.data.checked = false;
                 }
+                innerHTML.insert(checkbox);
+                innerHTML.insert(new Element('label').update(this.text));
+            } else {
+                innerHTML = new Element('a').update(this.text);
             }
+            this.innerHTML = innerHTML;
         }
-        nodeItem.insert(textEl);
-        if (typeof this.data.id != 'undefined') nodeItem.writeAttribute({id: this.data.id});
-        if (typeof this.data.title != 'undefined') nodeItem.writeAttribute({title: this.data.title});
-        if (typeof this.data.dir != 'undefined') nodeItem.writeAttribute({dir: this.data.dir});
-        if (typeof this.data.className != 'undefined') nodeItem.addClassName(this.data.className);
-        if (typeof this.data.style != 'undefined') nodeItem.setStyle(this.data.style);
+        nodeItem.insert(this.innerHTML);
         nodeItem.observe('click', this.click.bind(this));
         nodeItem.observe('mouseover', this.mouseOver.bind(this));
         nodeItem.observe('mouseout', this.mouseOut.bind(this));
@@ -80,7 +65,7 @@ Protopack.Tree.Node = Class.create({
             expander.observe('click', this.toggle.bind(this)),
             container.insert(expander);
         }
-        this.div = nodeItem;
+        this.element = nodeItem;
         container.insert(nodeItem);
 
         return container;

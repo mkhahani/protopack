@@ -33,5 +33,12 @@ Protopack.Tree.addMethods({
     toggle: function(e) {
         this.expand(e.memo.id);
         this.fire('tree:toggle', e.memo);
+    },
+
+    /**
+     * Occurs on node creation
+     */
+    nodeCreate: function(e) {
+        this.fire('tree:nodecreate', e.memo);
     }
 });
