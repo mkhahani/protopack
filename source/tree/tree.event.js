@@ -7,7 +7,17 @@ Protopack.Tree.addMethods({
      * Occurs on node click
      */
     click: function(e) {
-        this._selectNode(e.memo.id);
+        var id = e.memo.id;
+        if (this.multiSelect) {
+            if (this.nodeById[id].data.checked) {
+                this.deselectNode(id);
+            } else {
+                this.selectNode(id);
+            }
+        } else {
+            this.deselectNode(this.selected);
+            this.selectNode(id);
+        }
         this.fire('tree:click', e.memo);
     },
 

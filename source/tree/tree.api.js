@@ -111,25 +111,31 @@ Protopack.Tree.addMethods({
     },
 
     /**
-     * Updates the 'selected' attribute of the tree and selects appropriate node(s)
+     * Selects given node ID(s)
      */
-    setSelected: function (sel) {
-        function doSelect(id) {
-            this.nodeById[id].data.checked = true;
-            this.nodeById[id].element.down('input').checked = true;
-        }
+    select: function (idSet) {
         if (this.multiSelect) {
-            this.clearSelection();
-            if (Object.isArray(sel)) {
-                sel = sel.uniq();
-                sel.each(doSelect, this);
-                this.selected = sel;
-            } else {
-                this.selected = [sel];
-                doSelect.call(this, sel);
-            }
+            idSet = Object.isArray(idSet)? idSet.uniq() : [idSet];
+            idSet.each(function (id) {
+                this.selectNode(id);
+            }, this);
         } else {
-            this._selectNode(sel);
+            this.selectNode(idSet);
+        }
+    },
+
+    /**
+     * Clears selected/checked nodes
+     */
+    clear: function () {
+        if (this.multiSelect) {
+            var sel = this.selected.clone();
+            for (var i = 0; i < sel.length; i++) {
+                this.deselectNode(sel[i]);
+            }
+            this.selected.clear();
+        } else {
+            this.deselectNode(this.selected);
         }
     },
 
