@@ -82,34 +82,35 @@ Protopack.Tree = Class.create({
      * @return  void
      */
     loadData: function (data) {
-        function parseData(parent, nodeObj) {
-            var store = data.partition(function(row) {
-                return row[1] == parent;
-            });
-            data = store[1];
-            store[0].each(function(row) {
-                var node = nodeObj.addNode(row[0], row[1], row[2], row[3] || null);
-                if (data.length > 0) {
-                    parseData(row[0], node);
+        var parseData = function (parent, nodeObj) {
+                var store = data.partition(function(row) {
+                        return row[1] == parent;
+                    }),
+                    i;
+                data = store[1];
+                for (i = 0; i < store[0].length; i++) {
+                    var row = store[0][i],
+                        node = nodeObj.addNode(row[0], row[1], row[2], row[3] || null);
+                    if (data.length > 0) {
+                        parseData(row[0], node);
+                    }
                 }
-            });
+               },
+            tree,
+            i;
+
+        for (i = 0; i < data.length; i++) {
+            this.dataById[data[i][0]] = data[i];
         }
-        var dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
-            dataById = {},
-            tree;
 
-        data.each( function (row, i) {
-            dataById[row[0]] = row;
-        });
-        this.dataById = dataById;
-
-        parseData(0, dataObj);
-        this.dataObj = dataObj;
+        this.dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
+        parseData(0, this.dataObj);
         tree = this.getTreeNodes(this.dataObj.nodes);
         this.xhtml.update(tree);
+
         try {
             tree.down('li').addClassName('first');
-        } catch(err) {};
+        } catch (err) {}
     },
 
     getTreeNodes: function (nodes) {
