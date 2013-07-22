@@ -68,6 +68,7 @@ Protopack.Tree = Class.create({
         tree.observe('node:mouseover', this.mouseOver.bind(this));
         tree.observe('node:mouseout', this.mouseOut.bind(this));
         tree.observe('node:toggle', this.toggle.bind(this));
+        tree.observe('node:create', this.nodeCreate.bind(this));
 
         return tree;
     },
@@ -236,16 +237,16 @@ Protopack.Tree = Class.create({
      * Occurs on node click and updates the 'selected' attribute of the tree
      */
     _selectNode: function (id) {
-        if (this.dataById[id] === undefined) return;
+        if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
-            var checked = this.dataById[id].data.checked,
+            var checked = this.nodeById[id].data.checked,
                 i = this.selected.indexOf(id);
             if (checked) {
                 this.selected.splice(i, 1);
             } else if (i === -1) {
                 this.selected.push(id);
             }
-            this.dataById[id].data.checked = !checked;
+            this.nodeById[id].data.checked = !checked;
             this.nodeById[id].div.down('input').checked = !checked;
         } else {
             this.clearSelection();
