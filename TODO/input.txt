@@ -1,1 +1,0 @@
-- The margin of the popup should be equal to input

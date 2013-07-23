@@ -1,4 +1,0 @@
-- activeIndex
-- activeTab
-- activeSheet
-- 2 new events: beforeChange & afterChange
