@@ -111,6 +111,24 @@ Protopack.Tree.addMethods({
     },
 
     /**
+     * Expands all nodes
+     */
+    expandAll: function () {
+        this.dataObj.getNodes().each(function(node) {
+            this.expand(node.id, true);
+        }, this);
+    },
+
+    /**
+     * Collapses all nodes
+     */
+    collapseAll: function () {
+        this.dataObj.getNodes().each(function(node) {
+            this.collapse(node.id, true);
+        }, this);
+    },
+
+    /**
      * Selects given node ID(s)
      */
     select: function (idSet) {
