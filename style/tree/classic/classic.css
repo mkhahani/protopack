@@ -22,5 +22,5 @@
 .ptree .first.last > span.open {background-position:-54px -36px;}
 .ptree .node {display:inline-block; padding:1px 2px; cursor:pointer;}
 .ptree .node.hover {color:blue;}
-.ptree .node.selected {background-color:navy;}
+.ptree .node.selected {background-color:navy; color:white;}
 .ptree .node.selected a {color:white;}

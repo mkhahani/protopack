@@ -9,9 +9,8 @@
 .ptree-tango span.close {background:url(close.png) 0 50% no-repeat;}
 .ptree-tango span.open {background:url(open.png) 0 50% no-repeat;}
 .ptree-tango .caption {font-weight:bold; padding-bottom:2px;}
-.ptree-tango .node {display:inline-block; padding:0 2px;}
-.ptree-tango .node {margin-left:3px; cursor:pointer;}
-.ptree-tango .node a {padding:1px 2px;}
+.ptree-tango .node {display:inline-block; margin-left:3px; padding:1px 2px; cursor:pointer;}
+.ptree-tango .node input[type=checkbox] {vertical-align:middle; margin:0 2px 2px 0;}
 .ptree-tango .node.hover {color:blue;}
-.ptree-tango .node.selected {background-color:#d86060;}
+.ptree-tango .node.selected {background-color:#d86060; color:white;}
 .ptree-tango .node.selected a {color:white;}
