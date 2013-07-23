@@ -29,8 +29,9 @@ Protopack.Tree.Node = Class.create({
      */
     initialize: function (node, content, options) {
         this.data = node;
-        this.options = options;
         this.innerHTML = content;
+        this.options = {};
+        Object.extend(this.options, options || {});
         this.outer = this.construct();
     },
 

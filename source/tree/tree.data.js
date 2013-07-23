@@ -32,7 +32,7 @@ Protopack.Tree.Data = Class.create({
         this.id = id;
         this.pid = pid;
         this.text = text;
-        this.extra = extra || null;
+        this.extra = extra || {};
         this.childs = [];
     },
 

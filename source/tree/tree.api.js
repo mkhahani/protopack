@@ -48,28 +48,21 @@ Protopack.Tree.addMethods({
      * @return  void
      */
     expand: function (id, deep) {
-        if (!this.nodeById[id]) return;
-        var node = this.nodeById[id],
-            ul = node.element.next('ul'),
-            nodeObj;
-        if (ul === undefined) {
-            nodeObj = this.dataObj.getNode(id);
-            ul = this.getChildNodes(nodeObj.childs);
-            node.outer.insert(ul);
-        } else {
-            ul.show();
+        if (!this.nodeById[id]) {
+            return;
         }
-        if (ul.children.length > 0) {
+
+        var node = this.nodeById[id],
+            childEl = this.prepareNode(node).show();
+
+        if (node.data.childs.length > 0) {
             node.expander.className = 'open';
         }
 
         if (deep) {
-            if (!nodeObj) {
-                nodeObj = this.dataObj.getNode(id);
-            }
-            nodeObj.childs.each(function(nObj) {
-                this.expand(nObj.data.id, true);
-            }.bind(this));
+            node.data.childs.each(function(child) {
+                this.expand(child.id, true);
+            }, this);
         }
     },
 
@@ -82,31 +75,21 @@ Protopack.Tree.addMethods({
      * @return  void
      */
     collapse: function (id, deep) {
-        if (!this.nodeById[id]) return;
-        var node = this.nodeById[id],
-            ul = node.element.next('ul'),
-            nodeObj;
-        if (ul === undefined) {
-            if (deep) {
-                nodeObj = this.dataObj.getNode(id);
-                ul = this.getChildNodes(nodeObj.childs);
-                node.outer.insert(ul);
-            } else {
-                return;
-            }
+        if (!this.nodeById[id]) {
+            return;
         }
-        ul.hide();
-        if (ul.children.length > 0) {
+
+        var node = this.nodeById[id],
+            childEl = this.prepareNode(node).hide();
+
+        if (node.data.childs.length > 0) {
             node.expander.className = 'close';
         }
 
         if (deep) {
-            if (!nodeObj) {
-                nodeObj = this.dataObj.getNode(id);
-            }
-            nodeObj.childs.each(function(nObj) {
-                this.collapse(nObj.data.id, true);
-            }.bind(this));
+            node.data.childs.each(function(child) {
+                this.collapse(child.id, true);
+            }, this);
         }
     },
 
@@ -114,8 +97,8 @@ Protopack.Tree.addMethods({
      * Expands all nodes
      */
     expandAll: function () {
-        this.dataObj.getNodes().each(function(node) {
-            this.expand(node.data.id, true);
+        this.dataObj.childs.each(function(node) {
+            this.expand(node.id, true);
         }, this);
     },
 
@@ -123,8 +106,8 @@ Protopack.Tree.addMethods({
      * Collapses all nodes
      */
     collapseAll: function () {
-        this.dataObj.getNodes().each(function(node) {
-            this.collapse(node.data.id, true);
+        this.dataObj.childs.each(function(node) {
+            this.collapse(node.id, true);
         }, this);
     },
 
@@ -157,9 +140,13 @@ Protopack.Tree.addMethods({
         }
     },
 
-    insertNode: function (id, pid, text, data) {
-        var node = this.dataObj.addNode(id, pid, text, data),
-            nodeObj = this.createNode(node);
+    // TODO: the code is buggy
+    insertNode: function (id, pid, text, extra) {
+        var parent = this.nodeById[pid],
+            node = parent.data.addNode(id, pid, text, extra),
+            nodeObj = this.createNode(node),
+            container = this.prepareNode(parent);
+        container.insert(nodeObj.outer);
     },
 
     deleteNode: function (id) {

@@ -103,7 +103,7 @@ Protopack.Tree = Class.create({
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
-        tree = this.getChildNodes(this.dataObj.childs);
+        tree = this.createChild(this.dataObj.childs);
         this.xhtml.update(tree);
 
         // The most first node
@@ -112,7 +112,21 @@ Protopack.Tree = Class.create({
         } catch (err) {}
     },
 
-    getChildNodes: function (nodes) {
+    createNode: function (node, options) {
+        var content = null;
+        this.fire('tree:nodecreate', node, content);
+        nodeObj = new Protopack.Tree.Node(node, content, options);
+        nodeObj.element.addClassName('node');
+        if (this.multiSelect) {
+            if (nodeObj.data.extra.checked) {
+                this.selected.push(nodeObj.data.id);
+            }
+            // NOTE: `selected` doesn't include not loaded nodes
+        }
+        return nodeObj;
+    },
+
+    createChild: function (nodes) {
         var ul = new Element('ul'),
             options = {multiSelect: this.multiSelect, interactive: this.options.interactive},
             nodeObj;
@@ -132,18 +146,18 @@ Protopack.Tree = Class.create({
         return ul;
     },
 
-    createNode: function (node, options) {
-        var content = null;
-        this.fire('tree:nodecreate', node, content);
-        nodeObj = new Protopack.Tree.Node(node, content, options);
-        nodeObj.element.addClassName('node');
-        if (this.multiSelect) {
-            if (nodeObj.data.extra.checked) {
-                this.selected.push(nodeObj.data.id);
-            }
-            // NOTE: `selected` doesn't include not loaded nodes
+    prepareNode: function (node) {
+        var childEl = node.element.next('ul');
+        if (childEl === undefined) {
+            childEl = this.createChild(node.data.childs);
+            node.outer.insert(childEl);
         }
-        return nodeObj;
+        return childEl;
+    },
+
+    appendNode: function (node) {
+        var parent = this.nodeById[node.data.pid];
+        parent.element.next('ul');
     },
 
     render: function () {   // TODO: how about partial rendering
