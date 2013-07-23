@@ -69,18 +69,6 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         return xhtml.insert(this.dropdown.setContent(tree.xhtml));
     },
 
-    _updateTree: function () {
-        var target = this.xhtml.up();
-        this.xhtml = this._construct();
-        if (target) {
-            $(target).update(this.xhtml);
-            //this.render();
-        }
-        if (this.value) {
-            this.setValue(this.value);
-        }
-    },
-
     _onSelect: function (node) {
         if (this.multiSelect) {
             this.value = this.valueEntry.value = this.tree.selected;
@@ -125,17 +113,17 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.valueEntry.name = id;
     },
 
-    clear: function () {
-        this.tree.clear();
-        this.value = this.valueEntry.value = this.tree.selected;
-        this.entry.value = this.text = '';
-    },
-
     setValue: function (value) {
         this.tree.select(value);
         this.value = this.valueEntry.value = value = this.tree.selected;
         this.text = this.fetchText(value);
         this.entry.value = this.text;
+    },
+
+    clear: function () {
+        this.tree.clear();
+        this.value = this.valueEntry.value = this.tree.selected;
+        this.entry.value = this.text = '';
     },
 
     insertNode: function (node) {
