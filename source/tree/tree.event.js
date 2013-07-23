@@ -7,9 +7,9 @@ Protopack.Tree.addMethods({
      * Occurs on node click
      */
     click: function(e) {
-        var id = e.memo.id;
+        var id = e.memo.data.id;
         if (this.multiSelect) {
-            if (this.nodeById[id].data.checked) {
+            if (e.memo.data.extra.checked) {
                 this.deselectNode(id);
             } else {
                 this.selectNode(id);
@@ -41,8 +41,8 @@ Protopack.Tree.addMethods({
      * Occurs on node expand/collapse
      */
     toggle: function(e) {
-        var id = e.memo.id;
-        if (this.nodeById[id].expander.className === 'close') {
+        var id = e.memo.data.id;
+        if (e.memo.expander.className === 'close') {
             this.expand(id);
         } else {
             this.collapse(id);

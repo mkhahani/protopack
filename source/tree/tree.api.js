@@ -54,7 +54,7 @@ Protopack.Tree.addMethods({
             nodeObj;
         if (ul === undefined) {
             nodeObj = this.dataObj.getNode(id);
-            ul = this.getTreeNodes(nodeObj.nodes);
+            ul = this.getChildNodes(nodeObj.childs);
             node.outer.insert(ul);
         } else {
             ul.show();
@@ -67,8 +67,8 @@ Protopack.Tree.addMethods({
             if (!nodeObj) {
                 nodeObj = this.dataObj.getNode(id);
             }
-            nodeObj.nodes.each(function(nObj) {
-                this.expand(nObj.id, true);
+            nodeObj.childs.each(function(nObj) {
+                this.expand(nObj.data.id, true);
             }.bind(this));
         }
     },
@@ -89,7 +89,7 @@ Protopack.Tree.addMethods({
         if (ul === undefined) {
             if (deep) {
                 nodeObj = this.dataObj.getNode(id);
-                ul = this.getTreeNodes(nodeObj.nodes);
+                ul = this.getChildNodes(nodeObj.childs);
                 node.outer.insert(ul);
             } else {
                 return;
@@ -104,8 +104,8 @@ Protopack.Tree.addMethods({
             if (!nodeObj) {
                 nodeObj = this.dataObj.getNode(id);
             }
-            nodeObj.nodes.each(function(nObj) {
-                this.collapse(nObj.id, true);
+            nodeObj.childs.each(function(nObj) {
+                this.collapse(nObj.data.id, true);
             }.bind(this));
         }
     },
@@ -115,7 +115,7 @@ Protopack.Tree.addMethods({
      */
     expandAll: function () {
         this.dataObj.getNodes().each(function(node) {
-            this.expand(node.id, true);
+            this.expand(node.data.id, true);
         }, this);
     },
 
@@ -124,7 +124,7 @@ Protopack.Tree.addMethods({
      */
     collapseAll: function () {
         this.dataObj.getNodes().each(function(node) {
-            this.collapse(node.id, true);
+            this.collapse(node.data.id, true);
         }, this);
     },
 
@@ -157,7 +157,9 @@ Protopack.Tree.addMethods({
         }
     },
 
-    insertNode: function (node) {
+    insertNode: function (id, pid, text, data) {
+        var node = this.dataObj.addNode(id, pid, text, data),
+            nodeObj = this.createNode(node);
     },
 
     deleteNode: function (id) {

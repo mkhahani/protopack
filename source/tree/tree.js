@@ -82,7 +82,7 @@ Protopack.Tree = Class.create({
      * @return  void
      */
     loadData: function (data) {
-        var parseData = function (parent, nodeObj) {
+        var buildData = function (parent, nodeObj) {
                 var store = data.partition(function (row) {
                         return row[1] == parent;
                     }),
@@ -92,16 +92,18 @@ Protopack.Tree = Class.create({
                     var row = store[0][i],
                         node = nodeObj.addNode(row[0], row[1], row[2], row[3] || null);
                     if (data.length > 0) {
-                        parseData(row[0], node);
+                        buildData(row[0], node);
                     }
                 }
                },
             tree,
             i;
 
-        this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null),
-        parseData(this.rootId, this.dataObj);
-        tree = this.getTreeNodes(this.dataObj.nodes);
+        this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null);
+        buildData(this.rootId, this.dataObj);
+        // now dataObj contains whole tree data
+
+        tree = this.getChildNodes(this.dataObj.childs);
         this.xhtml.update(tree);
 
         // The most first node
@@ -110,22 +112,14 @@ Protopack.Tree = Class.create({
         } catch (err) {}
     },
 
-    getTreeNodes: function (nodes) {
+    getChildNodes: function (nodes) {
         var ul = new Element('ul'),
             options = {multiSelect: this.multiSelect, interactive: this.options.interactive},
             nodeObj;
         //nodes.sort( function (n1, n2) {return n1.data.seq - n2.data.seq;} );
         nodes.each( function (node, i) {
-            this.fire('tree:nodecreate', node);
-            nodeObj = new Protopack.Tree.Node(node, options);
-            nodeObj.element.addClassName('node');
-            if (this.multiSelect) {
-                if (nodeObj.data.checked) {
-                    this.selected.push(nodeObj.id);
-                }
-                // NOTE: `selected` doesn't include not yet loaded nodes
-            }
-            if (node.nodes.length !== 0) {
+            nodeObj = this.createNode(node, options);
+            if (node.childs.length > 0) {
                 nodeObj.expander.addClassName('close');
             }
             if (i === nodes.length - 1) {
@@ -136,6 +130,20 @@ Protopack.Tree = Class.create({
         }.bind(this));
 
         return ul;
+    },
+
+    createNode: function (node, options) {
+        var content = null;
+        this.fire('tree:nodecreate', node, content);
+        nodeObj = new Protopack.Tree.Node(node, content, options);
+        nodeObj.element.addClassName('node');
+        if (this.multiSelect) {
+            if (nodeObj.data.extra.checked) {
+                this.selected.push(nodeObj.data.id);
+            }
+            // NOTE: `selected` doesn't include not loaded nodes
+        }
+        return nodeObj;
     },
 
     render: function () {   // TODO: how about partial rendering
@@ -187,7 +195,7 @@ Protopack.Tree = Class.create({
             if (this.selected.indexOf(id) === -1) {
                 this.selected.push(id);
             }
-            this.nodeById[id].data.checked = true;
+            this.nodeById[id].data.extra.checked = true;
             this.nodeById[id].element.down('input').checked = true;
         } else {
             this.nodeById[id].element.addClassName('selected');
@@ -201,7 +209,7 @@ Protopack.Tree = Class.create({
     deselectNode: function (id) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
-            this.nodeById[id].data.checked = false;
+            this.nodeById[id].data.extra.checked = false;
             this.nodeById[id].element.down('input').checked = false;
             this.selected.splice(this.selected.indexOf(id), 1);
         } else {
