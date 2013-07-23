@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2013 Mohsen Khahani
  * @license     MIT
- * @version     1.0
+ * @version     1.1
  * @created     July 20, 2013
  * @url         http://mohsenkhahani.ir/protopack
  *
@@ -22,54 +22,55 @@ Protopack.Tree.Node = Class.create({
      * Tree node initializer
      *
      * @access  private
-     * @param   array   node [id, pid, text, data]
-     * @param   object  options
-     * @return  Object  A class instance of Tree Node
+     * @param   object  node     Class instance of Protopack.Tree.Data
+     * @param   string  content  Node inner content (optional)
+     * @param   object  options  Node options
+     * @return  Object  Class instance of Tree Node
      */
-    initialize: function (node, options) {
-        this.id   = node.id;
-        this.pid  = node.pid;
-        this.text = node.text;
-        this.data = node.data || {};
-        this.innerHTML = node.innerHTML;
-        this.outer = this.construct(options);
+    initialize: function (node, content, options) {
+        this.data = node;
+        this.options = options;
+        this.innerHTML = content;
+        this.outer = this.construct();
     },
 
-    construct: function (options) {
+    construct: function () {
         var container = new Element('li'),
-            nodeItem  = new Element('div'),
-            innerHTML;
+            expander = new Element('span'),
+            nodeEl = new Element('div');
         if (!this.innerHTML) {
-            if (options.multiSelect) {
-                var checkbox = new Element('input', {type: 'checkbox', value: this.id});
-                innerHTML = new Element('div');
-                if (typeof this.data.checked != 'undefined') {
-                    checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
-                } else {
-                    this.data.checked = false;
-                }
-                innerHTML.insert(checkbox);
-                innerHTML.insert(new Element('label').update(this.text));
-            } else {
-                innerHTML = new Element('a').update(this.text);
-            }
-            this.innerHTML = innerHTML;
+            this.innerHTML = this.buildNode();
         }
-        nodeItem.insert(this.innerHTML);
-        nodeItem.observe('click', this.click.bind(this));
-        nodeItem.observe('mouseover', this.mouseOver.bind(this));
-        nodeItem.observe('mouseout', this.mouseOut.bind(this));
+        nodeEl.insert(this.innerHTML);
+        nodeEl.observe('click', this.click.bind(this));
+        nodeEl.observe('mouseover', this.mouseOver.bind(this));
+        nodeEl.observe('mouseout', this.mouseOut.bind(this));
+        this.element = nodeEl;
 
-        if (options.interactive) {
-            var expander = new Element('span');
-            expander.observe('click', this.toggle.bind(this)),
-            container.insert(expander);
-            this.expander = expander;
-        }
-        this.element = nodeItem;
-        container.insert(nodeItem);
+        expander.observe('click', this.toggle.bind(this)),
+        container.insert(expander);
+        this.expander = expander;
 
+        container.insert(nodeEl);
         return container;
+    },
+
+    buildNode: function () {
+        var content;
+        if (this.options.multiSelect) {
+            var checkbox = new Element('input', {type: 'checkbox', value: this.data.id});
+            content = new Element('div');
+            if (typeof this.data.checked != 'undefined') {
+                checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
+            } else {
+                this.data.checked = false;
+            }
+            content.insert(checkbox);
+            content.insert(new Element('label').update(this.data.text));
+        } else {
+            content = new Element('a').update(this.data.text);
+        }
+        return content;
     },
 
     click: function () {
