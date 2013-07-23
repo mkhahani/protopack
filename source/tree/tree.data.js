@@ -33,13 +33,13 @@ Protopack.Tree.Data = Class.create({
         this.pid = pid;
         this.text = text;
         this.data = data || null;
-        this.nodes = [];
+        this.childs = [];
     },
 
     addNode: function(id, pid, text, data) {
         var parent = this.getNode(pid),
             node = new Protopack.Tree.Data(id, pid, text, data);
-        parent.nodes.push(node);
+        parent.childs.push(node);
         return node;
     },
 
@@ -49,16 +49,16 @@ Protopack.Tree.Data = Class.create({
         }
 
         var res = false;
-        this.nodes.each(function(node) {
-            if (node.id == id) {
-                res = node;
+        this.childs.each(function(child) {
+            if (child.id == id) {
+                res = child;
                 throw $break;
             }
         });
 
         if (res === false) {
-            this.nodes.each(function(node) {
-                res = node.getNode(id);
+            this.childs.each(function(child) {
+                res = child.getNode(id);
                 if (res) {
                     throw $break;
                 }
@@ -68,17 +68,14 @@ Protopack.Tree.Data = Class.create({
         return res;
     },
 
-    getNodes: function(recursive) {
-        var nodes = this.nodes.clone();
-        if (recursive) {
-            this.nodes.each(function(node) {
-                var res = node.getNodes(true);
-                nodes = nodes.concat(res);
-                // res.each(function(r) {
-                    // nodes.push(r);
-                // });
+    getChildren: function(deep) {
+        var childs = this.childs.clone();
+        if (deep) {
+            this.childs.each(function(child) {
+                var grandchilds = child.getChildren(true);
+                childs = childs.concat(grandchilds);
             });
         }
-        return nodes;
+        return childs;
     }
 });
