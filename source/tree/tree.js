@@ -22,9 +22,10 @@ Protopack.Tree = Class.create({
      * Default configuration
      */
     options: {
-        className: 'ptree',
-        interactive: true,
-        multiSelect: false
+        className : 'ptree',    // base classname
+        interactive : true,     // not implemented yet
+        multiSelect : false,    // use of checkboxes or not
+        rootId : 0              // ID of the root nodes
     },
 
     /**
@@ -39,6 +40,7 @@ Protopack.Tree = Class.create({
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
         this.multiSelect = this.options.multiSelect;
+        this.rootId = this.options.rootId;
         this.selected = (this.multiSelect)? [] : null;
         this.nodeById = {};
         this.xhtml = this._construct(target);
@@ -97,8 +99,8 @@ Protopack.Tree = Class.create({
             tree,
             i;
 
-        this.dataObj = new Protopack.Tree.Data(0, -1, 'root', null),
-        parseData(0, this.dataObj);
+        this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null),
+        parseData(this.rootId, this.dataObj);
         tree = this.getTreeNodes(this.dataObj.nodes);
         this.xhtml.update(tree);
 
