@@ -45,11 +45,11 @@ Protopack.Input = Class.create({
         this.dropdownStyle = this.options.dropdownStyle;
         if (target) {
             this.target = $(target);
-            this.xhtml = this._construct();
+            this.xhtml = this.construct();
         }
     },
 
-    _construct: function () {
+    construct: function () {
         var xhtml = new Element('div', {'class': this.className});
 
         this.entry = this._buildEntry();
@@ -130,7 +130,7 @@ Protopack.Input = Class.create({
     grab: function (target) {
         this.entry = $(target);
         this.xhtml.update();
-        this.xhtml = this._construct();
+        this.xhtml = this.construct();
     },
 
     render: function () {

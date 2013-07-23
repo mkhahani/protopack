@@ -46,12 +46,12 @@ Protopack.Select = Class.create(Protopack.Input, {
         this.selectItemHandler = this._selectItem.bind(this);
         if (target) {
             this.target = $(target);
-            this.xhtml = this._construct();
+            this.xhtml = this.construct();
         }
         //this.render();
     },
 
-    _construct: function ($super) {
+    construct: function ($super) {
         var xhtml = $super();   // Calling constructor of the parent class
         this.listBox = this._buildListBox();
         this.dropdown.setContent(this.listBox);
