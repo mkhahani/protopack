@@ -64,10 +64,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             options = {multiSelect: this.multiSelect, 
                        interactive:this.options.interactive,
                        defaultState:this.options.defaultState},
-            tree = new Protopack.Tree(null, 
-                                     options, 
-                                     {nodeclick: this._onSelect.bind(this)});
-
+            tree = new Protopack.Tree(null, options);
+        tree.observe('tree:click', this._onSelect.bind(this));
         this.valueEntry = entry;
         this.tree = tree;
         xhtml.insert(entry);
@@ -86,7 +84,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         }
     },
 
-    _onSelect: function (node, e) {
+    _onSelect: function (node) {
         if (this.multiSelect) {
             this.value = this.valueEntry.value = this.tree.selected;
             this.text = this.entry.value = this.tree.getText(this.tree.selected).join(', ');
