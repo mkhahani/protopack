@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2011-2013 Mohsen Khahani
  * @license     MIT
- * @version     1.1
+ * @version     1.2
  * @created     October 5, 2011
  * @url         http://mohsenkhahani.ir/protopack
  *
@@ -24,9 +24,11 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
      * Default configuration
      */
     options: {
-        className : 'ptreeselect',
-        multiSelect : false,
-        interactive : false,
+        className : 'ptreeselect', // base classname
+        interactive : false, // not implemented yet
+        multiSelect : false, // use of checkboxes or not
+        fullPath: true, // display full path of selected node (single mode)
+        pathSep: ' > '  // Path separator
     },
 
     /**
@@ -55,8 +57,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     },
 
     construct: function ($super) {
-        var xhtml = $super(),
-            entry = new Element('input', {type:'hidden'}),
+        var xhtml = $super();
+            entry = new Element('input', {type:'hidden'});
             options = {
                 multiSelect: this.multiSelect, 
                 interactive:this.options.interactive
@@ -72,12 +74,11 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     select: function (node) {
         if (this.multiSelect) {
             this.value = this.valueEntry.value = this.tree.selected;
-            this.text = this.entry.value = this.fetchText(this.tree.selected);
         } else {
             this.value = this.valueEntry.value = node.data.id;
-            this.text = this.entry.value = node.data.text;
             this.dropdown.close();
         }
+        this.text = this.entry.value = this.fetchText(this.tree.selected);
         this.fire('treeselect:change', this.value);
     },
 
@@ -97,7 +98,17 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         } else {
             var node = this.tree.getNode(idSet)
             if (node) {
-                return node.data.text;
+                if (this.options.fullPath) {
+                    var res = [],
+                        id = idSet;
+                    while (id != 0) {
+                        res.push(this.tree.getNode(id).data.text);
+                        id = this.tree.getNode(id).data.pid;
+                    }
+                    return res.reverse().join(this.options.pathSep);
+                } else {
+                    return node.data.text;
+                }
             }
         }
         return null;
