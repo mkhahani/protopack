@@ -3,20 +3,21 @@
 <head>
   <title>Protopack Tree</title>
   <link rel="stylesheet" type="text/css" href="../style/tree/classic/classic.css" media="screen" />
-  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango-lines.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
   <script type="text/javascript" src="../source/tree/tree.js"></script>
   <script type="text/javascript" src="../source/tree/tree.data.js"></script>
   <script type="text/javascript" src="../source/tree/tree.node.js"></script>
   <script type="text/javascript" src="../source/tree/tree.event.js"></script>
+  <script type="text/javascript" src="../source/tree/tree.api.js"></script>
   <style type="text/css">
     body, button {font:12px arial;}
     body {background-color:silver;}
     h1 {font:bold 16px times; text-align:center; margin-top:100px;}
     button {height:24px;}
     #wrapper {width:400px; margin:0 auto;}
-    #workspace {height:400px; border:1px solid grey; background-color:white; overflow:auto;}
+    #workspace {height:250px; border:1px solid grey; background-color:white; overflow:auto;}
     #mkh_tree {padding:20px;}
   </style>
 </head>
@@ -24,21 +25,20 @@
   <h1>Protopack Tree</h1>
   <div id="wrapper">
     <div id="workspace"></div>
-    <hr/>
-    <div id="options">
+    <div>
       <form id="frm_options">
         <table><tr>
           <td>
-            <input type="checkbox" name="chk_multi_select" value="multi_select" />Multi Select<br/>
+            <input type="checkbox" name="chk_multi_select" value="multi_select" onclick="updateTree()" />Multi Select<br/>
           </td>
           <td>
-            <input type="checkbox" name="chk_interactive" value="interactive" checked />Interactive<br/>
+            <input type="checkbox" name="chk_interactive" value="interactive" onclick="updateTree()" checked />Interactive<br/>
+          </td>
+          <td>
+            <button type="button" onclick="test()">test</button>
           </td>
         </tr></table>
       </form>
-      <hr/>
-      <button onclick="updateTree()">Update</button>
-      <button onclick="test()">Expand</button>
     </div>
   </div>
 </body>
@@ -65,20 +65,18 @@
           multiSelect: frm.chk_multi_select.checked,
           interactive: frm.chk_interactive.checked,
           //className: 'ptree-tango'
-        },
-        events = {
-          nodeclick: treeClick,
-          nodemouseover:treeMouseOver,
-          nodemouseout:treeMouseOut
         };
-    tree = new Protopack.Tree('workspace', options, events);
+
+    tree = new Protopack.Tree('workspace', options);
     tree.setId('mkh_tree');
-    tree.loadData(data);
     //tree.setCaption('Root');
     tree.setClassName('ptree-tango');
+    tree.observe('tree:nodecreate', prepareNode);
     //tree.observe('tree:click', treeClick);
     //tree.observe('tree:mouseover', treeMouseOver);
     //tree.observe('tree:mouseout', treeMouseOut);
+    //tree.observe('tree:toggle', treeToggle);
+    tree.loadData(data);
   }
 
   function treeClick(node) {
@@ -93,29 +91,31 @@
     console.log('tree.mouseout: ');
     console.log(node);
   }
+  function treeToggle(node) {
+    console.log('tree.toggle: ');
+    console.log(node);
+  }
+  function prepareNode(node, innerHTML) {
+    if (!tree.options.multiSelect) {
+      if (node.id == 3) {
+        innerHTML = '<strong>' + node.text + '</strong>';
+      }
+      if (node.extra.href) {
+        innerHTML = new Element('a', {href:node.extra.href}).update(node.text);
+      }
+    }
+  }
   
   function test() {
-    tree.expand(2, true);
-    //var rootNode = [0, 0, 'Root'];
-    //var node = tree.dataObj.getNode(3)
-    //console.log(node.getNodes(true));
-    //tree2.loadData(data);
-    //tree.setSelected(22);
-    //tree.setCaption('MKH Tree!');
-
-    //tree.insertNode([11, 6, 'Item11', {}, {color:'green'}]);
-    //tree.deleteNode(8);
-    //tree.updateNode(8, [8, 7, 'Item8', {}, {color:'green'}]);
-    //tree.clearSelection();
-    //tree2.clearSelection();
-
-    //tree.setSelected(5);
-    //tree2.setSelected(8);
-    //alert(tree.selected);
-    //alert(tree2.selected);
-
-    //alert(tree.getText(2));
-    //alert(tree2.getText([2,3,8]));
+    //console.log(tree.getNode(3));
+    //tree.collapse(1, true);
+    //tree.setCaption('MKH Tree');
+    //tree.select([1, 4]);
+    //tree.clear();
+    //console.log(tree.selected);
+    //tree.expandAll();
+    //tree.collapseAll();
+    //tree.insertNode(12, 1, 'Item12');
   }
 
   var tree;
