@@ -27,68 +27,48 @@
   <h1>Protopack Tree v1.1</h1>
   <div id="wrapper">
     <div id="workspace" align="center">
-      <!--select id="myselect" onchange="alert(this.value)">
-        <option>javascript 1</option>
-        <option>javascript 2</option>
-        <option>javascript 3</option>
-        <option value="[1,2,3]">javascript</option>
-        <option value="{1:1, 2:2, 3:3}">javascript</option>
-      </select>
-      <input id="whatever" type="text" value="Javascript Programming Language" /-->
+      <div id="single_select"></div>
+      <div id="multi_select"></div>
     </div>
-    <hr/>
     <div id="options">
-      <button onclick="updateSelect()">Update</button>
+      <button onclick="test()">Test</button>
     </div>
   </div>
 </body>
 <script>
-  function updateSelect() {
-    //myCombo.setValue(['1','3','4']);
-    //myCombo.setId('mkh_combo');
-    //myCombo.setValue(5);
-    //myCombo.insertNode(['1','3','Added Node']);
-    //myCombo.deleteNode('3');
-    //myCombo.updateNode('3', ['3','9','Updated Node']);
-    //myCombo.setValue([1,2,5]);
-    myCombo.setValue(5);
+  function test() {
+    //combo2.setValue(5);
+    combo2.setValue(['1',2,5]);
+    //combo2.clear();
   }
-  function onTreeSelect() {
-    //alert(myCombo.value);
-    //alert(myCombo.tree.selected);
+  function onTreeSelect(value) {
+    //console.log(value);
   }
   //var items = [[1, 'item1', false], [2, 'item2', 1], [3, 'item3', true], [4, 'item4', false], [5, 'item5', false]];
-  //var combo1 = new AdvCombo('mkhCombo1', 'This is an advanced combobox component', items, 3, {}, 'workspace1');
-  //var combo2 = new AdvCombo('mkhCombo2', 'This is an advanced combobox component', items, 3, {}, 'workspace2');
 
 
   var data = [
-      [1, 0, 'Item1'],
-      [2, 0, 'Item2'],
-      [3, 2, 'Item3'],
-      [4, 3, 'Item4'],
-      [5, 3, 'Item5'],
-      [6, 5, 'Item6'],
-      [7, 2, 'Item7'],
-      [8, 7, 'Item8'],
-      [9, 7, 'Item9'],
-      [10, 0, 'Item10']
-      ],
-      options = {
-          multiSelect:false,
-          interactive:true,
-          defaultState:'collapse'
-      };
-  //var myCombo = new Protopack.TreeSelect('workspace');
-  var myCombo = new Protopack.TreeSelect('workspace', options, {onSelect: onTreeSelect});
-  myCombo.setId('the_treeselect');
-  myCombo.loadData(data);
-  myCombo.tree.setClassName('ptree-tango');
-  //myCombo.render();
-  //$('workspace').update(combo.get());
-  //combo.render();
-  //alert(edt.value);
-  //edt.value = 'MKH';
-  //alert(edt.value);
+        [1, 0, 'Item1'],
+        [2, 0, 'Item2'],
+        [3, 2, 'Item3'],
+        [4, 3, 'Item4'],
+        [5, 3, 'Item5'],
+        [6, 5, 'Item6'],
+        [7, 2, 'Item7'],
+        [8, 7, 'Item8'],
+        [9, 7, 'Item9'],
+        [10, 0, 'Item10']
+      ];
+
+  var combo1 = new Protopack.TreeSelect('single_select', {multiSelect:false});
+  combo1.setId('the_treeselect');
+  combo1.tree.setClassName('ptree-tango');
+  combo1.observe('treeselect:change', onTreeSelect);
+  combo1.loadData(data);
+
+  var combo2 = new Protopack.TreeSelect('multi_select', {multiSelect:true});
+  combo2.tree.setClassName('ptree-tango');
+  combo2.observe('treeselect:change', onTreeSelect);
+  combo2.loadData(data);
 </script>
 </html>
