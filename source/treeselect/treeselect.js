@@ -46,7 +46,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
         this.value = [];
-        this.xhtml = this._construct();
+        this.xhtml = this.construct();
         if (target) {
             $(target).insert(this.xhtml);
             //this.render();
@@ -54,7 +54,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         Protopack.extendEvents(this);
     },
 
-    _construct: function ($super) {
+    construct: function ($super) {
         var xhtml = $super(),
             entry = new Element('input', {type:'hidden'}),
             options = {
@@ -62,14 +62,14 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
                 interactive:this.options.interactive
             },
             tree = new Protopack.Tree(null, options);
-        tree.observe('tree:click', this._onSelect.bind(this));
+        tree.observe('tree:click', this.select.bind(this));
         this.valueEntry = entry;
         this.tree = tree;
         xhtml.insert(entry);
         return xhtml.insert(this.dropdown.setContent(tree.xhtml));
     },
 
-    _onSelect: function (node) {
+    select: function (node) {
         if (this.multiSelect) {
             this.value = this.valueEntry.value = this.tree.selected;
             this.text = this.entry.value = this.fetchText(this.tree.selected);
