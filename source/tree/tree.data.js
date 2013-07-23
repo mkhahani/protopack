@@ -25,20 +25,20 @@ Protopack.Tree.Data = Class.create({
      * @param   string  id      Node's ID
      * @param   string  pid     Node's parent
      * @param   string  text    Node's text
-     * @param   mixed   data    Node's extra data (optional)
+     * @param   mixed   extra   Node's extra data (optional)
      * @return  Object  A class instance of Tree Data
      */
-    initialize: function (id, pid, text, data) {
+    initialize: function (id, pid, text, extra) {
         this.id = id;
         this.pid = pid;
         this.text = text;
-        this.data = data || null;
+        this.extra = extra || null;
         this.childs = [];
     },
 
-    addNode: function(id, pid, text, data) {
+    addNode: function(id, pid, text, extra) {
         var parent = this.getNode(pid),
-            node = new Protopack.Tree.Data(id, pid, text, data);
+            node = new Protopack.Tree.Data(id, pid, text, extra);
         parent.childs.push(node);
         return node;
     },
