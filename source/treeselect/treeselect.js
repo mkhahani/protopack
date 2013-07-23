@@ -24,28 +24,23 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
      * Default configuration
      */
     options: {
-        className   : 'ptreeselect',
-        editable    : true,
+        className : 'ptreeselect',
         multiSelect : false,
         interactive : false,
-        defaultState: 'expand'
     },
 
     /**
      * TreeSelect initializer
      *
-     * @param   mixed   target  Target element or element ID
-     * @param   object  options Input options
-     * @param   object  events  Tree events
+     * @param   mixed   target  Container element/ID
+     * @param   object  options TreeSelect options
      *
-     * @return  Object  A class instance of TreeSelect
+     * @return  Object  Class instance of TreeSelect
      */
-    initialize: function (target, options, events) {
+    initialize: function (target, options) {
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
-        this.events = events || {};
         this.className = this.options.className;
-        this.editable = this.options.editable;
         this.multiSelect = this.options.multiSelect;
         this.readonly = true;
         this.buttonStyle = 'disabled';
@@ -56,14 +51,16 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             $(target).insert(this.xhtml);
             //this.render();
         }
+        Protopack.extendEvents(this);
     },
 
     _construct: function ($super) {
-        var xhtml = $super(),   // Calling constructor of the Parent Class
+        var xhtml = $super(),
             entry = new Element('input', {type:'hidden'}),
-            options = {multiSelect: this.multiSelect, 
-                       interactive:this.options.interactive,
-                       defaultState:this.options.defaultState},
+            options = {
+                multiSelect: this.multiSelect, 
+                interactive:this.options.interactive
+            },
             tree = new Protopack.Tree(null, options);
         tree.observe('tree:click', this._onSelect.bind(this));
         this.valueEntry = entry;
@@ -93,9 +90,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             this.text = this.entry.value = node.data.text;
             this.dropdown.close();
         }
-        if (this.events.onSelect) {
-            this.events.onSelect();
-        }
+        this.fire('treeselect:change', this.value);
     },
 
     /**
