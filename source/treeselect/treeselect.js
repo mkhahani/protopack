@@ -87,15 +87,37 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     _onSelect: function (node) {
         if (this.multiSelect) {
             this.value = this.valueEntry.value = this.tree.selected;
-            this.text = this.entry.value = this.tree.getText(this.tree.selected).join(', ');
+            this.text = this.entry.value = this.fetchText(this.tree.selected);
         } else {
-            this.value = this.valueEntry.value = node.id;
-            this.text = this.entry.value = node.text;
+            this.value = this.valueEntry.value = node.data.id;
+            this.text = this.entry.value = node.data.text;
             this.dropdown.close();
         }
         if (this.events.onSelect) {
             this.events.onSelect();
         }
+    },
+
+    /**
+     * Returns text of given node ID's
+     */
+    fetchText: function (idSet) {
+        if (Object.isArray(idSet)) {
+            var res = [];
+            idSet.each(function (id) {
+                var node = this.tree.getNode(id);
+                if (node) {
+                    res.push(node.data.text);
+                }
+            }, this);
+            return res.join(', ');
+        } else {
+            var node = this.tree.getNode(idSet)
+            if (node) {
+                return node.data.text;
+            }
+        }
+        return null;
     },
 
     loadData: function (data) {
@@ -109,16 +131,15 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     },
 
     clear: function () {
-        this.tree.clearSelection();
+        this.tree.clear();
         this.value = this.valueEntry.value = this.tree.selected;
         this.entry.value = this.text = '';
     },
 
     setValue: function (value) {
-        this.tree.setSelected(value);
+        this.tree.select(value);
         this.value = this.valueEntry.value = value = this.tree.selected;
-        this.text = (Object.isArray(value))? this.tree.getText(value).join(', ') :
-                                             this.tree.getText(value);
+        this.text = this.fetchText(value);
         this.entry.value = this.text;
     },
 
