@@ -158,23 +158,11 @@ Protopack.Tree.addMethods({
     },
 
     insertNode: function (node) {
-        this.data.push(node);
-        this.reload();
     },
 
     deleteNode: function (id) {
-        var index = this._getNodeIndex(id);
-        if (index != -1) {
-            this.data.splice(index, 1);
-            this.reload();
-        }
     },
 
     updateNode: function (id, node) {
-        var index = this._getNodeIndex(id);
-        if (index != -1) {
-            this.data.splice(index, 1);
-        }
-        this.insertNode(node);
     }
 });

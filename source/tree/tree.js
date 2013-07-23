@@ -208,16 +208,5 @@ Protopack.Tree = Class.create({
             this.nodeById[id].element.removeClassName('selected');
             this.selected = null;
         }
-    },
-
-    _getNodeIndex: function (id) {
-        var res = -1;
-        this.data.each( function (row, i) {
-            if (row[0] == id) {
-                res = i;
-                throw $break;
-            }
-        });
-        return res;
     }
 });
