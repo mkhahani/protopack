@@ -188,9 +188,13 @@ Protopack.Tree.addMethods({
      */
     deleteNode: function (id) {
         var nodeObj = this.nodeById[id],
-            pid = nodeObj.data.pid,
             dataObj,
-            index;
+            index,
+            pid;
+        if (!nodeObj) {
+            return false;
+        }
+        pid = nodeObj.data.pid;
         try {
             if (pid == 0) {
                 dataObj = this.dataObj;
