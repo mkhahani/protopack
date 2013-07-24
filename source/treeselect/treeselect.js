@@ -130,6 +130,14 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.entry.value = this.text;
     },
 
+    /**
+     * Selects all tree nodes (in multiSelect mode)
+     */
+    selectAll: function () {
+        this.tree.selectAll();
+        this.setValue(this.tree.selected);
+    },
+
     clear: function () {
         this.tree.clear();
         this.value = this.valueEntry.value = this.tree.selected;
