@@ -24,11 +24,11 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
      * Default configuration
      */
     options: {
-        className : 'ptreeselect', // base classname
-        interactive : false, // not implemented yet
-        multiSelect : false, // use of checkboxes or not
-        fullPath: true, // display full path of selected node (single mode)
-        pathSep: ' > '  // Path separator
+        className: 'ptreeselect', // base classname
+        interactive: false,       // not implemented yet
+        multiSelect: false,       // use of checkboxes or not
+        fullPath: true,           // display full path of selected node (single mode)
+        pathSep: ' > '            // Path separator
     },
 
     /**
@@ -42,9 +42,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     initialize: function (target, options) {
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
+        this.options.readonly = true;
         this.className = this.options.className;
         this.multiSelect = this.options.multiSelect;
-        this.readonly = true;
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
         this.value = [];
