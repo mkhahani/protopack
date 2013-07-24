@@ -23,18 +23,18 @@ Protopack.Select = Class.create(Protopack.Input, {
      * Default configuration
      */
     options: {
-        className : 'pselect',
-        readonly  : false,
-        listSize  : 8
+        className: 'pselect',
+        readonly: false,
+        listSize: 8
     },
 
     /**
      * Select initializer
      *
-     * @param   mixed   target  Target element or element ID
+     * @param   mixed   target  Container element/ID
      * @param   object  options Select options
      *
-     * @return  Object  A class instance of Select
+     * @return  Object  Class instance of Select
      */
     initialize: function (target, options) {
         this.options = Object.clone(this.options);
@@ -43,32 +43,30 @@ Protopack.Select = Class.create(Protopack.Input, {
         this.readonly = this.options.readonly;
         this.buttonStyle = 'disabled';
         this.dropdownStyle = 'auto';
-        this.selectItemHandler = this._selectItem.bind(this);
         if (target) {
             this.target = $(target);
             this.xhtml = this.construct();
         }
-        //this.render();
     },
 
     construct: function ($super) {
-        var xhtml = $super();   // Calling constructor of the parent class
-        this.listBox = this._buildListBox();
+        var xhtml = $super();
+        this.listBox = this.buildListBox();
         this.dropdown.setContent(this.listBox);
         this.render();
         return xhtml;
     },
 
-    _buildListBox: function () {
+    buildListBox: function () {
         var listBox = new Element('select', {size:0});
         if (listBox.selectedIndex !== -1) {
             this.entry.value = listBox.options[listBox.selectedIndex].text;
         }
-        listBox.observe('click', this.selectItemHandler);
+        listBox.observe('click', this.selectItem.bind(this));
         return listBox;
     },
 
-    _selectItem: function (e) {
+    selectItem: function (e) {
         if (this.listBox.selectedIndex !== -1) {
             this.entry.value = this.listBox.options[this.listBox.selectedIndex].text;
         }
@@ -92,5 +90,4 @@ Protopack.Select = Class.create(Protopack.Input, {
         }
         this.render();
     }
-
 });
