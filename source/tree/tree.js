@@ -31,10 +31,11 @@ Protopack.Tree = Class.create({
     /**
      * Tree initializer
      *
+     * @access  private
      * @param   mixed   target  Container element/ID
      * @param   object  options Tree options
      *
-     * @return  Object  A class instance of Tree 
+     * @return  Object  Class instance of Tree 
      */
     initialize: function (target, options) {
         this.options = Object.clone(this.options);
@@ -43,21 +44,18 @@ Protopack.Tree = Class.create({
         this.rootId = this.options.rootId;
         this.selected = (this.multiSelect)? [] : null;
         this.nodeById = {};
-        this.xhtml = this._construct(target);
+        this.xhtml = this.construct(target);
         Protopack.extendEvents(this);
-        // default checked inputs does not work on IE6
-        //if (Prototype.Browser.IE6) {
-            //this._refresh.bind(this).delay(0.1);
-        //}
     },
 
     /**
      * Builds tree structure
      *
+     * @access  private
      * @param   mixed   target  Container element/ID
      * @return  string  XHTML grid
      */
-    _construct: function (target) {
+    construct: function (target) {
         var tree = new Element('div', {'class': this.options.className});
         if (target) {
             $(target).update(tree);
@@ -76,8 +74,9 @@ Protopack.Tree = Class.create({
     /**
      * Loads data and builds the tree
      *
+     * @access  public
      * @param   data    Array   Array of nodes which each node is an array itself
-     *                          node: [id:int, pid:int, text:string, data:Obj]
+     *                          node: [id, pid, text, extra]
      *
      * @return  void
      */
@@ -176,28 +175,6 @@ Protopack.Tree = Class.create({
                 node.expander.className = 'l';
             }
         });
-    },
-
-    _sort: function (node1, node2) {
-        var n1 = node1[2].toLowerCase(),
-            n2 = node2[2].toLowerCase(),
-            res = 0;
-
-        if (n1 > n2) {
-            res = 1;
-        } else if (n1 < n2) {
-            res = -1;
-        }
-
-        return res;
-    },
-
-    _refresh: function () {
-        this.data.each( function (row, index) {
-            var inputs = this.xhtml.select('input[type=checkbox][value=' + row[0] + ']');
-                checked = row[3]? row[3].checked : false;
-            inputs[0].checked = checked;
-        }.bind(this));
     },
 
     /**
