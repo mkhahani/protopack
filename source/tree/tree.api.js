@@ -151,16 +151,26 @@ Protopack.Tree.addMethods({
      * @return  object  Created node
      */
     insertNode: function (id, pid, text, extra) {
-        if (!this.nodeById[pid]) {
-            return;
+        var node,
+            nodeObj,
+            dataObj,
+            container;
+        if (pid == 0) {
+            dataObj = this.dataObj;
+            container = this.xhtml.down('ul');
+        } else {
+            var parent = this.nodeById[pid];
+            if (!parent) {
+                return;
+            }
+            dataObj = parent.data;
+            container = this.prepareNode(parent);
+            parent.expander.className = 'open';
         }
-        var parent = this.nodeById[pid],
-            container = this.prepareNode(parent),
-            node = parent.data.addNode(id, pid, text, extra),
-            nodeObj = this.createNode(node);
+        node = dataObj.addNode(id, pid, text, extra);
+        nodeObj = this.createNode(node);
         container.insert(nodeObj.outer);
         nodeObj.outer.addClassName('last');
-        parent.expander.className = 'open';
         this.nodeById[id] = nodeObj;
         try {
             nodeObj.outer.previous('li').removeClassName('last');
