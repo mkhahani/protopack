@@ -140,13 +140,33 @@ Protopack.Tree.addMethods({
         }
     },
 
-    // TODO: the code is buggy
+    /**
+     * Appends a new node as the last child of it's parent
+     *
+     * @access  public
+     * @param   string  id      Node ID
+     * @param   string  pid     Node parent ID
+     * @param   string  text    Node text
+     * @param   object  extra   Extra data (optional)
+     * @return  object  Created node
+     */
     insertNode: function (id, pid, text, extra) {
+        if (!this.nodeById[pid]) {
+            return;
+        }
         var parent = this.nodeById[pid],
+            container = this.prepareNode(parent),
             node = parent.data.addNode(id, pid, text, extra),
-            nodeObj = this.createNode(node),
-            container = this.prepareNode(parent);
+            nodeObj = this.createNode(node);
         container.insert(nodeObj.outer);
+        nodeObj.outer.addClassName('last');
+        parent.expander.className = 'open';
+        this.nodeById[id] = nodeObj;
+        try {
+            nodeObj.outer.previous('li').removeClassName('last');
+        } catch(err) {}
+
+        return nodeObj;
     },
 
     deleteNode: function (id) {
