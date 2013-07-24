@@ -99,6 +99,7 @@ Protopack.Tree = Class.create({
             i;
 
         this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null);
+
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
@@ -152,29 +153,6 @@ Protopack.Tree = Class.create({
             node.outer.insert(childEl);
         }
         return childEl;
-    },
-
-    appendNode: function (node) {
-        var parent = this.nodeById[node.data.pid];
-        parent.element.next('ul');
-    },
-
-    render: function () {   // TODO: how about partial rendering
-        if (!this.options.interactive) {
-            return;
-        }
-        var nodes = this.xhtml.select('div');
-        nodes.each(function (node) {
-            if (node.next()) {
-                if (node.next().visible()) {
-                    node.expander.className = 'open';
-                } else {
-                    node.expander.className = 'close';
-                }
-            } else {
-                node.expander.className = 'l';
-            }
-        });
     },
 
     /**
