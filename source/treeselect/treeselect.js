@@ -120,8 +120,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     },
 
     setId: function (id) {
-        this.valueEntry.id = id;
-        this.valueEntry.name = id;
+        this.xhtml.id = id;
     },
 
     setValue: function (value) {
