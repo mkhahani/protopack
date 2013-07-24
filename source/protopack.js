@@ -31,18 +31,18 @@ var Protopack = Protopack || {
      */
     extendEvents: function (object) {
         Object.extend(object, {
-            _initObserve: function (event) {
+            initObserve: function (event) {
                 this.observers = this.observers || {};
                 this.observers[event] = this.observers[event] || [];
             },
             observe: function (event, handler) {
-                this._initObserve(event);
+                this.initObserve(event);
                 if (!this.observers[event].include(handler)) {
                     this.observers[event].push(handler)
                 }
             },
             fire: function (event) {
-                this._initObserve(event);
+                this.initObserve(event);
                 if (this.observers[event] !== undefined) {
                     for (var i = 0; i < this.observers[event].length; i++) {
                         var args = $A(arguments).slice(1);
