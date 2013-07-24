@@ -126,6 +126,15 @@ Protopack.Tree.addMethods({
     },
 
     /**
+     * Selects all tree nodes (in multiSelect mode)
+     */
+    selectAll: function () {
+        if (this.multiSelect) {
+            this.select(Object.keys(this.nodeById));
+        }
+    },
+
+    /**
      * Clears selected/checked nodes
      */
     clear: function () {
