@@ -115,7 +115,12 @@
     //console.log(tree.selected);
     //tree.expandAll();
     //tree.collapseAll();
-    //tree.insertNode(12, 1, 'Item12');
+
+    //var newNode = tree.insertNode(12, tree.selected, 'Item12');
+    //newNode.element.setStyle('font-weight:bold;');
+
+    tree.deleteNode(8);
+    tree.deleteNode(9);
   }
 
   var tree;
