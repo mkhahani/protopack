@@ -23,7 +23,7 @@ if (typeof Prototype === 'undefined' || !Prototype.Version.match('1.7')) {
  * @access  public
  */
 var Protopack = Protopack || {
-    version: '1.0',
+    version: '1.0dev',
 
     /**
      * Adds `observe` and `fire` methods to passed object
