@@ -23,19 +23,19 @@ Protopack.Input = Class.create({
      * Default configuration
      */
     options: {
-        className : 'pinput',
-        readonly : true,
-        buttonStyle : 'smart',  // [disabled, visible, smart]
-        dropdownStyle : 'auto'  // [disabled, manually, auto]
+        className: 'pinput',
+        readonly: true,
+        buttonStyle: 'smart',  // [disabled, visible, smart]
+        dropdownStyle: 'auto'  // [disabled, manually, auto]
     },
 
     /**
      * Input intializer
      *
-     * @param   mixed   target  Target element or element ID
-     * @param   object  options Input options {className, multiSelect}
+     * @param   mixed   target  Container element/ID
+     * @param   object  options Input options
      *
-     * @return  object  A class instance of Input 
+     * @return  object  Class instance of Input 
      */
     initialize: function (target, options) {
         this.options = Object.clone(this.options);
@@ -52,16 +52,16 @@ Protopack.Input = Class.create({
     construct: function () {
         var xhtml = new Element('div', {'class': this.className});
 
-        this.entry = this._buildEntry();
+        this.entry = this.buildEntry();
         xhtml.insert(this.entry);
 
         if (this.buttonStyle !== 'disabled') {
-            this.button = this._buildButton(xhtml);
+            this.button = this.buildButton(xhtml);
             xhtml.insert(this.button);
         }
 
         if (this.dropdownStyle !== 'disabled') {
-            this.dropdown = this._buildDropdown(xhtml);
+            this.dropdown = this.buildDropdown(xhtml);
         }
 
         if (this.target) {
@@ -71,7 +71,7 @@ Protopack.Input = Class.create({
         return xhtml;
     },
 
-    _buildEntry: function () {
+    buildEntry: function () {
         var entry = (this.entry)? (this.entry) : new Element('input', {type: 'text'});
         if (this.options.readonly) {
             entry.writeAttribute({readonly: true});
@@ -79,24 +79,24 @@ Protopack.Input = Class.create({
         if (this.buttonStyle === 'smart') {
             entry.observe('mousedown', function () { this.button.hide(); }.bind(this));
         }
-        entry.observe('mousedown', this._onInputClick.bind(this));
+        entry.observe('mousedown', this.click.bind(this));
 
         return entry;
     },
 
-    _buildButton: function (xhtml) {
+    buildButton: function (xhtml) {
         var button = new Element('button');
         if (this.buttonStyle === 'smart') {
             button.hide();
             xhtml.observe('mouseover', function () { button.show(); }.bind(this));
             xhtml.observe('mouseout', function () { button.hide(); }.bind(this));
         }
-        button.observe('click', this._onButtonClick.bind(this));
+        button.observe('click', this.buttonClick.bind(this));
 
         return button;
     },
 
-    _buildDropdown: function (xhtml) {
+    buildDropdown: function (xhtml) {
         var options = {
                 className: this.className + '-dropdown',
                 modal: false,
@@ -110,13 +110,13 @@ Protopack.Input = Class.create({
         return dropdown;
     },
 
-    _onInputClick: function (e) {
+    click: function (e) {
         if (this.dropdownStyle === 'auto' && Event.isLeftClick(e)) {
             this.dropdown.toggle();
         }
     },
 
-    _onButtonClick: function (e) {
+    buttonClick: function (e) {
         if (this.dropdownStyle === 'auto') {
             this.dropdown.toggle();
             //Event.stop(e);
