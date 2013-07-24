@@ -53,7 +53,7 @@ Protopack.Tree.addMethods({
         }
 
         var node = this.nodeById[id],
-            childEl = this.prepareNode(node).show();
+            childEl = this.getChilds(node).show();
 
         if (node.data.childs.length > 0) {
             node.expander.className = 'open';
@@ -80,7 +80,7 @@ Protopack.Tree.addMethods({
         }
 
         var node = this.nodeById[id],
-            childEl = this.prepareNode(node).hide();
+            childEl = this.getChilds(node).hide();
 
         if (node.data.childs.length > 0) {
             node.expander.className = 'close';
@@ -164,7 +164,7 @@ Protopack.Tree.addMethods({
                 return;
             }
             dataObj = parent.data;
-            container = this.prepareNode(parent);
+            container = this.getChilds(parent);
             parent.expander.className = 'open';
         }
         node = dataObj.addNode(id, pid, text, extra);

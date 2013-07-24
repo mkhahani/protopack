@@ -103,7 +103,7 @@ Protopack.Tree = Class.create({
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
-        tree = this.createChild(this.dataObj.childs);
+        tree = this.createChilds(this.dataObj.childs);
         this.xhtml.update(tree);
 
         // The most first node
@@ -126,7 +126,7 @@ Protopack.Tree = Class.create({
         return nodeObj;
     },
 
-    createChild: function (nodes) {
+    createChilds: function (nodes) {
         var ul = new Element('ul'),
             options = {multiSelect: this.multiSelect, interactive: this.options.interactive},
             nodeObj;
@@ -146,10 +146,10 @@ Protopack.Tree = Class.create({
         return ul;
     },
 
-    prepareNode: function (node) {
+    getChilds: function (node) {
         var childEl = node.element.next('ul');
         if (childEl === undefined) {
-            childEl = this.createChild(node.data.childs);
+            childEl = this.createChilds(node.data.childs);
             node.outer.insert(childEl);
         }
         return childEl;
