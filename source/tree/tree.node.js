@@ -29,31 +29,31 @@ Protopack.Tree.Node = Class.create({
      */
     initialize: function (node, content, options) {
         this.data = node;
-        this.innerHTML = content;
+        this.inner = content;
         this.options = {};
         Object.extend(this.options, options || {});
         this.outer = this.construct();
     },
 
     construct: function () {
-        var container = new Element('li'),
+        var outer = new Element('li'),
             expander = new Element('span'),
             nodeEl = new Element('div');
-        if (!this.innerHTML) {
-            this.innerHTML = this.buildNode();
+        if (!this.inner) {
+            this.inner = this.buildNode();
         }
-        nodeEl.insert(this.innerHTML);
+        nodeEl.insert(this.inner);
         nodeEl.observe('click', this.click.bind(this));
         nodeEl.observe('mouseover', this.mouseOver.bind(this));
         nodeEl.observe('mouseout', this.mouseOut.bind(this));
         this.element = nodeEl;
 
         expander.observe('click', this.toggle.bind(this)),
-        container.insert(expander);
+        outer.insert(expander);
         this.expander = expander;
 
-        container.insert(nodeEl);
-        return container;
+        outer.insert(nodeEl);
+        return outer;
     },
 
     buildNode: function () {
