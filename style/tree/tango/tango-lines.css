@@ -4,9 +4,10 @@
  */
 
 .ptree-tango {line-height:12px;}
-.ptree-tango ul {list-style:none; margin:0; padding-left:20px; background:url(h-line.png) repeat-y;}
+.ptree-tango ul {list-style:none; margin:0; padding-left:18px; background:url(line.png) repeat-y;}
 .ptree-tango > ul {background:none; padding:0;}
 .ptree-tango .last > ul {background:none;}
+.ptree-tango li {white-space:nowrap;}
 .ptree-tango span {display:inline-block; width:18px; height:18px; vertical-align:middle;}
 .ptree-tango span {background:url(states.png) no-repeat;}
 .ptree-tango span.close {background-position:0 -18px;}
@@ -20,8 +21,8 @@
 .ptree-tango .last > span.open {background-position:-18px -36px;}
 .ptree-tango .first.last > span.close {background-position:-54px -18px;}
 .ptree-tango .first.last > span.open {background-position:-54px -36px;}
-.ptree-tango .node {display:inline-block; margin-left:3px; padding:1px 2px; cursor:pointer;}
+.ptree-tango .node {display:inline-block; padding:1px 2px; cursor:pointer;}
 .ptree-tango .node input[type=checkbox] {vertical-align:middle; margin:0 2px 2px 0;}
 .ptree-tango .node.hover {color:blue;}
-.ptree-tango .node.selected {background-color:#d86060; color:white;}
+.ptree-tango .node.selected {background-color:#5B8CC7; color:white;}
 .ptree-tango .node.selected a {color:white;}

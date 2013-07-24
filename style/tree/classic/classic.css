@@ -4,9 +4,10 @@
  */
 
 .ptree {line-height:12px;}
-.ptree ul {list-style:none; margin:0; padding-left:20px; background:url(h-line.png) repeat-y;}
+.ptree ul {list-style:none; margin:0; padding-left:18px; background:url(h-line.png) repeat-y;}
 .ptree > ul {background:none; padding:0;}
 .ptree .last > ul {background:none;}
+.ptree li {white-space:nowrap;}
 .ptree span {display:inline-block; width:18px; height:18px; vertical-align:middle;}
 .ptree span {background:url(states.png) no-repeat;}
 .ptree span.close {background-position:0 -18px;}
