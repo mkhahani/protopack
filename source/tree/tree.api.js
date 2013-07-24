@@ -179,7 +179,46 @@ Protopack.Tree.addMethods({
         return nodeObj;
     },
 
+    /**
+     * Removes node from tree
+     *
+     * @access  public
+     * @param   string  id      Node ID
+     * @return  object  bool    True on success and false otherwise
+     */
     deleteNode: function (id) {
+        var nodeObj = this.nodeById[id],
+            pid = nodeObj.data.pid,
+            dataObj,
+            index;
+        try {
+            if (pid == 0) {
+                dataObj = this.dataObj;
+            } else {
+                var parent = this.nodeById[pid];
+                if (!parent) {
+                    return;
+                }
+                dataObj = parent.data;
+                var container = nodeObj.outer.up('ul');
+                if (container.children.length === 1) {
+                    parent.expander.className = '';
+                } else {
+                    if (!nodeObj.outer.next('li')) {
+                        var prev = nodeObj.outer.previous('li');
+                        if (prev) {
+                            prev.className = 'last';
+                        }
+                    }
+                }
+            }
+            nodeObj.outer.remove();
+            index = dataObj.childs.indexOf(nodeObj.data);
+            dataObj.childs.splice(index, 1);
+            delete this.nodeById[id];
+        } catch(err) {return false;}
+
+        return true;
     },
 
     updateNode: function (id, node) {
