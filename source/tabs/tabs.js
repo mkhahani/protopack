@@ -22,57 +22,63 @@ Protopack.Tabs = Class.create({
      * Default configuration
      */
     options: {
-        className  : 'ptabs',
-        findTabs   : true,
-        hover      : false,
-        defaultTab : 1
+        className: 'ptabs',
+        findTabs: true,
+        hover: false,
+        defaultTab: 1
     },
 
     /**
      * Tabs intializer
-     * @param   string  target  ID of the target element
+     *
+     * @access  private
+     * @param   mixed   target  Container element/ID
      * @param   object  options
+     * @return  Clss instance of Tabs
      */
     initialize: function (target, options) {
         if (!$(target)) {
             throw new Error('Protopack.Tabs.initialize(): Could not find the target element "' + target + '".');
         }
-        this._target = $(target);
+        this.target = $(target);
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
-        if (this.options.findTabs) {this._construct();}
+        if (this.options.findTabs) { this.construct(); }
     },
 
     /**
      * Builds tabs
-     * @param   string  target  ID of the target element
+     *
+     * @access  private
+     * @return  void
      */
-    _construct: function () {
-        var links = this._target.select('li a');
-        this.tabs = this._target.select('li').invoke('addClassName', this.options.className + '-tab');
+    construct: function () {
+        var links = this.target.select('li a');
+        this.tabs = this.target.select('li').invoke('addClassName', this.options.className + '-tab');
         this.sheets = links.map(function (link) {return $(link.rel);});
-        links.invoke('observe', 'click', this._switchTab.bind(this));
+        links.invoke('observe', 'click', this.switchTab.bind(this));
         if (this.options.hover) {
-            links.invoke('observe', 'mouseover', this._switchTab.bind(this));
+            links.invoke('observe', 'mouseover', this.switchTab.bind(this));
         }
-        this._reset();
+        this.reset();
         this.setActive(this.options.defaultTab);
-        this._target.addClassName(this.options.className);
+        this.target.addClassName(this.options.className);
     },
 
     /**
      * Creates tabs by passed tabs data
+     *
      * @param   array   tabs [[id1, title1], [id2, title2], ...]
      */
-    _createTabs: function (tabs) {
+    createTabs: function (tabs) {
         var ul = new Element('ul').addClassName(this.options.className);
         this.sheets = tabs.map(function (tab) {return $(tab[0]);});
         this.tabs = tabs.map(function (tab) {
             var a = new Element('a', {rel:tab[0]}).update(tab[1]),
                 li = new Element('li').insert(a);
-            a.observe('click', this._switchTab.bind(this));
+            a.observe('click', this.switchTab.bind(this));
             if (this.options.hover) {
-                a.observe('mouseover', this._switchTab.bind(this));
+                a.observe('mouseover', this.switchTab.bind(this));
             }
             li.addClassName(this.options.className + '-tab');
             ul.insert(li);
@@ -83,11 +89,12 @@ Protopack.Tabs = Class.create({
 
     /**
      * Switches to the clicked/hovered tab
+     *
      * @param   object  e   mouse event (click or mouseover)
      */
-    _switchTab: function (e) {
+    switchTab: function (e) {
         var link = Event.findElement(e);
-        this._reset();
+        this.reset();
         $(link.rel).show();
         link.up('li').addClassName('active');
     },
@@ -95,27 +102,29 @@ Protopack.Tabs = Class.create({
     /**
      * Deselects tabs and hides all sheets
      */
-    _reset: function () {
+    reset: function () {
         this.sheets.invoke('hide');
         this.tabs.invoke('removeClassName', 'active');
     },
 
     /**
-     * Creates tabs by passed tabs data
+     * Creates tabs by passing tabs data
+     *
      * @param   array   tabs [[id1, title1], [id2, title2], ...]
      */
     setTabs: function (tabs) {
-        this._target.insert({top: this._createTabs(tabs)});
-        this._reset();
+        this.target.insert({top: this.createTabs(tabs)});
+        this.reset();
         this.setActive(this.options.defaultTab);
     },
 
     /**
      * Selects a tab and displays related sheet
+     *
      * @param   integer index   tab index, begins from 1
      */
     setActive: function (index) {
-        this._reset();
+        this.reset();
         this.tabs[index - 1].addClassName('active');
         this.sheets[index - 1].show();
     }
