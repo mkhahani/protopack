@@ -1,0 +1,18 @@
+/**
+ *  Tree Tango style
+ *  http://mohsenkhahani.ir/protopack
+ */
+
+.ptree-tango {direction:rtl; text-align:right;}
+.ptree-tango ul {list-style:none; margin:0; padding-right:18px;}
+.ptree-tango > ul {padding:0;}
+.ptree-tango li {white-space:nowrap;}
+.ptree-tango span {display:inline-block; width:16px; height:20px; vertical-align:middle;}
+.ptree-tango span.close {background:url(close.png) 0 50% no-repeat;}
+.ptree-tango span.open {background:url(open.png) 0 50% no-repeat;}
+.ptree-tango .caption {font-weight:bold; padding-bottom:2px;}
+.ptree-tango .node {display:inline-block; padding:1px 2px; cursor:pointer;}
+.ptree-tango .node input[type=checkbox] {vertical-align:middle; margin:0 0 2px 2px;}
+.ptree-tango .node.hover {color:blue;}
+.ptree-tango .node.selected {background-color:#5B8CC7; color:white;}
+.ptree-tango .node.selected a {color:white;}
