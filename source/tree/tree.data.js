@@ -36,13 +36,6 @@ Protopack.Tree.Data = Class.create({
         this.childs = [];
     },
 
-    addNode: function(id, pid, text, extra) {
-        var parent = this.getNode(pid),
-            node = new Protopack.Tree.Data(id, pid, text, extra);
-        parent.childs.push(node);
-        return node;
-    },
-
     getNode: function(id) {
         if (this.id == id) {
             return this;
@@ -66,6 +59,20 @@ Protopack.Tree.Data = Class.create({
         }
 
         return res;
+    },
+
+    addNode: function(id, pid, text, extra) {
+        var parent = this.getNode(pid),
+            node = new Protopack.Tree.Data(id, pid, text, extra);
+        parent.childs.push(node);
+        return node;
+    },
+
+    deleteNode: function(id) {
+        var parent = this.getNode(pid),
+            node = new Protopack.Tree.Data(id, pid, text, extra);
+        parent.childs.push(node);
+        return node;
     },
 
     getChildren: function(deep) {

@@ -50,7 +50,7 @@ Protopack.Draggable = Class.create({
             this.cursorOffset = [
                 Event.pointerX(e) - this.dragObj.offsetLeft,
                 Event.pointerY(e) - this.dragObj.offsetTop
-            ]
+            ];
             Event.observe(document, 'mousemove', this.goDragFunc);
             Event.observe(this.clickObj, 'mouseup', this.stopDragFunc);
             Event.stop(e);
@@ -78,4 +78,3 @@ Protopack.Draggable = Class.create({
         Event.stop(e);
     }
 });
-

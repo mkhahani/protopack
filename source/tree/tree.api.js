@@ -52,8 +52,8 @@ Protopack.Tree.addMethods({
             return;
         }
 
-        var node = this.nodeById[id],
-            childEl = this.getChilds(node).show();
+        var node = this.nodeById[id];
+        this.getChilds(node).show();
 
         if (node.data.childs.length > 0) {
             node.expander.className = 'open';
@@ -79,8 +79,8 @@ Protopack.Tree.addMethods({
             return;
         }
 
-        var node = this.nodeById[id],
-            childEl = this.getChilds(node).hide();
+        var node = this.nodeById[id];
+        this.getChilds(node).hide();
 
         if (node.data.childs.length > 0) {
             node.expander.className = 'close';
@@ -164,7 +164,7 @@ Protopack.Tree.addMethods({
             nodeObj,
             dataObj,
             container;
-        if (pid == 0) {
+        if (pid == '0') {
             dataObj = this.dataObj;
             container = this.xhtml.down('ul');
         } else {
@@ -205,7 +205,7 @@ Protopack.Tree.addMethods({
         }
         pid = nodeObj.data.pid;
         try {
-            if (pid == 0) {
+            if (pid == '0') {
                 dataObj = this.dataObj;
             } else {
                 var parent = this.nodeById[pid];

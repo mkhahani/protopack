@@ -81,7 +81,8 @@ Protopack.Tree = Class.create({
      * @return  void
      */
     loadData: function (data) {
-        var buildData = function (parent, nodeObj) {
+        var tree,
+            buildData = function (parent, nodeObj) {
                 var store = data.partition(function (row) {
                         return row[1] == parent;
                     }),
@@ -94,9 +95,7 @@ Protopack.Tree = Class.create({
                         buildData(row[0], node);
                     }
                 }
-               },
-            tree,
-            i;
+               };
 
         this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null);
 

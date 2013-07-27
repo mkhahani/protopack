@@ -86,8 +86,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
      * Returns text of given node ID's
      */
     fetchText: function (idSet) {
+        var res = [];
         if (Object.isArray(idSet)) {
-            var res = [];
             idSet.each(function (id) {
                 var node = this.tree.getNode(id);
                 if (node) {
@@ -96,12 +96,11 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             }, this);
             return res.join(', ');
         } else {
-            var node = this.tree.getNode(idSet)
+            var node = this.tree.getNode(idSet);
             if (node) {
                 if (this.options.fullPath) {
-                    var res = [],
-                        id = idSet;
-                    while (id != 0) {
+                    var id = idSet;
+                    while (id != '0') {
                         res.push(this.tree.getNode(id).data.text);
                         id = this.tree.getNode(id).data.pid;
                     }

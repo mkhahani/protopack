@@ -44,13 +44,13 @@ Protopack.Progressbar = Class.create({
         this.end       = this.options.end;
         this.position  = this.options.position;
         this.step      = this.options.step;
-        this._constructor(target);
+        this.construct(target);
     },
 
     /**
      * Creates the progressbar structure
      */
-    _constructor: function(target) {
+    construct: function(target) {
         var progress  = new Element('div', {'class':'bar'}).update('&nbsp;'),
             container = new Element('div', {'class':this.className});
         container.insert(progress);
@@ -58,23 +58,23 @@ Protopack.Progressbar = Class.create({
         this.progressBar = progress;
         $(target).update(container);
         if (this.options.valueType != 'none') {
-            this.valueBar = this._createValuebar();
+            this.valueBar = this.createValuebar();
         }
 
-        this._init();
-        this._update();
+        this.init();
+        this.update();
     },
 
-    _createValuebar: function() {
+    createValuebar: function() {
         var valueBar = new Element('div', {'class':'value'});
         this.container.insert(valueBar);
         return valueBar;
     },
 
-    _init: function() {
+    init: function() {
         this.valueBar.style.lineHeight = this.progressBar.measure('height') + 'px';
         this.width = this.container.measure('width');
-        this._pxStep = this.width / (this.end - this.start);
+        this.pxStep = this.width / (this.end - this.start);
         switch (this.options.valuePos) {
             case 'center':
                 this.valueBar.style.left = '0';
@@ -89,24 +89,24 @@ Protopack.Progressbar = Class.create({
         }
     },
 
-    _update: function() {
+    update: function() {
         //var width;
-        this._pxPos = (this.position - this.start) * this._pxStep;
+        this.pxPos = (this.position - this.start) * this.pxStep;
         // if (this.position == this.end) {
             // width = this.width;
         // } else if (this.position == this.start) {
             // width = 0;
         // } else {
-            // width = Math.round(this._pxPos);
+            // width = Math.round(this.pxPos);
         // }
-        //width = Math.round(this._pxPos);
-        this.progressBar.style.width = Math.round(this._pxPos) + 'px';
+        //width = Math.round(this.pxPos);
+        this.progressBar.style.width = Math.round(this.pxPos) + 'px';
         if (this.valueBar) {
-            this._updateValueBar();
+            this.updateValueBar();
         }
     },
 
-    _updateValueBar: function() {
+    updateValueBar: function() {
         var value;
         switch (this.options.valueType) {
             case 'ratio':
@@ -135,29 +135,29 @@ Protopack.Progressbar = Class.create({
         this.position = this.start;
         this.progressBar.style.width = '0';
         if (this.valueBar) {
-            this._updateValueBar();
+            this.updateValueBar();
         }
     },
 
     setStart: function(start) {
         this.start = start;
-        this._init();
+        this.init();
     },
 
     setEnd: function(end) {
         this.end = end;
-        this._init();
+        this.init();
     },
 
     setPosition: function(pos) {
         this.position = pos;
-        this._update();
+        this.update();
     },
 
     stepIt: function() {
         if (this.position < this.end) {
             this.position++;
-            this._update();
+            this.update();
         }
     },
 
@@ -170,6 +170,6 @@ Protopack.Progressbar = Class.create({
         } else {
             this.position = newPos;
         }
-        this._update();
+        this.update();
     }
 });

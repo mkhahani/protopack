@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2011-2013 Mohsen Khahani
  * @license     MIT
- * @version     1.0
+ * @version     1.0dev
  * @url         http://mohsenkhahani.ir/protopack
  */
 
@@ -38,7 +38,7 @@ var Protopack = Protopack || {
             observe: function (event, handler) {
                 this.initObserve(event);
                 if (!this.observers[event].include(handler)) {
-                    this.observers[event].push(handler)
+                    this.observers[event].push(handler);
                 }
             },
             fire: function (event) {
