@@ -1,3 +1,8 @@
+/**
+ *  Ptotopack.Progressbar Style
+ *  http://mohsenkhahani.ir/protopack
+ */
+
 .pprogressbar {position:relative; width:100%; height:100%; border:1px solid #999999; padding:1px; x-overflow:hidden;}
 .pprogressbar .bar {float:left; width:0; height:100%; background-color:blue; background_:url(progress.png);}
 .pprogressbar .value {position:absolute; height:100%; padding:0 2px; white-space:nowrap;}
