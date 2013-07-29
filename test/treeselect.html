@@ -2,12 +2,12 @@
 <html>
 <head>
   <title>Protopack TreeSelect</title>
-  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="../style/tree/tango/tango-lines.css" media="screen" />
   <link rel="stylesheet" type="text/css" href="../style/treeselect.css" media="screen" />
   <script type="text/javascript" src="../lib/prototype.js"></script>
   <script type="text/javascript" src="../source/protopack.js"></script>
-  <script type="text/javascript" src="../source/window/window.js"></script>
   <script type="text/javascript" src="../source/input/input.js"></script>
+  <script type="text/javascript" src="../source/window/window.js"></script>
   <script type="text/javascript" src="../source/tree/tree.js"></script>
   <script type="text/javascript" src="../source/tree/tree.data.js"></script>
   <script type="text/javascript" src="../source/tree/tree.node.js"></script>
@@ -38,7 +38,8 @@
 <script>
   function test() {
     //combo2.setValue(5);
-    combo2.setValue(['1',2,5]);
+    //combo2.setValue(['1',2,5]);
+    combo2.selectAll();
     //combo2.clear();
   }
   function onTreeSelect(value) {
