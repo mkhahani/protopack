@@ -103,7 +103,8 @@ Protopack.Input = Class.create({
                 draggable: false,
                 showHeader: false,
                 closeButton: false,
-                autoClose: true
+                autoClose: true,
+                autoCenter: false
             },
             dropdown = new Protopack.Window(options, xhtml);
         dropdown.excludedElements.push(this.entry);
