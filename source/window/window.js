@@ -30,7 +30,8 @@ Protopack.Window = Class.create({
         escape          : true,
         autoClose       : false,
         showHeader      : true,
-        closeButton     : true
+        closeButton     : true,
+        autoCenter      : true
     },
 
     /**
@@ -244,7 +245,7 @@ Protopack.Window = Class.create({
             } catch(err) {
                 throw 'Could not set window position.';
             }
-        } else {
+        } else if (this.options.autoCenter) {
             var width  = this.window.getWidth(),
                 height = this.window.getHeight(),
                 offset,
