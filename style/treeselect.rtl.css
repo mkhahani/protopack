@@ -16,6 +16,10 @@
 .ptreeselect-dropdown {
   position: absolute;
   z-index: 20;
+  min-width: 100%;
+  max-width: 500px;
+  max-height: 400px;
+  overflow: auto;
   background-color: white;
   border: 1px solid #888888;
   box-shadow: 5px 5px 5px #AAAAAA;

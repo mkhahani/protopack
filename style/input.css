@@ -24,6 +24,8 @@
 .pinput-dropdown {
   position: absolute;
   z-index: 20;
+  min-width: 100%;
+  max-width: 500px;
   max-height: 400px;
   overflow: auto;
   padding: 5px;
