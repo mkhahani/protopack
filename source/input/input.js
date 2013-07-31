@@ -135,9 +135,9 @@ Protopack.Input = Class.create({
     },
 
     render: function () {
-        if (this.dropdown.window.getWidth() < this.entry.getWidth()) {
-            this.dropdown.window.style.width = this.entry.getWidth() + 'px';
-        }
+        // if (this.dropdown.window.getWidth() < this.entry.getWidth()) {
+            // this.dropdown.window.style.width = this.entry.getWidth() + 'px';
+        // }
         this.dropdown.window.style.top = this.entry.getHeight() + 1 + 'px';
 
         /*if (this.buttonStyle !== 'disabled') {
