@@ -982,7 +982,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.xhtml = this.construct();
         if (target) {
             $(target).insert(this.xhtml);
-            //this.render();
+            this.render();
         }
         Protopack.extendEvents(this);
     },
