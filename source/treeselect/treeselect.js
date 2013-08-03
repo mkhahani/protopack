@@ -127,6 +127,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     },
 
     setValue: function (value) {
+        this.tree.clear();
         this.tree.select(value);
         this.value = this.valueEntry.value = value = this.tree.selected;
         this.text = this.fetchText(value);
