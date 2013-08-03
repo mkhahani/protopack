@@ -28,7 +28,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         interactive: false,       // not implemented yet
         multiSelect: false,       // use of checkboxes or not
         fullPath: true,           // display full path of selected node (single mode)
-        pathSep: ' > '            // Path separator
+        pathSep: ' > ',           // Path separator
+        defaultText: ''           // Default text when value is null
     },
 
     /**
@@ -49,6 +50,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.dropdownStyle = 'auto';
         this.value = [];
         this.xhtml = this.construct();
+        this.setText(this.options.defaultText);
         if (target) {
             $(target).insert(this.xhtml);
             this.render();
@@ -78,7 +80,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             this.value = this.valueEntry.value = node.data.id;
             this.dropdown.close();
         }
-        this.text = this.entry.value = this.fetchText(this.tree.selected);
+        this.setText(this.fetchText(this.value));
         this.fire('treeselect:change', this.value);
     },
 
@@ -87,6 +89,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
      */
     fetchText: function (idSet) {
         var res = [];
+        if (idSet.length === 0) {
+            return this.options.defaultText;
+        }
         if (Object.isArray(idSet)) {
             idSet.each(function (id) {
                 var node = this.tree.getNode(id);
@@ -126,12 +131,17 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         this.valueEntry.name = name;
     },
 
+    setText: function (text) {
+        this.text = text;
+        this.entry.value = text;
+        this.entry.title = text;
+    },
+
     setValue: function (value) {
         this.tree.clear();
         this.tree.select(value);
         this.value = this.valueEntry.value = value = this.tree.selected;
-        this.text = this.fetchText(value);
-        this.entry.value = this.text;
+        this.setText(this.fetchText(this.value));
     },
 
     /**
@@ -145,7 +155,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     clear: function () {
         this.tree.clear();
         this.value = this.valueEntry.value = this.tree.selected;
-        this.entry.value = this.text = '';
+        this.setText(this.options.defaultText);
     },
 
     insertNode: function (node) {
@@ -159,5 +169,4 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     updateNode: function (id, node) {
         this.tree.updateNode(id, node);
     }
-
 });
