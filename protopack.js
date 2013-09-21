@@ -287,7 +287,8 @@ Protopack.Tree = Class.create({
         className : 'ptree',    // base classname
         interactive : true,     // not implemented yet
         multiSelect : false,    // use of checkboxes or not
-        rootId : 0              // ID of the root nodes
+        includeRoot : true,     // tree has a root node
+        rootId : 0              // ID of the root node
     },
 
     /**
@@ -359,12 +360,16 @@ Protopack.Tree = Class.create({
                 }
                };
 
-        this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null);
-
+        this.dataObj = new Protopack.Tree.Data(this.rootId, this.rootId - 1, 'root', null);
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
-        tree = this.createChilds(this.dataObj.childs);
+        if (this.options.includeRoot) {
+            this.nodeById[this.rootId] = this.dataObj;
+            tree = this.createChilds([this.dataObj]);
+        } else {
+            tree = this.createChilds(this.dataObj.childs);
+        }
         this.xhtml.update(tree);
 
         // The most first node
@@ -786,18 +791,26 @@ Protopack.Tree.addMethods({
      * Expands all nodes
      */
     expandAll: function () {
-        this.dataObj.childs.each(function(node) {
-            this.expand(node.id, true);
-        }, this);
+        if (this.options.includeRoot) {
+            this.expand(this.rootId, true);
+        } else {
+            this.dataObj.childs.each(function(node) {
+                this.expand(node.id, true);
+            }, this);
+        }
     },
 
     /**
      * Collapses all nodes
      */
     collapseAll: function () {
-        this.dataObj.childs.each(function(node) {
-            this.collapse(node.id, true);
-        }, this);
+        if (this.options.includeRoot) {
+            this.collapse(this.rootId, true);
+        } else {
+            this.dataObj.childs.each(function(node) {
+                this.collapse(node.id, true);
+            }, this);
+        }
     },
 
     /**
@@ -955,6 +968,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         className: 'ptreeselect', // base classname
         interactive: false,       // not implemented yet
         multiSelect: false,       // use of checkboxes or not
+        includeRoot: false,       // the tree has a root node
         fullPath: true,           // display full path of selected node (single mode)
         pathSep: ' > ',           // Path separator
         defaultText: ''           // Default text when value is null
@@ -991,7 +1005,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             entry = new Element('input', {type:'hidden'});
             options = {
                 multiSelect: this.multiSelect, 
-                interactive:this.options.interactive
+                interactive: this.options.interactive,
+                includeRoot: this.options.includeRoot
             },
             tree = new Protopack.Tree(null, options);
         tree.observe('tree:click', this.select.bind(this));
@@ -1032,10 +1047,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             var node = this.tree.getNode(idSet);
             if (node) {
                 if (this.options.fullPath) {
-                    var id = idSet;
-                    while (id != '0') {
-                        res.push(this.tree.getNode(id).data.text);
-                        id = this.tree.getNode(id).data.pid;
+                    while (node) {
+                        res.push(node.data.text);
+                        node = this.tree.getNode(node.data.pid);
                     }
                     return res.reverse().join(this.options.pathSep);
                 } else {
@@ -1237,7 +1251,6 @@ Protopack.Window = Class.create({
             this.destroy();
         }
         this.window = this.construct(target);
-        this.setPosition();
     },
 
     /**
@@ -1502,9 +1515,12 @@ Protopack.Window = Class.create({
      * @return  void
      */
     open: function (x, y) {
-        if (x !== undefined && y !== undefined) {
+        if (!this.window.style.left) {
             this.setPosition(x, y);
         }
+        // if (x !== undefined && y !== undefined) {
+            // this.setPosition(x, y);
+        // }
         this.window.show();
         if (this.options.modal) {
             this.overlay.show();
@@ -1555,5 +1571,1200 @@ Protopack.Window = Class.create({
             this.overlay.remove();
             this.overlay = null;
         }
+    }
+});
+
+/**
+ * Protopack Tabs base class
+ */
+Protopack.Tabs = Class.create({
+
+    /**
+     * Default configuration
+     */
+    options: {
+        className: 'ptabs',
+        findTabs: true,
+        hover: false,
+        defaultTab: 1
+    },
+
+    /**
+     * Tabs intializer
+     *
+     * @access  private
+     * @param   mixed   target  Container element/ID
+     * @param   object  options
+     * @return  Clss instance of Tabs
+     */
+    initialize: function (target, options) {
+        if (!$(target)) {
+            throw new Error('Protopack.Tabs.initialize(): Could not find the target element "' + target + '".');
+        }
+        this.target = $(target);
+        this.options = Object.clone(this.options);
+        Object.extend(this.options, options || {});
+        if (this.options.findTabs) { this.construct(); }
+    },
+
+    /**
+     * Builds tabs
+     *
+     * @access  private
+     * @return  void
+     */
+    construct: function () {
+        var links = this.target.select('li a');
+        this.tabs = this.target.select('li').invoke('addClassName', this.options.className + '-tab');
+        this.sheets = links.map(function (link) {return $(link.rel);});
+        links.invoke('observe', 'click', this.switchTab.bind(this));
+        if (this.options.hover) {
+            links.invoke('observe', 'mouseover', this.switchTab.bind(this));
+        }
+        this.reset();
+        this.setActive(this.options.defaultTab);
+        this.target.addClassName(this.options.className);
+    },
+
+    /**
+     * Creates tabs by passed tabs data
+     *
+     * @param   array   tabs [[id1, title1], [id2, title2], ...]
+     */
+    createTabs: function (tabs) {
+        var ul = new Element('ul').addClassName(this.options.className);
+        this.sheets = tabs.map(function (tab) {return $(tab[0]);});
+        this.tabs = tabs.map(function (tab) {
+            var a = new Element('a', {rel:tab[0]}).update(tab[1]),
+                li = new Element('li').insert(a);
+            a.observe('click', this.switchTab.bind(this));
+            if (this.options.hover) {
+                a.observe('mouseover', this.switchTab.bind(this));
+            }
+            li.addClassName(this.options.className + '-tab');
+            ul.insert(li);
+            return li;
+        }.bind(this));
+        return ul;
+    },
+
+    /**
+     * Switches to the clicked/hovered tab
+     *
+     * @param   object  e   mouse event (click or mouseover)
+     */
+    switchTab: function (e) {
+        var link = Event.findElement(e);
+        this.reset();
+        $(link.rel).show();
+        link.up('li').addClassName('active');
+    },
+
+    /**
+     * Deselects tabs and hides all sheets
+     */
+    reset: function () {
+        this.sheets.invoke('hide');
+        this.tabs.invoke('removeClassName', 'active');
+    },
+
+    /**
+     * Creates tabs by passing tabs data
+     *
+     * @param   array   tabs [[id1, title1], [id2, title2], ...]
+     */
+    setTabs: function (tabs) {
+        this.target.insert({top: this.createTabs(tabs)});
+        this.reset();
+        this.setActive(this.options.defaultTab);
+    },
+
+    /**
+     * Selects a tab and displays related sheet
+     *
+     * @param   integer index   tab index, begins from 1
+     */
+    setActive: function (index) {
+        this.reset();
+        this.tabs[index - 1].addClassName('active');
+        this.sheets[index - 1].show();
+    }
+});
+
+/**
+ * Protopack Grid base class
+ */
+Protopack.Grid = Class.create({
+
+    /**
+     * Default configuration
+     */
+    options: {
+        className     : 'pgrid',
+        header        : true,
+        footer        : true,
+        sorting       : 'client',   // ['client', 'server', false]
+        filtering     : false,      // ['client', 'server', false]
+        pagination    : false,      // depends on footer
+        keyboard      : false,      // depends on rowSelect/cellSelect
+        rowSelect     : true,
+        cellSelect    : false,
+        rowHover      : false,
+        cellHover     : false,
+        rowClasses    : false,
+        colClasses    : false,
+        oddEvenRows   : true,
+        currencySymbol: '$'
+    },
+
+    /**
+     * The grid intializer
+     *
+     * @param   string  target  ID of the target element
+     * @param   array   layout  grid layout (optional)
+     * @param   object  options grid options (optional)
+     * @param   object  events  grid events (optional)
+     */
+    initialize: function (target, layout, options, events) {
+        var columnsByName = {};
+        this.options = Object.clone(this.options);
+        Object.extend(this.options, options || {});
+        this.events = events || {};
+        this._columns = layout || [];
+        this._columns.each(function (col) {
+            columnsByName[col.name] = col;
+        });
+        this._columnsByName = columnsByName;
+        this._className = this.options.className;
+        this._pageIndex = 1;
+        this._pageBy = 0;
+        this._backupData = null;
+
+        this.grid = this._construct(target);
+        Protopack.extendEvents(this);
+    },
+
+    /**
+     * Builds the grid structure
+     *
+     * @param   string  target  ID of the target element
+     * @return  string  XHTML grid
+     */
+    _construct: function (target) {
+        var grid  = new Element('div', {'class':this._className}),
+            tbody = new Element('tbody'),
+            table = new Element('table').update(tbody),
+            body  = new Element('div', {'class':this._className + '-body'}).update(table);
+
+        /*Event.observe(div, 'scroll', function() {
+                alert('boo');
+        });*/
+
+        // Grid Header
+        if (this.options.header) {
+            this.header = this._createHeader();
+            grid.insert(this.header);
+        }
+
+        // Grid Body
+        body.tabIndex = '1';
+        body.observe('click', this._click.bind(this));
+        body.observe('dblclick', this._dblClick.bind(this));
+        body.observe('mouseover', this._mouseOver.bind(this));
+        body.observe('mouseout', this._mouseOut.bind(this));
+        if (this.options.keyboard) {
+            body.observe('keydown', this._keyDown.bind(this));
+        }
+        this.body = body;
+        this.table = table;
+        this._createColumns();
+        grid.insert(this.body);
+
+        // Grid Footer
+        if (this.options.footer) {
+            this.footer = this._createFooter();
+            grid.insert(this.footer);
+        }
+
+        $(target).insert(grid);
+        return grid;
+    },
+
+    /**
+     * Adds header to grid
+     */
+    _createHeader: function () {
+        var header = new Element('div', {'class':this._className + '-header'}),
+            table = new Element('table'),
+            trTitles = table.insertRow(-1),
+            trFilter = table.insertRow(-1),
+            ignore = 0;
+
+        // Titles
+        this._columns.each( function (column) {
+            if (ignore > 0) {
+                ignore--;
+                return;
+            }
+            var th = new Element('th');
+            if (column.hidden) {
+                th.addClassName('hidden');
+                th.setAttribute('width', 0);
+            } else {
+                th.addClassName('t-' + column.name);
+                if (column.image) {
+                    th.insert(new Element('img', {src:column.image}));
+                }
+                if (column.width) {
+                    th.setAttribute('width', column.width);
+                }
+                if (this.options.sorting && column.sortType) {
+                    th.addClassName('sortable');
+                }
+            }
+            trTitles.className = 'titles';
+            Element.insert(trTitles, th.insert(column.title));
+            if (column.hasOwnProperty('colSpan')) {
+                th.setAttribute('colspan', column.colSpan);
+                ignore = column.colSpan - 1;
+            }
+        }.bind(this));
+        if (this.options.sorting) {
+            Event.observe(trTitles, 'click', this._sort.bind(this));
+        }
+
+        // Filter
+        if (this.options.filtering) {
+            var form = new Element('form');
+            header.insert(form.insert(table));
+            ignore = 0;
+            trFilter.className = 'filters';
+            this._columns.each( function (column) {
+                if (ignore > 0) {
+                    ignore--;
+                    return;
+                }
+                var td = new Element('td');
+                if (column.hidden) {
+                    td.addClassName('hidden');
+                    td.setAttribute('width', 0);
+                } else {
+                    if (column.filter) {
+                        var filterFunc = (this.options.filtering === 'client')? this.filter:
+                                                                                this.events.onFilter;
+                        switch (column.filter) {
+                            case 'text':
+                                var input = new Element('input', {name:column.name});
+                                if (column.width) {
+                                    input.style.width = column.width + 'px';
+                                }
+                                td.insert(input);
+                                break;
+                            case 'list':
+                                var select = new Element('select', {name:column.name});
+                                select.style.width = column.width + 'px';
+                                td.insert(select);
+                                break;
+                        }
+                    }
+                }
+                Element.insert(trFilter, td);
+                if (column.hasOwnProperty('colSpan')) {
+                    td.setAttribute('colspan', column.colSpan);
+                    ignore = column.colSpan - 1;
+                }
+            }.bind(this));
+            Event.observe(trFilter, 'change', this._filter.bind(this));
+        } else {
+            header.insert(table);
+        }
+
+        return header;
+    },
+
+    /**
+     * Adds thead element to the table
+     */
+    _createFooter: function () {
+        var footer = new Element('div', {'class':this._className + '-footer'});
+            
+        if (this.options.pagination) {
+            var pager = new Element('table', {'class':this._className + '-pager'}),
+                tr = pager.insertRow(-1),
+                status = new Element('span', {'class':this._className + '-status'}),
+                input = new Element('input', {type:'text', value:'1'}),
+                first = new Element('input', {type:'button', 'class':'first'}),
+                prev = new Element('input', {type:'button', 'class':'prev'}),
+                next = new Element('input', {type:'button', 'class':'next'}),
+                last = new Element('input', {type:'button', 'class':'last'});
+
+            next.observe('click', function() {
+                this._goToPage('next');
+            }.bind(this));
+
+            prev.observe('click', function() {
+                this._goToPage('prev');
+            }.bind(this));
+
+            last.observe('click', function() {
+                this._goToPage('last');
+            }.bind(this));
+
+            first.observe('click', function() {
+                this._goToPage('first');
+            }.bind(this));
+
+            input.observe('keydown', function(e) {
+                if (e.keyCode === 13) {
+                    this._goToPage(input.value);
+                }
+            }.bind(this));
+
+            this.pgNext = next;
+            this.pgPrev = prev;
+            this.pgLast = last;
+            this.pgFirst = first;
+            this.pageInput = input;
+            this.status = status;
+
+            pager.insert(new Element('tr'));
+            tr.insert(new Element('td').insert(status));
+            tr.insert(new Element('td').insert(first));
+            tr.insert(new Element('td').insert(prev));
+            tr.insert(new Element('td').insert(input));
+            tr.insert(new Element('td').insert(next));
+            tr.insert(new Element('td').insert(last));
+            footer.insert(pager);
+        }
+
+        return footer;
+    },
+
+    /**
+     * Adds thead element to the table
+     */
+    _createColumns: function () {
+        var head = this.table.createTHead(),
+            tr = head.insertRow(-1),
+            count = 0,
+            ignore = 0;
+        this._columns.each( function (column, index) {
+            if (ignore > 0) {
+                ignore--;
+                return;
+            }
+            var th = new Element('th');
+            if (column.hidden) {
+                th.addClassName('hidden');
+                th.setAttribute('width', 0);
+            } else {
+                if (column.align) {
+                    th.setAttribute('align', column.align);
+                }
+                if (column.width) {
+                    th.setAttribute('width', column.width);
+                }
+                count++;
+            }
+            Element.insert(tr, th);
+            if (column.hasOwnProperty('colSpan')) {
+                th.setAttribute('colspan', column.colSpan);
+                ignore = column.colSpan - 1;
+            }
+        }.bind(this));
+    },
+
+    /**
+     * Adds a new row
+     */
+    _insertRow: function(data, index) {
+        var tr = this.table.tBodies[0].insertRow(index);
+        this._createCells(tr, data);
+        return tr;
+    },
+
+    /**
+     * Creates table cells and adds them to the tr
+     */
+    _createCells: function (tr, rowData) {
+        this._columns.each( function(column, index) {
+            var cell = tr.insertCell(-1),
+                key = Object.isArray(rowData)? index : column.name,
+                el = this._createElement(column, rowData[key]);
+            if (this.options.colClasses) {
+                cell.addClassName('c-' + key);
+            }
+            if (column.hidden) {
+                cell.addClassName('hidden');
+            } else {
+                if (column.align) {
+                    cell.setAttribute('align', column.align);
+                }
+            }
+            Element.insert(cell, el);
+        }.bind(this));
+    },
+
+    /**
+     * Creates required element and assigns it to a cell
+     */
+    _createElement: function (col, data) {
+        var el;
+        switch (col.type) {
+            case 'id':
+                el = data;
+                break;
+            case 'text':
+                if (Object.isString(data) || Object.isNumber(data)) {
+                    el = new Element('span').update(data);
+                } else {
+                    el = new Element('span').update(data.text);
+                }
+                break;
+            case 'currency':
+                var value = (Object.isString(data) || !isNaN(data))? data : data.text;
+                value = addCommas(value, this.options.currencySymbol);
+                el = new Element('span').update(value);
+                break;
+            case 'image':
+                if (Object.isString(data)) {
+                    el = new Element('img', {src:data});
+                /*} else if (Object.isArray(data)) {
+                    el = [];
+                    data.each(function (img) {
+                        if (Object.isString(img)) {
+                            el.push(new Element('img', {src:img}));
+                        } else {
+                            var imgEl = new Element('img', {src:img.src});
+                            if (img.hasOwnProperty('title')) {
+                                imgEl.setAttribute('title', img.title)
+                            }
+                            el.push(imgEl);
+                        }
+                    });*/
+                } else {
+                    el = new Element('img', {src:data.src});
+                    if (data.hasOwnProperty('alt')) {
+                        el.setAttribute('alt', data.alt);
+                    }
+                }
+                break;
+            case 'link':
+                if (Object.isString(data)) {
+                    el = new Element('a', {href:data}).update(data);
+                } else {
+                    el = new Element('a', {href:data.href});
+                    if (data.hasOwnProperty('text')) {
+                        el.update(data.text);
+                    }
+                    if (data.hasOwnProperty('image')) {
+                        el.insert(new Element('img'), {src:data.image});
+                    }
+                }
+                break;
+        }
+        if (typeof data == 'object') {
+            if (data.hasOwnProperty('title')) {
+                el.setAttribute('title', data.title);
+            }
+            if (data.hasOwnProperty('style')) {
+                el.setAttribute('style', data.style);
+            }
+        }
+        return el;
+    },
+
+    /**
+     * Inserts data into table
+     */
+    _load: function(data) {
+        if (data) {
+            $(this.table.tBodies[0]).update();
+            this.data = data;
+            // if (typeof this._sortBy !== 'undefined') {
+                // this.sort(this._sortBy, this._sortOrder);
+            // }
+            data.each(function(rowData) {
+                this._insertRow(rowData, -1);
+            }.bind(this));
+        }
+        this.refresh();
+        //this.render();
+    },
+
+    /**
+     * Highlights a row on mouse rollover
+     */
+    _highlightRow: function(rowEl) {
+        rowEl.addClassName('hover');
+    },
+
+    /**
+     * Clears highlighted row
+     */
+    _unHighlightRow: function(rowEl) {
+        rowEl.removeClassName('hover');
+    },
+
+    /**
+    /**
+     * Highlights a cell on mouse rollover
+     */
+    _highlightCell: function(cellEl) {
+        cellEl.addClassName('hover');
+    },
+
+    /**
+     * Clears highlighted cell
+     */
+    _unHighlightCell: function(cellEl) {
+        cellEl.removeClassName('hover');
+    },
+
+    /**
+     * Selects a grid row or clears the selection if null is passed
+     */
+    _selectRow: function(rowEl) {
+        if (this.selectedRow) {
+            this.selectedRow.removeClassName('selected');
+        }
+        if (rowEl) {
+            rowEl.addClassName('selected');
+        }
+        this.selectedRow = rowEl;
+    },
+
+    /**
+     * Selects a grid cell or clears the selection if null is passed
+     */
+    _selectCell: function(cellEl) {
+        if (this.selectedCell) {
+            this.selectedCell.removeClassName('selected');
+        }
+        if (cellEl) {
+            cellEl.addClassName('selected');
+        }
+        this.selectedCell = cellEl;
+    },
+
+    /**
+     * 
+     */
+    _goToPage: function(page) {
+        if (!isNaN(page)) {
+            if (page >= 1 || page <= this.maxPageIndex) {
+                this._pageIndex = page;
+            } else {
+                return;
+            }
+        } else {
+            switch (page) {
+                case 'next':
+                    if (this._pageIndex < this.maxPageIndex) this._pageIndex++; else return; break;
+                case 'prev':
+                    if (this._pageIndex > 1) this._pageIndex--; else return; break;
+                case 'last':
+                    if (this._pageIndex < this.maxPageIndex) this._pageIndex = this.maxPageIndex; else return; break;
+                case 'first':
+                    if (this._pageIndex > 1) this._pageIndex = 1; else return; break;
+                default:
+                    return;
+            }
+        }
+        this.initFunc(this._pageIndex);
+        this._updatePager();
+        if (this._backupData !== null) {
+            this._backupData = null;
+            this.filter(this._filterParams);
+        }
+
+        // if (this._pageIndex == this.maxPageIndex) {
+            // right.disable();
+        // } else {
+            // right.enable();
+        // }
+        // if (this._pageIndex == 1) {
+            // left.disable();
+        // } else {
+            // left.enable();
+        // }
+    },
+
+    /**
+     * 
+     */
+    _updatePager: function() {
+        if (this.footer) {
+            if (this.total === 0) {
+                this.status.update('');
+            } else {
+                var from = (this._pageIndex - 1) * this._pageBy + 1,
+                    to = this._pageIndex * this._pageBy;
+                if (to === 0 || to > this.total) {
+                    to = this.total;
+                }
+                if (this.options.pagination) {
+                    this.status.update(from + ' - ' + to + ' (' + this.total + ')');
+                    this.pageInput.setValue(this._pageIndex);
+                }
+            }
+        }
+    },
+
+    /**
+     * 
+     */
+    resetPager: function() {
+        this._pageIndex = 1;
+        this._updatePager();
+    }
+});
+
+/**
+ * Protopack Grid events
+ */
+Protopack.Grid.addMethods({
+
+    /**
+     * Occurs when clicking on the grid body
+     */
+    _click: function(e) {
+        var celEl = e.findElement('td'),
+            rowEl = celEl.up('tr');
+        if (celEl === document || rowEl === undefined) {
+            return;
+        }
+        if (this.options.rowSelect) {
+            this._selectRow(rowEl);
+        }
+        if (this.options.cellSelect) {
+            this._selectCell(celEl);
+        }
+        this.fire('grid:click', rowEl.sectionRowIndex, celEl.cellIndex, e);
+        // fixme: we need getColumnByIndex() to achieve column attributes
+    },
+
+    /**
+     * Occurs when double clicking on the grid body
+     */
+    _dblClick: function(e) {
+        var celEl = e.findElement('td'),
+            rowEl = celEl.up('tr');
+        if (celEl !== document && rowEl !== undefined) {
+            this.fire('grid:dblclick', rowEl.sectionRowIndex, celEl.cellIndex, e);
+        }
+    },
+
+    /**
+     * Occurs on mouse over event
+     */
+    _mouseOver: function(e) {
+        var rowEl = e.findElement('tr'),
+            celEl = e.findElement('td');
+
+        if (rowEl !== document) {
+            if (this.options.rowHover) {
+                this._highlightRow(rowEl);
+            }
+            this.fire('grid:rowover', rowEl.sectionRowIndex, e);
+        }
+
+        if (celEl !== document) {
+            rowEl = celEl.up('tr');
+            if (this.options.cellHover) {
+                this._highlightCell(celEl);
+            }
+            this.fire('grid:cellover', rowEl.sectionRowIndex, celEl.cellIndex, e);
+        }
+    },
+
+    /**
+     * Occurs on mouse out event
+     */
+    _mouseOut: function(e) {
+        var rowEl = e.findElement('tr'),
+            celEl = e.findElement('td');
+
+        if (rowEl !== document) {
+            if (this.options.rowHover) {
+                this._unHighlightRow(rowEl);
+            }
+            this.fire('grid:rowout', rowEl.sectionRowIndex, e);
+        }
+
+        if (celEl !== document) {
+            rowEl = celEl.up('tr');
+            if (this.options.cellHover) {
+                this._unHighlightCell(celEl);
+            }
+            this.fire('grid:cellout', rowEl.sectionRowIndex, celEl.cellIndex, e);
+        }
+    },
+
+    /**
+     * Occurs on key down event
+     */
+    _keyDown: function(e) {
+        var key = e.keyCode;
+
+        // row/cell navigation
+        if (this.options.rowSelect || this.options.cellSelect) {
+            // up/down navigation on rows/cells
+            if (key === 40 || key === 38) {
+                var cell = 0,
+                    rowEl;
+                if (this.selectedCell) {
+                    cell = this.selectedCell.cellIndex;
+                    row = this.selectedCell.up('tr').sectionRowIndex + key - 39;
+                } else {
+                    row = this.selectedRow? this.selectedRow.sectionRowIndex + key - 39 : 0;
+                }
+                rowEl = this.table.tBodies[0].rows[row];
+                if (rowEl) {
+                    if (this.options.rowSelect) {
+                        this._selectRow(rowEl);
+                    }
+                    if (this.options.rowCell) {
+                        this._selectCell(rowEl.cells[cell]);
+                    }
+                }
+            }
+
+            // left/right navigation on cells
+            if (this.options.cellSelect && (key === 37 || key === 39)) {
+                if (this.selectedCell) {
+                    var cell = this.selectedCell.cellIndex + key - 38,
+                        rowEl = this.selectedCell.up('tr'),
+                        cellEl = rowEl.cells[cell];
+                    if (cellEl) {
+                        this._selectCell(cellEl);
+                    }
+                }
+            }
+        }
+
+        this.fire('grid:keydown', e);        
+    },
+
+    /**
+     * Occurs when clicking on title of a grid column
+     */
+    _sort: function(e) {
+        var celEl = e.findElement('th'),
+            colObj;
+        if (celEl === document) {
+            return;
+        }
+        colObj = this._columns[celEl.cellIndex];
+        if (!colObj.sortType) {
+            return;
+        }
+        this._sortBy = colObj.name;
+        this._sortOrder = (this._sortOrder === 'ASC')? 'DESC' : 'ASC';
+        if (this.options.sorting === 'client') {
+            this.sort(this._sortBy, this._sortOrder);
+        } else {
+            this.fire('grid:sort', this._sortBy, this._sortOrder, e);
+            this.setSort(this._sortBy, this._sortOrder);
+        }
+    },
+
+    /**
+     * Occurs on filter form changes
+     */
+    _filter: function(e) {
+        var query = e.findElement().up('form').serialize(true);
+        if (this.options.filtering === 'client') {
+            this.filter(query);
+        } else {
+            this.fire('grid:filter', query, e);
+        }
+    }
+
+});
+
+/**
+ * Protopack Grid API's
+ */
+Protopack.Grid.addMethods({
+    /**
+     * Calls user defined function to initilize grid
+     */
+    init: function(func) {
+        this.initFunc = func;
+        func(this._pageIndex);
+    },
+
+    /**
+     * Sets ID of the grid
+     */
+    setId: function(id) {
+        this.grid.id = id;
+    },
+
+    /**
+     * Sets number of rows for pagination
+     */
+    pageBy: function(count) {
+        this._pageBy = count;
+    },
+
+    /**
+     * Fills the specified filter listbox with givven data values
+     */
+    setFilterList: function(name, values) {
+        if (!this.options.filtering) {
+            throw new Error('ProtopackGrid.setFilterList(): filter option is disabled');
+        }
+        var select = this.header.down('form')[name];
+        if (Object.isArray(values) && values.length > 0) {
+            values.each( function(value) {
+                var option = new Element('option', {value: value[0]}).update(value[1]);
+                select.insert(option);
+            });
+        }
+    },
+
+    /**
+     * Loads givven data in to grid
+     */
+    loadData: function (data, total) {
+        this._load(data);
+        this.total = (typeof total == 'undefined')? data.length : total;
+        if (this._pageBy !== 0) {
+            this.maxPageIndex = Math.ceil(this.total / this._pageBy);
+        }
+        this._updatePager();
+    },
+
+    /**
+     * Does some improvments on grid view - useful when called after hide/show
+     */
+    render: function () {
+        var widthArr = this.table.tHead.select('th').map(function (th, i) {
+            return th.hasClassName('hidden')? 0 : th.measure('width');
+        });
+        this.header.select('th').each(function (th, i) {
+            th.setAttribute('width', widthArr[i] + 'px');
+            //th.setStyle({width:widthArr[i] + 'px'});
+        });
+
+        if (this.table.getHeight() > this.body.getHeight()) { // when we have scrollbars on grid
+            this.header.setStyle('padding-right:16px');
+        } else {
+            this.header.setStyle('padding-right:0');
+        }
+    },
+
+    /**
+     * Reloads grid with current data
+     */
+    reload: function () {
+        this._load(this.data);
+    },
+
+    /**
+     * Assigns classnames (no data update)
+     */
+    refresh: function () {
+        var rows = this.table.tBodies[0].select('tr');
+        if (this.options.rowClasses) {
+            rows.each(function (tr, i) {
+                tr.addClassName('r-' + i);
+            });
+        }
+        if (this.options.oddEvenRows) {
+            rows.each(function (tr, i) {
+                var className = (i % 2 === 0)? 'even' : 'odd',
+                    oposite = (className === 'odd')? 'even' : 'odd';
+                if (tr.hasClassName(oposite)) {
+                    tr.removeClassName(oposite);
+                }
+                if (!tr.hasClassName(className)) {
+                    tr.addClassName(className);
+                }
+            });
+        }
+    },
+
+    /**
+     * Selects a row
+     */
+    selectRow: function(rowIndex) {
+        this._selectRow(this.table.tBodies[0].rows[rowIndex - 1]);
+    },
+
+    /**
+     * Selects a cell
+     */
+    selectCell: function(rowIndex, cellIndex) {
+        this._selectCell(this.table.tBodies[0].rows[rowIndex - 1].cells[cellIndex - 1]);
+    },
+
+    /**
+     * Clears all selected rows/cells
+     */
+    clearSelection: function() {
+        this.table.tBodies[0].select('.selected').invoke('removeClassName', 'selected');
+    },
+
+    /**
+     * Sets focus on the grid
+     */
+    focus: function() {
+        this.body.focus();
+    },
+
+    /**
+     * Client-side sort function
+     *
+     * @param   string  sortBy      column name
+     * @param   string  sortOrder   ['ASC' or 'DESC']
+     */
+    sort: function(sortBy, sortOrder) {
+        function _sort(a, b) {
+            var key = Object.isArray(a)? colIndex : sortBy,
+                sign = (sortOrder.toUpperCase() === 'ASC')? 1 : -1,
+                res;
+            a = a[key];
+            b = b[key];
+            if (typeof a == 'object') {a = a.value? a.value : a.text;}
+            if (typeof b == 'object') {b = b.value? b.value : b.text;}
+            if (!Object.isString(a) && !Object.isNumber(a)) {
+                a = a[Object.keys(a)[0]];
+                b = b[Object.keys(b)[0]];
+            }
+            if (a === b) {
+                return 0;
+            }
+            if (sortType === 'num') {
+                res = a - b;
+            } else {
+                if (a == b)
+                    res = 0;
+                else if (a > b)
+                    res = 1;
+                else
+                    res = -1;
+            }
+            return res * sign;
+        }
+        var colIndex = Object.keys(this._columnsByName).indexOf(sortBy),
+            sortType = this._columnsByName[sortBy].sortType;
+        if (typeof sortOrder === 'undefined') {
+            sortOrder = this._sortOrder;
+        }
+        this.data.sort(_sort);
+        this.setSort(sortBy, sortOrder);
+        this.reload();
+    },
+
+    /**
+     * Does not sort, just sets sortBy and sortOrder on grid
+     *
+     * @param   string  sortBy      column name
+     * @param   string  sortOrder   ['ASC' or 'DESC']
+     */
+    setSort: function(sortBy, sortOrder) {
+        var thArr = this.header.select('th');
+            index = Object.keys(this._columnsByName).indexOf(sortBy);
+        thArr.invoke('removeClassName', 'sorted-asc');
+        thArr.invoke('removeClassName', 'sorted-desc');
+        thArr[index].addClassName('sorted-' + sortOrder.toLowerCase());
+        this._sortBy = sortBy;
+        this._sortOrder = sortOrder;
+    },
+
+    /**
+     * Client side filter function
+     *
+     * @param   object  params {key1:value1, key2:value2, ...}
+     */
+    filter: function(params) {
+        var resArr = [];
+        if (this._backupData === null) {
+            this._backupData = this.data.clone();
+        }
+        this._filterParams = params;
+        this.data = [];
+        this._backupData.each(function(row, ri) {
+            var res = true;
+            Object.keys(params).each(function(param, pi) {
+                var key = Object.isArray(row)? pi : param,
+                    value = (typeof row[key] === 'object')? row[key].text : String(row[key]); // how about row[key].value ?
+                if (value.indexOf(params[param]) === -1) {
+                    res = false;
+                    throw $break;
+                }
+            });
+            if (res) resArr.push(row);
+        });
+        this.data = resArr;
+        this.reload();
+    },
+
+    /**
+     * Returns element of the specified row
+     */
+    getRowElement: function(index) {
+        var tr;
+        if (index > this.data.length + 1) {
+            throw new Error('ProtopackGrid.getRowElement(): Invalid row index');
+        }
+        try {
+            tr = this.table.tBodies[0].rows[--index];
+        } catch(err) {
+            throw new Error('ProtopackGrid.getRowElement(): Invalid tr element');
+        }
+        return tr;
+    },
+
+    /**
+     * Inserts a new row at specified position
+     */
+    insertRow: function(rowData, index) {
+        if (typeof index == 'undefined' || index > this.data.length) {
+            index = this.data.length;
+        } else {
+            index--;
+        }
+        this._insertRow(rowData, index);
+        this.data.splice(index, 0, rowData);
+        this.refresh();
+
+        return index + 1;
+    },
+
+    /**
+     * Removes specified row from grid
+     */
+    deleteRow: function(index) {
+        var tr;
+        if (index > this.data.length) {
+            throw new Error('ProtopackGrid.deleteRow(): Invalid row index');
+        }
+        try {
+            tr = this.table.tBodies[0].rows[--index];
+        } catch(err) {
+            throw new Error('ProtopackGrid.deleteRow(): Invalid tr element');
+        }
+        tr.remove();
+        this.data.splice(index, 1);
+        this.refresh();
+    },
+
+    /**
+     * Updates specified row by givven data
+     */
+    updateRow: function(index, rowData) {
+        var tr;
+        if (index > this.data.length) {
+            throw new Error('ProtopackGrid.updateRow(): Invalid row index');
+        }
+        try {
+            tr = this.table.tBodies[0].rows[--index];
+        } catch(err) {
+            throw new Error('ProtopackGrid.updateRow(): Invalid tr element');
+        }
+        tr.remove();
+        this._insertRow(rowData, index);
+        this.data[index] = rowData;
+        this.refresh();
+    },
+
+    /**
+     * Returns element of the specified row
+     */
+    updateCell: function(rowIndex, colIndex, cellData) {
+        var cell;
+        if (rowIndex > this.data.length) {
+            throw new Error('ProtopackGrid.updateCell(): Invalid row index');
+        }
+        try {
+            cell = this.table.tBodies[0].rows[--rowIndex].cells[colIndex-1];
+        } catch(err) {
+            throw new Error('ProtopackGrid.updateCell(): Invalid cell element');
+        }
+        var el = this._createElement(this._columns[colIndex-1], cellData);
+        cell.update(el);
+        this.data[rowIndex][colIndex] = cellData;
+    }
+});
+
+/**
+ * Protopack Select base class
+ */
+Protopack.Select = Class.create(Protopack.Input, {
+
+    /**
+     * Default configuration
+     */
+    options: {
+        className: 'pselect',
+        readonly: false,
+        listSize: 8
+    },
+
+    /**
+     * Select initializer
+     *
+     * @param   mixed   target  Container element/ID
+     * @param   object  options Select options
+     *
+     * @return  Object  Class instance of Select
+     */
+    initialize: function (target, options) {
+        this.options = Object.clone(this.options);
+        Object.extend(this.options, options || {});
+        this.className = this.options.className;
+        this.readonly = this.options.readonly;
+        this.buttonStyle = 'disabled';
+        this.dropdownStyle = 'auto';
+        if (target) {
+            this.target = $(target);
+            this.xhtml = this.construct();
+        }
+    },
+
+    construct: function ($super) {
+        var xhtml = $super();
+        this.listBox = this.buildListBox();
+        this.dropdown.setContent(this.listBox);
+        this.render();
+        return xhtml;
+    },
+
+    buildListBox: function () {
+        var listBox = new Element('select', {size:0});
+        if (listBox.selectedIndex !== -1) {
+            this.entry.value = listBox.options[listBox.selectedIndex].text;
+        }
+        listBox.observe('click', this.selectItem.bind(this));
+        return listBox;
+    },
+
+    selectItem: function (e) {
+        if (this.listBox.selectedIndex !== -1) {
+            this.entry.value = this.listBox.options[this.listBox.selectedIndex].text;
+        }
+        this.dropdown.close();
+    },
+
+    render: function ($super) {
+        $super();
+        this.listBox.size = (this.listBox.options.length < this.options.listSize)?
+            this.listBox.options.length : this.options.listSize;
+    },
+
+    setData: function (data) {
+        if (Object.isArray(data)) {
+            data.each(function (row) {
+                this.listBox.options[this.listBox.options.length] = new Option(row[1], row[0]);
+            }.bind(this));
+        } else {
+            this.listBox = $(data);
+            this.dropdown.setContent(this.listBox);
+        }
+        this.render();
     }
 });
