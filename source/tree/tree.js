@@ -98,7 +98,7 @@ Protopack.Tree = Class.create({
                 }
                };
 
-        this.dataObj = new Protopack.Tree.Data(this.rootId, this.rootId - 1, 'root', null);
+        this.dataObj = new Protopack.Tree.Data(this.rootId, this.rootId - 1, '/', null);
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
