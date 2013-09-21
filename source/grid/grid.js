@@ -35,7 +35,7 @@ Protopack.Grid = Class.create({
         cellHover     : false,
         rowClasses    : false,
         colClasses    : false,
-        oddEvenRows   : false,
+        oddEvenRows   : true,
         currencySymbol: '$'
     },
 
@@ -525,8 +525,8 @@ Protopack.Grid = Class.create({
                 if (to === 0 || to > this.total) {
                     to = this.total;
                 }
-                this.status.update(from + ' - ' + to + ' (' + this.total + ')');
                 if (this.options.pagination) {
+                    this.status.update(from + ' - ' + to + ' (' + this.total + ')');
                     this.pageInput.setValue(this._pageIndex);
                 }
             }
