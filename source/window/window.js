@@ -55,7 +55,6 @@ Protopack.Window = Class.create({
             this.destroy();
         }
         this.window = this.construct(target);
-        this.setPosition();
     },
 
     /**
@@ -320,7 +319,7 @@ Protopack.Window = Class.create({
      * @return  void
      */
     open: function (x, y) {
-        if (x !== undefined && y !== undefined) {
+        if (!this.window.style.left) {
             this.setPosition(x, y);
         }
         this.window.show();
