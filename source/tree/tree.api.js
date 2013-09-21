@@ -97,9 +97,13 @@ Protopack.Tree.addMethods({
      * Expands all nodes
      */
     expandAll: function () {
-        this.dataObj.childs.each(function(node) {
-            this.expand(node.id, true);
-        }, this);
+        if (this.options.includeRoot) {
+            this.expand(this.rootId, true);
+        } else {
+            this.dataObj.childs.each(function(node) {
+                this.expand(node.id, true);
+            }, this);
+        }
     },
 
     /**

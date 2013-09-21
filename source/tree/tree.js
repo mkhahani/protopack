@@ -25,7 +25,8 @@ Protopack.Tree = Class.create({
         className : 'ptree',    // base classname
         interactive : true,     // not implemented yet
         multiSelect : false,    // use of checkboxes or not
-        rootId : 0              // ID of the root nodes
+        includeRoot : true,     // tree has a root node
+        rootId : 0              // ID of the root node
     },
 
     /**
@@ -97,12 +98,16 @@ Protopack.Tree = Class.create({
                 }
                };
 
-        this.dataObj = new Protopack.Tree.Data(this.rootId, -1, 'root', null);
-
+        this.dataObj = new Protopack.Tree.Data(this.rootId, this.rootId - 1, 'root', null);
         buildData(this.rootId, this.dataObj);
         // now dataObj contains whole tree data
 
-        tree = this.createChilds(this.dataObj.childs);
+        if (this.options.includeRoot) {
+            this.nodeById[this.rootId] = this.dataObj;
+            tree = this.createChilds([this.dataObj]);
+        } else {
+            tree = this.createChilds(this.dataObj.childs);
+        }
         this.xhtml.update(tree);
 
         // The most first node
