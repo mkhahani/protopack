@@ -27,6 +27,7 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         className: 'ptreeselect', // base classname
         interactive: false,       // not implemented yet
         multiSelect: false,       // use of checkboxes or not
+        includeRoot: false,       // the tree has a root node
         fullPath: true,           // display full path of selected node (single mode)
         pathSep: ' > ',           // Path separator
         defaultText: ''           // Default text when value is null
@@ -63,7 +64,8 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             entry = new Element('input', {type:'hidden'});
             options = {
                 multiSelect: this.multiSelect, 
-                interactive:this.options.interactive
+                interactive: this.options.interactive,
+                includeRoot: this.options.includeRoot
             },
             tree = new Protopack.Tree(null, options);
         tree.observe('tree:click', this.select.bind(this));
@@ -104,10 +106,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
             var node = this.tree.getNode(idSet);
             if (node) {
                 if (this.options.fullPath) {
-                    var id = idSet;
-                    while (id != '0') {
-                        res.push(this.tree.getNode(id).data.text);
-                        id = this.tree.getNode(id).data.pid;
+                    while (node) {
+                        res.push(node.data.text);
+                        node = this.tree.getNode(node.data.pid);
                     }
                     return res.reverse().join(this.options.pathSep);
                 } else {
