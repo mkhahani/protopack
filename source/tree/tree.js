@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2011-2013 Mohsen Khahani
  * @license     MIT
- * @version     1.3
+ * @version     1.4
  * @created     October 4, 2011
  * @url         http://mohsenkhahani.ir/protopack
  *
@@ -24,9 +24,10 @@ Protopack.Tree = Class.create({
     options: {
         className : 'ptree',    // base classname
         interactive : true,     // not implemented yet
-        multiSelect : false,    // use of checkboxes or not
         includeRoot : true,     // tree has a root node
-        rootId : 0              // ID of the root node
+        rootId : 0,             // ID of the root node
+        multiSelect : false,    // use of checkboxes or not
+        relativeNodes : true    // selecting a node affects relative nodes (multiSelect mode)
     },
 
     /**
@@ -121,12 +122,6 @@ Protopack.Tree = Class.create({
         this.fire('tree:nodecreate', node, content);
         nodeObj = new Protopack.Tree.Node(node, content, options);
         nodeObj.element.addClassName('node');
-        if (this.multiSelect) {
-            if (nodeObj.data.extra.checked) {
-                this.selected.push(nodeObj.data.id);
-            }
-            // NOTE: `selected` doesn't include not loaded nodes
-        }
         return nodeObj;
     },
 
@@ -165,11 +160,10 @@ Protopack.Tree = Class.create({
     selectNode: function (id) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
+            this.nodeById[id].data.checked = true;
             if (this.selected.indexOf(id) === -1) {
                 this.selected.push(id);
             }
-            this.nodeById[id].data.extra.checked = true;
-            this.nodeById[id].element.down('input').checked = true;
         } else {
             this.nodeById[id].element.addClassName('selected');
             this.selected = id;
@@ -182,8 +176,7 @@ Protopack.Tree = Class.create({
     deselectNode: function (id) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
-            this.nodeById[id].data.extra.checked = false;
-            this.nodeById[id].element.down('input').checked = false;
+            this.nodeById[id].data.checked = false;
             this.selected.splice(this.selected.indexOf(id), 1);
         } else {
             this.nodeById[id].element.removeClassName('selected');

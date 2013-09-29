@@ -18,6 +18,7 @@
     button {height:24px;}
     #wrapper {width:400px; margin:0 auto;}
     #workspace {height:250px; border:1px solid grey; background-color:white; overflow:auto;}
+    #frm_options {white-space:nowrap;}
     #mkh_tree {padding:20px;}
   </style>
 </head>
@@ -29,10 +30,16 @@
       <form id="frm_options">
         <table><tr>
           <td>
-            <input type="checkbox" name="chk_multi_select" value="multi_select" onclick="updateTree()" />Multi Select<br/>
+            <input type="checkbox" name="chk_interactive" value="interactive" onclick="updateTree()" checked />Interactive<br/>
           </td>
           <td>
-            <input type="checkbox" name="chk_interactive" value="interactive" onclick="updateTree()" checked />Interactive<br/>
+            <input type="checkbox" name="chk_include_root" value="include_root" onclick="updateTree()" checked />Root Node<br/>
+          </td>
+          <td>
+            <input type="checkbox" name="chk_multi_select" value="multi_select" onclick="updateTree()" checked />Multi Select<br/>
+          </td>
+          <td>
+            <input type="checkbox" name="chk_relative_nodes" value="relative_nodes" onclick="updateTree()" checked />Relative Nodes<br/>
           </td>
           <td>
             <button type="button" onclick="test()">test</button>
@@ -49,7 +56,7 @@
         [1, 0, 'Item1', {id:'node1', className:'item-class', seq:3, style:{color:'red', fontWeight:'bold'}}],
         [2, 1, 'Item2', {id:'node2', title:'This is a hint', seq:1}],
         [4, 3, 'Item4', {id:'node4', href:'javascript:alert("linkable node!")', target:'_blank'}],
-        [5, 3, 'Item5', {id:'node5', checked: true}],
+        [5, 3, 'Item5', {id:'node5'}],
         [3, 0, 'Item3', {id:'node3'}],
         [6, 5, 'Item6', {id:'node6'}],
         [7, 2, 'Item7', {id:'node7'}],
@@ -62,8 +69,10 @@
 
     var frm = $('frm_options'),
         options = {
-          multiSelect: frm.chk_multi_select.checked,
           interactive: frm.chk_interactive.checked,
+          includeRoot: frm.chk_include_root.checked,
+          multiSelect: frm.chk_multi_select.checked,
+          relativeNodes: frm.chk_relative_nodes.checked
           //className: 'ptree-tango'
         };
 
@@ -71,12 +80,13 @@
     tree.setId('mkh_tree');
     //tree.setCaption('Root');
     tree.setClassName('ptree-tango');
-    tree.observe('tree:nodecreate', prepareNode);
+    //tree.observe('tree:nodecreate', prepareNode);
     //tree.observe('tree:click', treeClick);
     //tree.observe('tree:mouseover', treeMouseOver);
     //tree.observe('tree:mouseout', treeMouseOut);
     //tree.observe('tree:toggle', treeToggle);
     tree.loadData(data);
+    tree.expandAll();
   }
 
   function treeClick(node) {

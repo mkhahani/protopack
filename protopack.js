@@ -260,20 +260,6 @@ Protopack.Input = Class.create({
         this.dropdown.open();
     }
 });
-/**
- * Protopack Tree is a DHTML tree component based on Prototype JS framework
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2011-2013 Mohsen Khahani
- * @license     MIT
- * @version     1.3
- * @created     October 4, 2011
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- */
-
 
 /**
  * Protopack Tree base class
@@ -286,9 +272,10 @@ Protopack.Tree = Class.create({
     options: {
         className : 'ptree',    // base classname
         interactive : true,     // not implemented yet
-        multiSelect : false,    // use of checkboxes or not
         includeRoot : true,     // tree has a root node
-        rootId : 0              // ID of the root node
+        rootId : 0,             // ID of the root node
+        multiSelect : false,    // use of checkboxes or not
+        relativeNodes : true    // selecting a node affects relative nodes (multiSelect mode)
     },
 
     /**
@@ -383,12 +370,6 @@ Protopack.Tree = Class.create({
         this.fire('tree:nodecreate', node, content);
         nodeObj = new Protopack.Tree.Node(node, content, options);
         nodeObj.element.addClassName('node');
-        if (this.multiSelect) {
-            if (nodeObj.data.extra.checked) {
-                this.selected.push(nodeObj.data.id);
-            }
-            // NOTE: `selected` doesn't include not loaded nodes
-        }
         return nodeObj;
     },
 
@@ -427,11 +408,10 @@ Protopack.Tree = Class.create({
     selectNode: function (id) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
+            this.nodeById[id].data.checked = true;
             if (this.selected.indexOf(id) === -1) {
                 this.selected.push(id);
             }
-            this.nodeById[id].data.extra.checked = true;
-            this.nodeById[id].element.down('input').checked = true;
         } else {
             this.nodeById[id].element.addClassName('selected');
             this.selected = id;
@@ -444,8 +424,7 @@ Protopack.Tree = Class.create({
     deselectNode: function (id) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
-            this.nodeById[id].data.extra.checked = false;
-            this.nodeById[id].element.down('input').checked = false;
+            this.nodeById[id].data.checked = false;
             this.selected.splice(this.selected.indexOf(id), 1);
         } else {
             this.nodeById[id].element.removeClassName('selected');
@@ -453,186 +432,7 @@ Protopack.Tree = Class.create({
         }
     }
 });
-/**
- * Protopack Tree Data is a class for manipulating tree-structred data
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2013 Mohsen Khahani
- * @license     MIT
- * @version     1.0
- * @created     July 20, 2013
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- */
 
-
-/**
- * Protopack Tree Data class
- */
-Protopack.Tree.Data = Class.create({
-
-    /**
-     * Tree data initializer
-     *
-     * @access  private
-     * @param   string  id      Node's ID
-     * @param   string  pid     Node's parent
-     * @param   string  text    Node's text
-     * @param   mixed   extra   Node's extra data (optional)
-     * @return  Object  A class instance of Tree Data
-     */
-    initialize: function (id, pid, text, extra) {
-        this.id = id;
-        this.pid = pid;
-        this.text = text;
-        this.extra = extra || {};
-        this.childs = [];
-    },
-
-    getNode: function(id) {
-        if (this.id == id) {
-            return this;
-        }
-
-        var res = false;
-        this.childs.each(function(child) {
-            if (child.id == id) {
-                res = child;
-                throw $break;
-            }
-        });
-
-        if (res === false) {
-            this.childs.each(function(child) {
-                res = child.getNode(id);
-                if (res) {
-                    throw $break;
-                }
-            });
-        }
-
-        return res;
-    },
-
-    addNode: function(id, pid, text, extra) {
-        var parent = this.getNode(pid),
-            node = new Protopack.Tree.Data(id, pid, text, extra);
-        parent.childs.push(node);
-        return node;
-    },
-
-    deleteNode: function(id) {
-        var parent = this.getNode(pid),
-            node = new Protopack.Tree.Data(id, pid, text, extra);
-        parent.childs.push(node);
-        return node;
-    },
-
-    getChildren: function(deep) {
-        var childs = this.childs.clone();
-        if (deep) {
-            this.childs.each(function(child) {
-                var grandchilds = child.getChildren(true);
-                childs = childs.concat(grandchilds);
-            });
-        }
-        return childs;
-    }
-});
-/**
- * Protopack Tree Node is a class for building tree nodes
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2013 Mohsen Khahani
- * @license     MIT
- * @version     1.1
- * @created     July 20, 2013
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- */
-
-
-/**
- * Protopack Tree Node class
- */
-Protopack.Tree.Node = Class.create({
-
-    /**
-     * Tree node initializer
-     *
-     * @access  private
-     * @param   object  node     Class instance of Protopack.Tree.Data
-     * @param   string  content  Node inner content (optional)
-     * @param   object  options  Node options
-     * @return  Object  Class instance of Tree Node
-     */
-    initialize: function (node, content, options) {
-        this.data = node;
-        this.inner = content;
-        this.options = {};
-        Object.extend(this.options, options || {});
-        this.outer = this.construct();
-    },
-
-    construct: function () {
-        var outer = new Element('li'),
-            expander = new Element('span'),
-            nodeEl = new Element('div');
-        if (!this.inner) {
-            this.inner = this.buildNode();
-        }
-        nodeEl.insert(this.inner);
-        nodeEl.observe('click', this.click.bind(this));
-        nodeEl.observe('mouseover', this.mouseOver.bind(this));
-        nodeEl.observe('mouseout', this.mouseOut.bind(this));
-        this.element = nodeEl;
-
-        expander.observe('click', this.toggle.bind(this)),
-        outer.insert(expander);
-        this.expander = expander;
-
-        outer.insert(nodeEl);
-        return outer;
-    },
-
-    buildNode: function () {
-        var content;
-        if (this.options.multiSelect) {
-            var checkbox = new Element('input', {type: 'checkbox', value: this.data.id});
-            content = new Element('div');
-            if (typeof this.data.checked != 'undefined') {
-                checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
-            } else {
-                this.data.checked = false;
-            }
-            content.insert(checkbox);
-            content.insert(new Element('label').update(this.data.text));
-        } else {
-            content = new Element('a').update(this.data.text);
-        }
-        return content;
-    },
-
-    click: function () {
-        this.element.fire('node:click', this);
-    },
-
-    mouseOver: function () {
-        this.element.fire('node:mouseover', this);
-    },
-
-    mouseOut: function () {
-        this.element.fire('node:mouseout', this);
-    },
-
-    toggle: function () {
-        this.element.fire('node:toggle', this);
-    }
-});
 /**
  * Protopack Tree events
  */
@@ -644,10 +444,49 @@ Protopack.Tree.addMethods({
     click: function(e) {
         var id = e.memo.data.id;
         if (this.multiSelect) {
-            if (e.memo.data.extra.checked) {
-                this.deselectNode(id);
-            } else {
+            var checked = e.memo.checkbox.checked;
+            if (checked) {
                 this.selectNode(id);
+            } else {
+                this.deselectNode(id);
+            }
+
+            if (this.options.relativeNodes) {
+                // update children
+                var childs = e.memo.data.getChildren(true),
+                    ul = e.memo.element.next('ul');
+                if (ul) {
+                    ul.select('input').each(function (input) {
+                        input.checked = checked;
+                    });
+                }
+                childs.each(function (child) {
+                    if (checked) {
+                        this.selectNode(child.id);
+                    } else {
+                        this.deselectNode(child.id);
+                    }
+                }, this);
+
+                // update parent hierarchy
+                var pid = e.memo.data.pid;
+                while (pid != 0) {
+                    var parent = this.nodeById[pid],
+                        childsChecked = false;
+                    if (!parent) {
+                        break;
+                    }
+                    parent.data.childs.each(function(child) {
+                        childsChecked = childsChecked || child.checked;
+                    });
+                    parent.checkbox.checked = childsChecked;
+                    if (childsChecked) {
+                        this.selectNode(parent.data.id);
+                    } else {
+                        this.deselectNode(parent.data.id);
+                    }
+                    pid = parent.data.pid;
+                }
             }
         } else {
             this.deselectNode(this.selected);
@@ -692,6 +531,7 @@ Protopack.Tree.addMethods({
         this.fire('tree:nodecreate', e.memo);
     }
 });
+
 /**
  * Protopack Tree API
  */
@@ -804,13 +644,9 @@ Protopack.Tree.addMethods({
      * Collapses all nodes
      */
     collapseAll: function () {
-        if (this.options.includeRoot) {
-            this.collapse(this.rootId, true);
-        } else {
-            this.dataObj.childs.each(function(node) {
-                this.collapse(node.id, true);
-            }, this);
-        }
+        this.dataObj.childs.each(function(node) {
+            this.collapse(node.id, true);
+        }, this);
     },
 
     /**
@@ -939,22 +775,150 @@ Protopack.Tree.addMethods({
     updateNode: function (id, node) {
     }
 });
-/**
- * Protopack TreeSelect is a DHTML tree combobox component based on Prototype JS framework
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2011-2013 Mohsen Khahani
- * @license     MIT
- * @version     1.2
- * @created     October 5, 2011
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- *    - Protopack Input
- *    - Protopack Tree
- */
 
+/**
+ * Protopack Tree Node class
+ */
+Protopack.Tree.Node = Class.create({
+
+    /**
+     * Tree node initializer
+     *
+     * @access  private
+     * @param   object  node     Class instance of Protopack.Tree.Data
+     * @param   string  content  Node inner content (optional)
+     * @param   object  options  Node options
+     * @return  Object  Class instance of Tree Node
+     */
+    initialize: function (node, content, options) {
+        this.data = node;
+        this.inner = content;
+        this.options = {};
+        Object.extend(this.options, options || {});
+        this.outer = this.construct();
+    },
+
+    construct: function () {
+        var outer = new Element('li'),
+            expander = new Element('span'),
+            nodeEl = new Element('div');
+        if (!this.inner) {
+            this.inner = this.buildNode();
+        }
+        nodeEl.insert(this.inner);
+        nodeEl.observe('mouseover', this.mouseOver.bind(this));
+        nodeEl.observe('mouseout', this.mouseOut.bind(this));
+        if (!this.options.multiSelect) {
+            nodeEl.observe('click', this.click.bind(this));
+        }
+        this.element = nodeEl;
+
+        expander.observe('click', this.toggle.bind(this)),
+        outer.insert(expander);
+        this.expander = expander;
+
+        outer.insert(nodeEl);
+        return outer;
+    },
+
+    buildNode: function () {
+        var content;
+        if (this.options.multiSelect) {
+            var checkbox = new Element('input', {type: 'checkbox', value: this.data.id});
+            content = new Element('div');
+            checkbox.observe('click', this.click.bind(this));
+            content.insert(checkbox);
+            content.insert(new Element('label').update(this.data.text));
+            this.checkbox = checkbox;
+        } else {
+            content = new Element('a').update(this.data.text);
+        }
+        return content;
+    },
+
+    click: function () {
+        this.element.fire('node:click', this);
+    },
+
+    mouseOver: function () {
+        this.element.fire('node:mouseover', this);
+    },
+
+    mouseOut: function () {
+        this.element.fire('node:mouseout', this);
+    },
+
+    toggle: function () {
+        this.element.fire('node:toggle', this);
+    }
+});
+
+/**
+ * Protopack Tree Data class
+ */
+Protopack.Tree.Data = Class.create({
+
+    /**
+     * Tree data initializer
+     *
+     * @access  private
+     * @param   string  id      Node's ID
+     * @param   string  pid     Node's parent
+     * @param   string  text    Node's text
+     * @param   mixed   extra   Node's extra data (optional)
+     * @return  Object  A class instance of Tree Data
+     */
+    initialize: function (id, pid, text, extra) {
+        this.id = id;
+        this.pid = pid;
+        this.text = text;
+        this.extra = extra || {};
+        this.childs = [];
+    },
+
+    getNode: function(id) {
+        if (this.id == id) {
+            return this;
+        }
+
+        var res = false;
+        this.childs.each(function(child) {
+            if (child.id == id) {
+                res = child;
+                throw $break;
+            }
+        });
+
+        if (res === false) {
+            this.childs.each(function(child) {
+                res = child.getNode(id);
+                if (res) {
+                    throw $break;
+                }
+            });
+        }
+
+        return res;
+    },
+
+    addNode: function(id, pid, text, extra) {
+        var parent = this.getNode(pid),
+            node = new Protopack.Tree.Data(id, pid, text, extra);
+        parent.childs.push(node);
+        return node;
+    },
+
+    getChildren: function(deep) {
+        var childs = this.childs.clone();
+        if (deep) {
+            this.childs.each(function(child) {
+                var grandchilds = child.getChildren(true);
+                childs = childs.concat(grandchilds);
+            });
+        }
+        return childs;
+    }
+});
 
 /**
  * TreeSelect base class
@@ -967,8 +931,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     options: {
         className: 'ptreeselect', // base classname
         interactive: false,       // not implemented yet
-        multiSelect: false,       // use of checkboxes or not
         includeRoot: false,       // the tree has a root node
+        multiSelect: false,       // use of checkboxes or not
+        relativeNodes: true,      // selecting a node affects relative nodes (multiSelect mode)
         fullPath: true,           // display full path of selected node (single mode)
         pathSep: ' > ',           // Path separator
         defaultText: ''           // Default text when value is null
@@ -1004,9 +969,10 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         var xhtml = $super();
             entry = new Element('input', {type:'hidden'});
             options = {
-                multiSelect: this.multiSelect, 
                 interactive: this.options.interactive,
-                includeRoot: this.options.includeRoot
+                includeRoot: this.options.includeRoot,
+                multiSelect: this.multiSelect,
+                relativeNodes: this.options.relativeNodes
             },
             tree = new Protopack.Tree(null, options);
         tree.observe('tree:click', this.select.bind(this));
@@ -1113,22 +1079,6 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     }
 });
 
-
-/**
- *  Protopack Draggable is a drag & drop library based on Prototype JS framework
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2012-2013 Mohsen Khahani
- * @license     MIT
- * @version     1.0
- * @created     May 6, 2012
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- */
-
-
 /**
  * Protopack Draggable base class
  */
@@ -1194,21 +1144,6 @@ Protopack.Draggable = Class.create({
         Event.stop(e);
     }
 });
-/**
- *  Protopack Window is a DHTML Window Component based on Prototype JS framework
- *
- * @author      Mohsen Khahani <mkhahani@gmail.com>
- * @copyright   2012-2013 Mohsen Khahani
- * @license     MIT
- * @version     1.3
- * @created     May 6, 2012
- * @url         http://mohsenkhahani.ir/protopack
- *
- * @dependency
- *    - Prototype JS framework v1.7+
- *    - Protopack Draggable (optional)
- */
-
 
 /**
  * Protopack Window base class

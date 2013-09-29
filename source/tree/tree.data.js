@@ -68,13 +68,6 @@ Protopack.Tree.Data = Class.create({
         return node;
     },
 
-    deleteNode: function(id) {
-        var parent = this.getNode(pid),
-            node = new Protopack.Tree.Data(id, pid, text, extra);
-        parent.childs.push(node);
-        return node;
-    },
-
     getChildren: function(deep) {
         var childs = this.childs.clone();
         if (deep) {

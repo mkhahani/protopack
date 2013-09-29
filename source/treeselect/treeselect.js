@@ -4,7 +4,7 @@
  * @author      Mohsen Khahani <mkhahani@gmail.com>
  * @copyright   2011-2013 Mohsen Khahani
  * @license     MIT
- * @version     1.2
+ * @version     1.4
  * @created     October 5, 2011
  * @url         http://mohsenkhahani.ir/protopack
  *
@@ -26,8 +26,9 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
     options: {
         className: 'ptreeselect', // base classname
         interactive: false,       // not implemented yet
-        multiSelect: false,       // use of checkboxes or not
         includeRoot: false,       // the tree has a root node
+        multiSelect: false,       // use of checkboxes or not
+        relativeNodes: true,      // selecting a node affects relative nodes (multiSelect mode)
         fullPath: true,           // display full path of selected node (single mode)
         pathSep: ' > ',           // Path separator
         defaultText: ''           // Default text when value is null
@@ -63,9 +64,10 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
         var xhtml = $super();
             entry = new Element('input', {type:'hidden'});
             options = {
-                multiSelect: this.multiSelect, 
                 interactive: this.options.interactive,
-                includeRoot: this.options.includeRoot
+                includeRoot: this.options.includeRoot,
+                multiSelect: this.multiSelect,
+                relativeNodes: this.options.relativeNodes
             },
             tree = new Protopack.Tree(null, options);
         tree.observe('tree:click', this.select.bind(this));

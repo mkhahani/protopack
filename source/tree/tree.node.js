@@ -43,9 +43,11 @@ Protopack.Tree.Node = Class.create({
             this.inner = this.buildNode();
         }
         nodeEl.insert(this.inner);
-        nodeEl.observe('click', this.click.bind(this));
         nodeEl.observe('mouseover', this.mouseOver.bind(this));
         nodeEl.observe('mouseout', this.mouseOut.bind(this));
+        if (!this.options.multiSelect) {
+            nodeEl.observe('click', this.click.bind(this));
+        }
         this.element = nodeEl;
 
         expander.observe('click', this.toggle.bind(this)),
@@ -61,13 +63,10 @@ Protopack.Tree.Node = Class.create({
         if (this.options.multiSelect) {
             var checkbox = new Element('input', {type: 'checkbox', value: this.data.id});
             content = new Element('div');
-            if (typeof this.data.checked != 'undefined') {
-                checkbox.writeAttribute({checked: this.data.checked}); // Does not work on IE6
-            } else {
-                this.data.checked = false;
-            }
+            checkbox.observe('click', this.click.bind(this));
             content.insert(checkbox);
             content.insert(new Element('label').update(this.data.text));
+            this.checkbox = checkbox;
         } else {
             content = new Element('a').update(this.data.text);
         }
