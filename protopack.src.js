@@ -405,12 +405,15 @@ Protopack.Tree = Class.create({
     /**
      * Highlights/Checks given node
      */
-    selectNode: function (id) {
+    selectNode: function (id, render) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
             this.nodeById[id].data.checked = true;
             if (this.selected.indexOf(id) === -1) {
                 this.selected.push(id);
+            }
+            if (render) {
+                this.nodeById[id].checkbox.checked = true;
             }
         } else {
             this.nodeById[id].element.addClassName('selected');
@@ -421,11 +424,14 @@ Protopack.Tree = Class.create({
     /**
      * Un-highlights/Un-checks given node
      */
-    deselectNode: function (id) {
+    deselectNode: function (id, render) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
             this.nodeById[id].data.checked = false;
             this.selected.splice(this.selected.indexOf(id), 1);
+            if (render) {
+                this.nodeById[id].checkbox.checked = false;
+            }
         } else {
             this.nodeById[id].element.removeClassName('selected');
             this.selected = null;
@@ -656,7 +662,7 @@ Protopack.Tree.addMethods({
         if (this.multiSelect) {
             idSet = Object.isArray(idSet)? idSet.uniq() : [idSet];
             idSet.each(function (id) {
-                this.selectNode(id);
+                this.selectNode(id, true);
             }, this);
         } else {
             this.selectNode(idSet);
@@ -679,7 +685,7 @@ Protopack.Tree.addMethods({
         if (this.multiSelect) {
             var sel = this.selected.clone();
             for (var i = 0; i < sel.length; i++) {
-                this.deselectNode(sel[i]);
+                this.deselectNode(sel[i], true);
             }
             this.selected.clear();
         } else {
@@ -1080,6 +1086,21 @@ Protopack.TreeSelect = Class.create(Protopack.Input, {
 });
 
 /**
+ *  Protopack Draggable is a drag & drop library based on Prototype JS framework
+ *
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.0
+ * @created     May 6, 2012
+ * @url         http://mohsenkhahani.ir/protopack
+ *
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ */
+
+
+/**
  * Protopack Draggable base class
  */
 Protopack.Draggable = Class.create({
@@ -1144,6 +1165,21 @@ Protopack.Draggable = Class.create({
         Event.stop(e);
     }
 });
+/**
+ *  Protopack Window is a DHTML Window Component based on Prototype JS framework
+ *
+ * @author      Mohsen Khahani <mkhahani@gmail.com>
+ * @copyright   2012-2013 Mohsen Khahani
+ * @license     MIT
+ * @version     1.3
+ * @created     May 6, 2012
+ * @url         http://mohsenkhahani.ir/protopack
+ *
+ * @dependency
+ *    - Prototype JS framework v1.7+
+ *    - Protopack Draggable (optional)
+ */
+
 
 /**
  * Protopack Window base class
