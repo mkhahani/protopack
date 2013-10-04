@@ -122,7 +122,7 @@ Protopack.Tree.addMethods({
         if (this.multiSelect) {
             idSet = Object.isArray(idSet)? idSet.uniq() : [idSet];
             idSet.each(function (id) {
-                this.selectNode(id);
+                this.selectNode(id, true);
             }, this);
         } else {
             this.selectNode(idSet);
@@ -145,7 +145,7 @@ Protopack.Tree.addMethods({
         if (this.multiSelect) {
             var sel = this.selected.clone();
             for (var i = 0; i < sel.length; i++) {
-                this.deselectNode(sel[i]);
+                this.deselectNode(sel[i], true);
             }
             this.selected.clear();
         } else {

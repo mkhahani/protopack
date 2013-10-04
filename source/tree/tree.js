@@ -157,12 +157,15 @@ Protopack.Tree = Class.create({
     /**
      * Highlights/Checks given node
      */
-    selectNode: function (id) {
+    selectNode: function (id, render) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
             this.nodeById[id].data.checked = true;
             if (this.selected.indexOf(id) === -1) {
                 this.selected.push(id);
+            }
+            if (render) {
+                this.nodeById[id].checkbox.checked = true;
             }
         } else {
             this.nodeById[id].element.addClassName('selected');
@@ -173,11 +176,14 @@ Protopack.Tree = Class.create({
     /**
      * Un-highlights/Un-checks given node
      */
-    deselectNode: function (id) {
+    deselectNode: function (id, render) {
         if (this.nodeById[id] === undefined) return;
         if (this.multiSelect) {
             this.nodeById[id].data.checked = false;
             this.selected.splice(this.selected.indexOf(id), 1);
+            if (render) {
+                this.nodeById[id].checkbox.checked = false;
+            }
         } else {
             this.nodeById[id].element.removeClassName('selected');
             this.selected = null;
