@@ -53,5 +53,8 @@
 
   var autoTabs = new Protopack.Tabs('auto_tabs', {findTabs:false});
   autoTabs.setTabs([['sheet4', 'Tab1'], ['sheet5', 'Tab2'], ['sheet6', 'Tab3']]);
+  autoTabs.observe('tabs:change', function (tab) {
+    console.log(tab);
+  });
 </script>
 </html>

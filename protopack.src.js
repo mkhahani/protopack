@@ -1575,6 +1575,7 @@ Protopack.Tabs = Class.create({
         this.target = $(target);
         this.options = Object.clone(this.options);
         Object.extend(this.options, options || {});
+        Protopack.extendEvents(this);
         if (this.options.findTabs) { this.construct(); }
     },
 
@@ -1629,6 +1630,7 @@ Protopack.Tabs = Class.create({
         this.reset();
         $(link.rel).show();
         link.up('li').addClassName('active');
+        this.fire('tabs:change', link.rel);
     },
 
     /**
@@ -1659,6 +1661,7 @@ Protopack.Tabs = Class.create({
         this.reset();
         this.tabs[index - 1].addClassName('active');
         this.sheets[index - 1].show();
+        this.fire('tabs:change', this.tabs[index - 1].down('a').rel);
     }
 });
 
