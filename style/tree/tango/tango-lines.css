@@ -22,6 +22,8 @@
 .ptree-tango .first.last > span.close {background-position:-54px -18px;}
 .ptree-tango .first.last > span.open {background-position:-54px -36px;}
 .ptree-tango .node {display:inline-block; padding:1px 2px;}
+.ptree-tango .node a {cursor:pointer;}
+.ptree-tango .node a:hover {color:#00c;}
 .ptree-tango .node input[type=checkbox] {vertical-align:middle; margin:0 2px 2px 0;}
 .ptree-tango .node.selected {background-color:#5B8CC7; color:white;}
 .ptree-tango .node.selected a {color:white;}
